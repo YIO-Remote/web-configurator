@@ -1,0 +1,45 @@
+body {
+  background-color: #000;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  color: #fff;
+}
+
+h3 {
+  color: #abf;
+}
+
+input {
+  float: right;
+  width: 100px;
+}
+
+select {
+  float: right;
+  width: 100px;
+}
+
+#configJsonTextBox {
+  height: 200px;
+  width: 100%;
+  margin: 10px;
+  background-color: black;
+  color: #eee;
+  padding: 10px;
+}
+
+.configPage {
+  background-color: #161515;
+  padding: 10px;
+  margin-bottom: 40px;
+}
+
+.configItem {
+  padding-left: 20px;
+  padding-right: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #1c1b1b;
+  margin-bottom: 2px;
+}
