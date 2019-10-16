@@ -18,8 +18,8 @@ function wsConnect(url) {
       console.log("Sending configJson request to server");
       socket.send(`{"type":"getconfig"}`);
     }
-    if (messageObj.areas && messageObj.entities) {
-      parseConfigurationJson(messageObj);
+    if (messageObj.type && messageObj.type === "config") {
+      parseConfigurationJson(messageObj.config);
     }
   };
 
@@ -76,7 +76,11 @@ function displayEntities(entities) {
   for (let type of SUPPORTED_ENTITIES) {
     innerHtml += `<h4>${type}</h4>`;
     for (let entity of entities[type]) {
-      innerHtml += `<div class="configItem"><div>${entity.area}</div><div>${entity.entity_id}</div><div>${entity.friendly_name}</div><div>${entity.integration}</div><div>${entity.supported_features}</div></div>`;
+      innerHtml += `<div class="configItem"><div>${entity.area}</div><div>${entity.entity_id}</div><div>${entity.friendly_name}</div><div>${entity.integration}</div>`;
+      for (let feature of entity.supported_features) {
+        innerHtml += `<div>${feature}</div>`;
+      }
+      innerHtml += "</div>";
     }
   }
   document.getElementById("entities").innerHTML = innerHtml;

@@ -4,34 +4,49 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="configPage" id="configFile" name="configFile">
-      <h3>Configuration File</h3>
-      <div class="configItem" id="configFileJson">
-        <textarea name="configJsonTextBox" id="configJsonTextBox"> </textarea>
-      </div>
+    <div class="menuFrame" id="menu">
+      <div class="logoHolder"><img src="logo.svg" alt="Logo" class="menuLogo" /></div>
+
+      <div class="menuItem">Integrations</div>
+      <div class="menuItem">Entities</div>
+      <div class="menuItem">Areas</div>
+      <div class="menuItem">Advanced</div>
+      <div class="menuItem">Settings</div>
+      <div class="menuItem">Profiles</div>
+      <div class="menuItem">Groups</div>
+      <div class="menuItem">Pages</div>
     </div>
 
-    <div class="configPage" id="areas" name="areas"></div>
-
-    <div class="configPage" id="areasArea" name="areasArea">
-      <h3>Configuration Areas:Area</h3>
-      <div class="configItem">
-        <label for="areasArea.area">Area name</label>
-        <input type="text" name="areasArea.area" placeholder="Livingroom" />
+    <div class="mainFrame" id="main">
+      <div class="configPage" id="configFile" name="configFile">
+        <h3>Configuration File</h3>
+        <div class="configItem" id="configFileJson">
+          <textarea name="configJsonTextBox" id="configJsonTextBox"> </textarea>
+        </div>
       </div>
 
-      <div class="configItem">
-        <label for="areasArea.bluetooth">Corresponding Bluetooth device</label>
-        <input type="text" name="areasArea.bluetooth" placeholder="00:00:00:00:00:00" />
+      <div class="configPage" id="areas" name="areas"></div>
+
+      <div class="configPage" id="areasArea" name="areasArea">
+        <h3>Configuration Areas:Area</h3>
+        <div class="configItem">
+          <label for="areasArea.area">Area name</label>
+          <input type="text" name="areasArea.area" placeholder="Livingroom" />
+        </div>
+
+        <div class="configItem">
+          <label for="areasArea.bluetooth">Corresponding Bluetooth device</label>
+          <input type="text" name="areasArea.bluetooth" placeholder="00:00:00:00:00:00" />
+        </div>
       </div>
+
+      <div class="configPage" id="entities" name="entities"></div>
+      <div class="configPage" id="intergrations" name="intergrations"></div>
+      <div class="configPage" id="settings" name="settings"></div>
+      <div class="configPage" id="ui_config.groups" name="ui_config.groups"></div>
+      <div class="configPage" id="ui_config.pages" name="ui_config.pages"></div>
+      <div class="configPage" id="ui_config.profiles" name="ui_config.profiles"></div>
     </div>
-
-    <div class="configPage" id="entities" name="entities"></div>
-    <div class="configPage" id="intergrations" name="intergrations"></div>
-    <div class="configPage" id="settings" name="settings"></div>
-    <div class="configPage" id="ui_config.groups" name="ui_config.groups"></div>
-    <div class="configPage" id="ui_config.pages" name="ui_config.pages"></div>
-    <div class="configPage" id="ui_config.profiles" name="ui_config.profiles"></div>
   </body>
   <script src="configurator.js"></script>
 </html>
