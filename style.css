@@ -4,6 +4,9 @@ body {
   border: 0;
   padding: 0;
   color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 100;
 }
 
 h3 {
@@ -41,5 +44,15 @@ select {
   padding-top: 5px;
   padding-bottom: 5px;
   background-color: #1c1b1b;
+  margin-bottom: 2px;
+}
+
+.configItemError {
+  padding-left: 20px;
+  padding-right: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #1c1b1b;
+  color: #b00;
   margin-bottom: 2px;
 }
