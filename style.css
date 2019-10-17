@@ -35,13 +35,16 @@ select {
 }
 
 .logoHolder {
-  width: 120px;
-  padding: 20px;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 30px;
 }
 
 .menuLogo {
-  fill: #fff;
-  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
 }
 
 .menuFrame {
@@ -53,6 +56,7 @@ select {
 .menuItem {
   font-size: 20px;
   margin: 10px;
+  text-align: center;
 }
 
 .mainFrame {

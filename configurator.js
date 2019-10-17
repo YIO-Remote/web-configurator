@@ -1,8 +1,9 @@
 const SUPPORTED_ENTITIES = ["blind", "light", "media_player"];
+const DEBUG_HOST = "10.2.1.217";
 
 function wsConnect(url) {
   let socket = new WebSocket(url);
-  console.log("function wsConnect(url){");
+  console.log(`Connecting to host: "${host}"`);
 
   socket.onopen = function(e) {
     console.log("[open] Connection established");
@@ -227,4 +228,9 @@ function getEntityById(entities, key) {
   return returnEntity;
 }
 
-wsConnect("ws://10.2.1.217:946");
+let host = window.location.hostname;
+if (host === "") {
+  host = DEBUG_HOST;
+  console.log(`::: Using debug host: "${host}" :::`);
+}
+wsConnect(`ws://${host}:946`);
