@@ -12,7 +12,8 @@ body {
 }
 
 h3 {
-  color: #abf;
+  color: #3a4a8a;
+  margin-top: 0;
 }
 
 input {
@@ -23,6 +24,32 @@ input {
 select {
   float: right;
   width: 100px;
+}
+
+button {
+  width: 100px;
+  background-color: #2f2e2e;
+  display: inline-block;
+  border: none;
+  border-radius: 5px;
+  color: #eee;
+  margin: 10px;
+  padding: 5px;
+  outline: none;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 100;
+}
+button:hover,
+.configItem:hover,
+.menuItem:hover {
+  background-color: #022407;
+}
+button:active,
+.configItem:hover,
+.menuItem:hover {
+  background-color: #03360b; /*#0e3b15*/
+  border: none;
 }
 
 #configJsonTextBox {
@@ -55,8 +82,10 @@ select {
 
 .menuItem {
   font-size: 20px;
-  margin: 10px;
+  margin: 2px;
   text-align: center;
+  border-radius: 5px;
+  padding: 8px;
 }
 
 .mainFrame {
@@ -70,6 +99,8 @@ select {
   background-color: #161515;
   padding: 10px;
   margin-bottom: 40px;
+  border-radius: 10px;
+  margin-top: 96px;
 }
 
 .configItem {
@@ -79,6 +110,17 @@ select {
   padding-bottom: 5px;
   background-color: #1c1b1b;
   margin-bottom: 2px;
+  border-radius: 5px;
+}
+
+.configMenu {
+  padding-left: 20px;
+  padding-right: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #1c1b1b;
+  margin-bottom: 2px;
+  border-radius: 5px;
 }
 
 .configItemError {

@@ -7,14 +7,14 @@
     <div class="menuFrame" id="menu">
       <div class="logoHolder"><img src="logo.png" alt="Logo" class="menuLogo" /></div>
 
-      <div class="menuItem">Integrations</div>
-      <div class="menuItem">Entities</div>
-      <div class="menuItem">Areas</div>
-      <div class="menuItem">Advanced</div>
-      <div class="menuItem">Settings</div>
-      <div class="menuItem">Profiles</div>
-      <div class="menuItem">Groups</div>
-      <div class="menuItem">Pages</div>
+      <div class="menuItem" onclick="setActiveUI('integrations');">Integrations</div>
+      <div class="menuItem" onclick="setActiveUI('entities');">Entities</div>
+      <div class="menuItem" onclick="setActiveUI('areas');">Areas</div>
+      <div class="menuItem" onclick="setActiveUI('advanced');">Advanced</div>
+      <div class="menuItem" onclick="setActiveUI('settings');">Settings</div>
+      <div class="menuItem" onclick="setActiveUI('profiles');">Profiles</div>
+      <div class="menuItem" onclick="setActiveUI('groups');">Groups</div>
+      <div class="menuItem" onclick="setActiveUI('pages');">Pages</div>
     </div>
 
     <div class="mainFrame" id="main">
@@ -23,6 +23,7 @@
         <div class="configItem" id="configFileJson">
           <textarea name="configJsonTextBox" id="configJsonTextBox"> </textarea>
         </div>
+        <div class="configMenu"><button type="button" onclick="getConfig();">Reload</button><button type="button" onclick="setConfig();">Save</button><button type="button" onclick="downloadConfig();">Download</button></div>
       </div>
 
       <div class="configPage" id="areas" name="areas"></div>

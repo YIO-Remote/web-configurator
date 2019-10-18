@@ -1,8 +1,21 @@
 const SUPPORTED_ENTITIES = ["blind", "light", "media_player"];
 const DEBUG_HOST = "10.2.1.217";
 
+const UI_ELEMENTS = {
+  integrations: ["intergrations"],
+  entities: ["entities"],
+  areas: ["areas", "areasArea"],
+  advanced: ["configFile"],
+  settings: ["settings"],
+  profiles: ["ui_config.profiles"],
+  groups: ["ui_config.groups"],
+  pages: ["ui_config.pages"]
+};
+
+let socket;
+
 function wsConnect(url) {
-  let socket = new WebSocket(url);
+  socket = new WebSocket(url);
   console.log(`Connecting to host: "${host}"`);
 
   socket.onopen = function(e) {
@@ -17,7 +30,7 @@ function wsConnect(url) {
     console.log(`[message] Data received from server`);
     if (messageObj.type && messageObj.type === "auth_ok") {
       console.log("Sending configJson request to server");
-      socket.send(`{"type":"getconfig"}`);
+      getConfig();
     }
     if (messageObj.type && messageObj.type === "config") {
       parseConfigurationJson(messageObj.config);
@@ -39,6 +52,23 @@ function wsConnect(url) {
   };
 }
 
+function getConfig() {
+  socket.send(`{"type":"getconfig"}`);
+}
+
+function setConfig() {
+  try {
+    let confJson = document.getElementById("configJsonTextBox").value;
+    //Try parsing configuration. Fail on error
+    let confObj = JSON.parse(confJson);
+    socket.send(`{"type":"setconfig", "config":${confJson}}`);
+    console.log("Config save requested");
+  } catch (e) {
+    alert(`Failed to save configuration with error: ${e.message}`);
+    console.log(`Failed to save configuration with error: ${e.message}`);
+  }
+}
+
 function buildAuthPacket(token) {
   return `{"type":"auth","token": "${token}"}`;
 }
@@ -51,11 +81,33 @@ function parseConfigurationJson(confObj) {
   if (confObj) displayJsonConfigText(confObj);
   if (confObj.areas) displayAreas(confObj.areas);
   if (confObj.entities) displayEntities(confObj.entities);
-  if (confObj.integration) displayIntergrations(confObj.integration);
+  if (confObj.integration) displayIntergrations(confObj.integrations);
   if (confObj.settings) displaySettings(confObj.settings, confObj.ui_config);
   if (confObj.ui_config.groups) displayUiConfigGroups(confObj.ui_config, confObj.entities);
   if (confObj.ui_config.pages) displayUiConfigPages(confObj.ui_config);
   if (confObj.ui_config.profiles) displayUiConfigProfiles(confObj.ui_config, confObj.entities);
+}
+
+function setActiveUI(element) {
+  const keys = Object.keys(UI_ELEMENTS);
+  for (let key of keys) {
+    for (let elmnt of UI_ELEMENTS[key]) {
+      if (key === element) {
+        setVisibilityOfId(elmnt, true);
+      } else {
+        setVisibilityOfId(elmnt, false);
+      }
+    }
+  }
+}
+
+function setVisibilityOfId(id, visibility) {
+  let element = document.getElementById(id);
+  if (visibility) {
+    element.style.display = "block";
+  } else {
+    element.style.display = "none";
+  }
 }
 
 function displayJsonConfigText(confObj) {
@@ -90,38 +142,42 @@ function displayEntities(entities) {
 function displayIntergrations(intergrations) {
   let innerHtml = "<h3>Configuration Intergration</h3>";
 
-  for (let intergration of intergrations) {
-    innerHtml += `<div class="configItem"><div>${intergration.friendly_name}</div><div>${intergration.id}</div><div>${intergration.plugin}</div><div>${intergration.type}</div><div>${intergration.data}</div></div>`;
+  const keys = Object.keys(intergrations);
+
+  for (let key of keys) {
+    for (let intergration of intergrations[key]) {
+      for (let endpoint of intergration) {
+        innerHtml += `<div class="configItem"><div>${endpoint.friendly_name}</div><div>${endpoint.id}</div><div>${endpoint.plugin}</div><div>${endpoint.type}</div><div>${endpoint.data}</div></div>`;
+      }
+    }
   }
+
   document.getElementById("intergrations").innerHTML = innerHtml;
 }
 
 function displaySettings(settings, ui_config) {
   let innerHtml = "<h3>Configuration Settings</h3>";
 
-  innerHtml += '<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode"></div></div>';
-  innerHtml += '<div class="configItem"><div>Auto brightness <input type="checkbox" id="settings.autobrightness" name="autobrightness"></div></div>';
-  innerHtml += '<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea"></div></div>';
-  innerHtml += '<div class="configItem"><div>Software Updates <input type="checkbox" id="settings.softwareupdate" name="softwareupdate"></div></div>';
-  innerHtml += '<div class="configItem"><div>Language <select id="settings.language" name="language">';
-  innerHtml += '<option value="en_US">en_US</option>';
-  innerHtml += '<option value="nl_NL">nl_NL</option>';
-  innerHtml += '<option value="de_DE">de_DE</option>';
-  innerHtml += '<option value="jp_JS">jp_JS</option>';
-  innerHtml += "</select></div></div>";
-  innerHtml += '<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250"></div></div>';
-  innerHtml += '<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000"></div></div>';
-  innerHtml += '<div class="configItem"><div>WiFi time <input type="number" id="settings.wifitime" name="wifitime"min="0" max="36000"></div></div>';
+  innerHtml += `<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode" ${isChecked(ui_config.darkmode)}></div></div>`;
+  innerHtml += `<div class="configItem"><div>Auto brightness <input type="checkbox" id="settings.autobrightness" name="autobrightness" ${isChecked(settings.autobrightness)}></div></div>`;
+  innerHtml += `<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea" ${isChecked(settings.bluetootharea)}></div></div>`;
+  innerHtml += `<div class="configItem"><div>Software Updates <input type="checkbox" id="settings.softwareupdate" name="softwareupdate"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Language <select id="settings.language" name="language">`;
+  innerHtml += `<option value="en_US">en_US</option>`;
+  innerHtml += `<option value="nl_NL">nl_NL</option>`;
+  innerHtml += `<option value="de_DE">de_DE</option>`;
+  innerHtml += `<option value="jp_JS">jp_JS</option>`;
+  innerHtml += `</select></div></div>`;
+  innerHtml += `<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000"></div></div>`;
+  innerHtml += `<div class="configItem"><div>WiFi time <input type="number" id="settings.wifitime" name="wifitime"min="0" max="36000"></div></div>`;
 
   document.getElementById("settings").innerHTML = innerHtml;
-  document.getElementById("settings.autobrightness").checked = settings.autobrightness;
-  document.getElementById("settings.bluetootharea").checked = settings.bluetootharea;
   document.getElementById("settings.language").value = settings.language;
   document.getElementById("settings.proximity").value = settings.proximity;
   document.getElementById("settings.shutdowntime").value = settings.shutdowntime;
   document.getElementById("settings.softwareupdate").checked = settings.softwareupdate;
   document.getElementById("settings.wifitime").value = settings.wifitime;
-  document.getElementById("ui_config.darkmode").checked = ui_config.darkmode;
 }
 
 function displayUiConfigGroups(uiConfig, entities) {
@@ -132,7 +188,7 @@ function displayUiConfigGroups(uiConfig, entities) {
     const group = uiConfig.groups[key];
     innerHtml += `<h4>Group: ${group.name}</h4>`;
     innerHtml += `<div class="configItem"><div>UUID: ${key}</div></div>`;
-    innerHtml += `<div class="configItem"><div>switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)}"></div></div>`;
+    innerHtml += `<div class="configItem"><div>switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)}></div></div>`;
     innerHtml += `<div class="configItem">Assigned entities:`;
     for (let entity of group.entities) {
       const ent = getEntityById(entities, entity);
@@ -228,6 +284,27 @@ function getEntityById(entities, key) {
   return returnEntity;
 }
 
+function downloadConfig() {
+  let confJson = document.getElementById("configJsonTextBox").value;
+  download("config.json", confJson);
+}
+
+function download(filename, text) {
+  var pom = document.createElement("a");
+  pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  pom.setAttribute("download", filename);
+
+  if (document.createEvent) {
+    var event = document.createEvent("MouseEvents");
+    event.initEvent("click", true, true);
+    pom.dispatchEvent(event);
+  } else {
+    pom.click();
+  }
+}
+
+/////////// Start /////////////////
+setActiveUI("None");
 let host = window.location.hostname;
 if (host === "") {
   host = DEBUG_HOST;
