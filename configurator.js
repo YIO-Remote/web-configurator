@@ -81,7 +81,7 @@ function parseConfigurationJson(confObj) {
   if (confObj) displayJsonConfigText(confObj);
   if (confObj.areas) displayAreas(confObj.areas);
   if (confObj.entities) displayEntities(confObj.entities);
-  if (confObj.integration) displayIntergrations(confObj.integrations);
+  if (confObj.integrations) displayIntegrations(confObj.integrations);
   if (confObj.settings) displaySettings(confObj.settings, confObj.ui_config);
   if (confObj.ui_config.groups) displayUiConfigGroups(confObj.ui_config, confObj.entities);
   if (confObj.ui_config.pages) displayUiConfigPages(confObj.ui_config);
@@ -139,16 +139,15 @@ function displayEntities(entities) {
   document.getElementById("entities").innerHTML = innerHtml;
 }
 
-function displayIntergrations(intergrations) {
+function displayIntegrations(integrations) {
   let innerHtml = "<h3>Configuration Intergration</h3>";
 
-  const keys = Object.keys(intergrations);
+  const keys = Object.keys(integrations);
 
   for (let key of keys) {
-    for (let intergration of intergrations[key]) {
-      for (let endpoint of intergration) {
-        innerHtml += `<div class="configItem"><div>${endpoint.friendly_name}</div><div>${endpoint.id}</div><div>${endpoint.plugin}</div><div>${endpoint.type}</div><div>${endpoint.data}</div></div>`;
-      }
+    for (let integration of integrations[key].data) {
+      console.log(integration);
+      innerHtml += `<div class="configItem"><div>"${integration.friendly_name}</div><div>${integration.id}</div><div>${JSON.stringify(integration.data)}</div></div>`;
     }
   }
 
