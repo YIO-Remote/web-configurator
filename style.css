@@ -12,13 +12,22 @@ body {
 }
 
 h3 {
-  color: #3a4a8a;
+  color: #ffffff;
   margin-top: 0;
+  text-align: center;
+}
+
+h4 {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
 }
 
 input {
-  float: right;
+  /*float: right;*/
   width: 100px;
+  display: block;
 }
 
 select {
@@ -41,24 +50,31 @@ button {
   font-weight: 100;
 }
 button:hover,
-.configItem:hover,
+.dragableItem:hover,
 .menuItem:hover {
-  background-color: #022407;
+  background-color: #222332;
 }
 button:active,
-.configItem:hover,
+.dragableItem:hover,
 .menuItem:hover {
-  background-color: #03360b; /*#0e3b15*/
+  background-color: #222332; /*#0e3b15*/
   border: none;
 }
 
 #configJsonTextBox {
-  height: 200px;
+  height: 84%;
   width: 100%;
-  margin: 10px;
-  background-color: black;
+  background-color: #222332;
   color: #eee;
   padding: 10px;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+#configFile {
+  background-color: #313247;
 }
 
 .logoHolder {
@@ -89,10 +105,21 @@ button:active,
 }
 
 .mainFrame {
+  width: 100%;
+  position: inherit;
+  padding-top: 20px;
+}
+
+.toolpage {
   height: 100%;
-  width: 800px;
+}
+
+.toolFrame {
+  height: 100%;
+  width: 300px;
   position: absolute;
-  left: 200px;
+  right: 0px;
+  top: 0;
 }
 
 .configPage {
@@ -100,17 +127,38 @@ button:active,
   padding: 10px;
   margin-bottom: 40px;
   border-radius: 10px;
-  margin-top: 96px;
+  margin-top: 30px;
+  margin: auto auto;
+  width: 600px;
 }
 
-.configItem {
+.configItem,
+.dragableItem {
   padding-left: 20px;
-  padding-right: 40px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   background-color: #1c1b1b;
   margin-bottom: 2px;
-  border-radius: 5px;
+  border-radius: 6px;
+}
+
+.dragableItem {
+  background-color: #313247;
+  list-style-type: none;
+}
+
+.dragList,
+.toolDragList {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 2px;
+  border-radius: 15px;
+  border-style: dashed;
+  border-width: 1;
+  border-color: #1c1b1b;
 }
 
 .configMenu {
@@ -131,4 +179,13 @@ button:active,
   background-color: #1c1b1b;
   color: #b00;
   margin-bottom: 2px;
+}
+
+.small {
+  color: #585858;
+  right: 0px;
+  float: right;
+  font-weight: 600;
+  font-size: small;
+  text-transform: uppercase;
 }
