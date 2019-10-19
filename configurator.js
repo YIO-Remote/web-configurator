@@ -360,6 +360,7 @@ function updateGuiMainProfiles(uiConfig, entities) {
 
 function updateGuiToolPages(pages) {
   let innerHtml = "<h3> Pages</h3>";
+  innerHtml += `<div class="blockSmall"></div>`;
   innerHtml += `<ul id="tool.pages" class="toolDragList">`;
   innerHtml += `<li class="dragableItem" id="favorites"><b>Favorites</b><a class="small">YIO Reserved</a></li>`;
   innerHtml += `<li class="dragableItem" id="settings"><b>Settings</b><a class="small">YIO Reserved</a></li>`;
@@ -374,6 +375,7 @@ function updateGuiToolPages(pages) {
 
 function updateGuiToolGroups(groups) {
   let innerHtml = "<h3> groups</h3>";
+  innerHtml += `<div class="blockSmall"></div>`;
   innerHtml += `<ul id="tool.groups" class="toolDragList">`;
   const keys = Object.keys(groups);
   for (let key of keys) {
@@ -387,7 +389,7 @@ function updateGuiToolGroups(groups) {
 function updateGuiToolEntities(entities) {
   let innerHtml = "<h3> Entities</h3>";
   let ulArray = [];
-
+  innerHtml += `<div class="blockSmall"></div>`;
   for (let type of SUPPORTED_ENTITIES) {
     let ulID = `tool.entities.${type}`;
     ulArray.push(ulID);
