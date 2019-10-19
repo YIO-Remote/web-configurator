@@ -163,19 +163,19 @@ function updateGuiMainIntegrations(integrations) {
 function updateGuiMainSettings(settings, ui_config) {
   let innerHtml = "<h3>Configuration Settings</h3>";
 
-  innerHtml += `<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode" ${isChecked(ui_config.darkmode)}></div></div>`;
-  innerHtml += `<div class="configItem"><div>Auto brightness <input type="checkbox" id="settings.autobrightness" name="autobrightness" ${isChecked(settings.autobrightness)}></div></div>`;
-  innerHtml += `<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea" ${isChecked(settings.bluetootharea)}></div></div>`;
-  innerHtml += `<div class="configItem"><div>Software Updates <input type="checkbox" id="settings.softwareupdate" name="softwareupdate"></div></div>`;
-  innerHtml += `<div class="configItem"><div>Language <select id="settings.language" name="language">`;
+  innerHtml += `<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode" ${isChecked(ui_config.darkmode)} onchange="settingsChangeDarkmode()"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Auto brightness <input type="checkbox" id="settings.autobrightness" name="autobrightness" ${isChecked(settings.autobrightness)} onchange="settingsChangeAutobrightness()"></div></div>`;
+  //innerHtml += `<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea" ${isChecked(settings.bluetootharea)}></div></div>`;
+  innerHtml += `<div class="configItem"><div>Software Updates <input type="checkbox" id="settings.softwareupdate" name="softwareupdate" onchange="settingsChangeSoftwareupdate()"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Language <select id="settings.language" name="language" onchange="settingsChangeLanguage()">`;
   innerHtml += `<option value="en_US">en_US</option>`;
   innerHtml += `<option value="nl_NL">nl_NL</option>`;
   innerHtml += `<option value="de_DE">de_DE</option>`;
   innerHtml += `<option value="jp_JS">jp_JS</option>`;
   innerHtml += `</select></div></div>`;
-  innerHtml += `<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250"></div></div>`;
-  innerHtml += `<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000"></div></div>`;
-  innerHtml += `<div class="configItem"><div>WiFi time <input type="number" id="settings.wifitime" name="wifitime"min="0" max="36000"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250" onchange="settingsChangeProximity()"></div></div>`;
+  innerHtml += `<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000" onchange="settingsChangeShutdowntime()"></div></div>`;
+  innerHtml += `<div class="configItem"><div>WiFi time <input type="number" id="settings.wifitime" name="wifitime"min="0" max="36000" onchange="settingsChangeWifitime()"></div></div>`;
 
   document.getElementById("settings").innerHTML = innerHtml;
   document.getElementById("settings.language").value = settings.language;
@@ -697,6 +697,49 @@ function dragableRemove(evt) {
 
     configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig].splice(oldIndex, 1);
   }
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+
+function settingsChangeDarkmode() {
+  let element = document.getElementById(`ui_config.darkmode`);
+  configObj.ui_config.darkmode = element.checked;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeAutobrightness() {
+  let element = document.getElementById(`settings.autobrightness`);
+  configObj.settings.autobrightness = element.checked;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeSoftwareupdate() {
+  let element = document.getElementById(`settings.softwareupdate`);
+  configObj.settings.softwareupdate = element.checked;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeLanguage() {
+  let element = document.getElementById(`settings.language`);
+  configObj.settings.language = element.value;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeProximity() {
+  let element = document.getElementById(`settings.proximity`);
+  configObj.settings.proximity = element.value;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeShutdowntime() {
+  let element = document.getElementById(`settings.shutdowntime`);
+  configObj.settings.shutdowntime = element.value;
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function settingsChangeWifitime() {
+  let element = document.getElementById(`settings.wifitime`);
+  configObj.settings.wifitime = element.value;
   updateGuiByConfigObj();
   wsSetConfig();
 }
