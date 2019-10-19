@@ -10,7 +10,7 @@ const UI_ELEMENTS = {
   profiles: ["ui_config.profiles"],
   groups: ["ui_config.groups", "toolEntities"],
   pages: ["ui_config.pages", "toolGroups"],
-  DoNotShowDefault: ["manageProfile", "toolPages", "managePage"]
+  DoNotShowDefault: ["manageProfile", "toolPages", "managePage", "manageGroup"]
 };
 
 let socket; //websocket handle
@@ -187,6 +187,8 @@ function updateGuiMainSettings(settings, ui_config) {
 
 function updateGuiMainGroups(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Groups</h3>";
+  innerHtml += `<button type="button" onclick="mainGroupManage();">Add new group</button>`;
+
   const keys = Object.keys(uiConfig.groups);
   let ulArray = [];
 
@@ -198,6 +200,8 @@ function updateGuiMainGroups(uiConfig, entities) {
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
     innerHtml += `<h4>${group.name}</h4>`;
+    innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit ${group.name}</button><br>`;
+    innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)}></div></div>`;
 
     innerHtml += `<ul id="${ulID}" yioConfig="groups" yioConfigKey="${key}" yioSubConfig="entities" class="dragList">`;
@@ -389,18 +393,18 @@ function changeDragSellection(sellection) {
   if (dragSelection === "M") setGuiVisibilityOfId("manageProfile", true);
 }
 
-function mainProfileManage(profileKey) {
+// Managing Profiles
+function mainProfileManage(key) {
   changeDragSellection("M");
   let manageProfileName = document.getElementById("manageProfile.name");
-  if (profileKey) {
-    editKey = profileKey;
-    manageProfileName.value = configObj.ui_config.profiles[profileKey].name;
+  if (key) {
+    editKey = key;
+    manageProfileName.value = configObj.ui_config.profiles[key].name;
   } else {
     editKey = toolGenerateUuidv4();
     manageProfileName.value = "";
   }
 }
-
 function toolProfileSave() {
   let manageProfileName = document.getElementById("manageProfile.name");
   if (manageProfileName.value != "") {
@@ -418,14 +422,12 @@ function toolProfileSave() {
     alert("ERROR: Name must have a value");
   }
 }
-
 function toolProfileCancel() {
   let manageProfileName = document.getElementById("manageProfile.name");
   manageProfileName.value = "";
   editKey = "";
   setGuiVisibilityOfId("manageProfile", false);
 }
-
 function toolProfileRemove() {
   if (configObj.ui_config.profiles[editKey]) {
     delete configObj.ui_config.profiles[editKey];
@@ -438,19 +440,19 @@ function toolProfileRemove() {
   wsSetConfig();
 }
 
-function mainPageManage(profileKey) {
+// Managing Pages
+function mainPageManage(key) {
   setGuiVisibilityOfId("toolGroups", false);
   setGuiVisibilityOfId("managePage", true);
   let managePageName = document.getElementById("managePage.name");
-  if (profileKey) {
-    editKey = profileKey;
-    managePageName.value = configObj.ui_config.pages[profileKey].name;
+  if (key) {
+    editKey = key;
+    managePageName.value = configObj.ui_config.pages[key].name;
   } else {
     editKey = toolGenerateUuidv4();
     managePageName.value = "";
   }
 }
-
 function toolPageSave() {
   let managePageName = document.getElementById("managePage.name");
   if (managePageName.value != "") {
@@ -469,7 +471,6 @@ function toolPageSave() {
     alert("ERROR: Name must have a value");
   }
 }
-
 function toolPageCancel() {
   let managePageName = document.getElementById("managePage.name");
   managePageName.value = "";
@@ -477,7 +478,6 @@ function toolPageCancel() {
   setGuiVisibilityOfId("toolGroups", true);
   setGuiVisibilityOfId("managePage", false);
 }
-
 function toolPageRemove() {
   // if the page exist then delete it.
   if (configObj.ui_config.pages[editKey]) {
@@ -498,7 +498,72 @@ function toolPageRemove() {
   let managePageName = document.getElementById("managePage.name");
   managePageName.value = "";
   editKey = "";
+  setGuiVisibilityOfId("toolGroups", true);
   setGuiVisibilityOfId("managePage", false);
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+
+// Managing Groups
+function mainGroupManage(key) {
+  setGuiVisibilityOfId("toolEntities", false);
+  setGuiVisibilityOfId("manageGroup", true);
+  let manageGroupName = document.getElementById("manageGroup.name");
+  if (key) {
+    editKey = key;
+    manageGroupName.value = configObj.ui_config.groups[key].name;
+  } else {
+    editKey = toolGenerateUuidv4();
+    manageGroupName.value = "";
+  }
+}
+function toolGroupSave() {
+  let manageGroupName = document.getElementById("manageGroup.name");
+  if (manageGroupName.value != "") {
+    if (configObj.ui_config.groups[editKey]) {
+      configObj.ui_config.groups[editKey].name = manageGroupName.value;
+    } else {
+      configObj.ui_config.groups[editKey] = { name: manageGroupName.value, entities: [], switch: false };
+    }
+    manageGroupName.value = "";
+    editKey = "";
+    setGuiVisibilityOfId("toolEntities", true);
+    setGuiVisibilityOfId("manageGroup", false);
+    updateGuiByConfigObj();
+    wsSetConfig();
+  } else {
+    alert("ERROR: Name must have a value");
+  }
+}
+function toolGroupCancel() {
+  let manageGroupName = document.getElementById("manageGroup.name");
+  manageGroupName.value = "";
+  editKey = "";
+  setGuiVisibilityOfId("toolEntities", true);
+  setGuiVisibilityOfId("manageGroup", false);
+}
+function toolGroupRemove() {
+  // if the page exist then delete it.
+  if (configObj.ui_config.groups[editKey]) {
+    delete configObj.ui_config.groups[editKey];
+  }
+
+  // Clean up all references in profiles.
+  if (configObj.ui_config.pages) {
+    for (let i in configObj.ui_config.pages) {
+      let index = configObj.ui_config.pages[i].groups.indexOf(editKey);
+
+      if (index > -1) {
+        configObj.ui_config.pages[i].groups.splice(index, 1);
+      }
+    }
+  }
+
+  let manageGroupName = document.getElementById("manageGroup.name");
+  manageGroupName.value = "";
+  editKey = "";
+  setGuiVisibilityOfId("toolEntities", true);
+  setGuiVisibilityOfId("manageGroup", false);
   updateGuiByConfigObj();
   wsSetConfig();
 }
