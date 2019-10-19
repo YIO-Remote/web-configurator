@@ -10,7 +10,7 @@ const UI_ELEMENTS = {
   profiles: ["ui_config.profiles"],
   groups: ["ui_config.groups", "toolEntities"],
   pages: ["ui_config.pages", "toolGroups"],
-  DoNotShowDefault: ["manageProfile", "toolPages"]
+  DoNotShowDefault: ["manageProfile", "toolPages", "managePage"]
 };
 
 let socket; //websocket handle
@@ -34,11 +34,11 @@ function wsConnect(url) {
     console.log(`[message] Data received from server`);
     if (messageObj.type && messageObj.type === "auth_ok") {
       console.log("Sending configJson request to server");
-      getConfig();
+      wsGetConfig();
     }
     if (messageObj.type && messageObj.type === "config") {
       configObj = messageObj.config;
-      parseConfigurationJson();
+      updateGuiByConfigObj();
     }
   };
 
@@ -57,18 +57,18 @@ function wsConnect(url) {
   };
 }
 
-function getConfig() {
+function wsGetConfig() {
   socket.send(`{"type":"getconfig"}`);
 }
 
-function setConfig() {
+function wsSetConfig() {
   try {
     //Try parsing configuration. Fail on error
     let confJson = document.getElementById("configJsonTextBox").value;
     configObj = JSON.parse(confJson);
     socket.send(`{"type":"setconfig", "config":${confJson}}`);
     console.log("Config save requested");
-    parseConfigurationJson();
+    updateGuiByConfigObj();
   } catch (e) {
     alert(`Failed to save configuration with error: ${e.message}`);
     console.log(`Failed to save configuration with error: ${e.message}`);
@@ -79,41 +79,42 @@ function buildAuthPacket(token) {
   return `{"type":"auth","token": "${token}"}`;
 }
 
-function uuidv4() {
+function toolGenerateUuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 }
 
-function parseConfigurationJson() {
-  if (configObj) displayJsonConfigText(configObj);
-  if (configObj.areas) displayAreas(configObj.areas);
-  if (configObj.entities) displayEntities(configObj.entities);
-  if (configObj.entities) displayToolEntities(configObj.entities);
-  if (configObj.integrations) displayIntegrations(configObj.integrations);
-  if (configObj.settings) displaySettings(configObj.settings, configObj.ui_config);
-  if (configObj.ui_config.groups) displayUiConfigGroups(configObj.ui_config, configObj.entities);
-  if (configObj.ui_config.pages) displayUiConfigPages(configObj.ui_config);
-  if (configObj.ui_config.pages) displayToolPages(configObj.ui_config.pages);
-  if (configObj.ui_config.profiles) displayUiConfigProfiles(configObj.ui_config, configObj.entities);
+function updateGuiByConfigObj() {
+  if (configObj) updateGuiMainConfigJsonText(configObj);
+  if (configObj.areas) updateGuiMainAreas(configObj.areas);
+  if (configObj.entities) updateGuiMainEntities(configObj.entities);
+  if (configObj.entities) updateGuiToolEntities(configObj.entities);
+  if (configObj.integrations) updateGuiMainIntegrations(configObj.integrations);
+  if (configObj.settings) updateGuiMainSettings(configObj.settings, configObj.ui_config);
+  if (configObj.ui_config.groups) updateGuiMainGroups(configObj.ui_config, configObj.entities);
+  if (configObj.ui_config.groups) updateGuiToolGroups(configObj.ui_config.groups);
+  if (configObj.ui_config.pages) updateGuiMainPages(configObj.ui_config);
+  if (configObj.ui_config.pages) updateGuiToolPages(configObj.ui_config.pages);
+  if (configObj.ui_config.profiles) updateGuiMainProfiles(configObj.ui_config, configObj.entities);
 }
 
-function setActiveUI(element) {
+function setGuiActive(element) {
   //Set visibility to false on all.
   const keys = Object.keys(UI_ELEMENTS);
   for (let key of keys) {
     for (let elmnt of UI_ELEMENTS[key]) {
-      setVisibilityOfId(elmnt, false);
+      setGuiVisibilityOfId(elmnt, false);
     }
   }
 
   //Set visibility to true for required elements.
   try {
     for (let elmnt of UI_ELEMENTS[element]) {
-      setVisibilityOfId(elmnt, true);
+      setGuiVisibilityOfId(elmnt, true);
     }
   } catch (e) {}
 }
 
-function setVisibilityOfId(id, visibility) {
+function setGuiVisibilityOfId(id, visibility) {
   let element = document.getElementById(id);
   if (visibility) {
     element.style.display = "block";
@@ -122,12 +123,12 @@ function setVisibilityOfId(id, visibility) {
   }
 }
 
-function displayJsonConfigText(confObj) {
+function updateGuiMainConfigJsonText(confObj) {
   let confJson = JSON.stringify(confObj, null, 2);
   document.getElementById("configJsonTextBox").value = confJson;
 }
 
-function displayAreas(areas) {
+function updateGuiMainAreas(areas) {
   let innerHtml = "<h3>Configuration Areas</h3>";
   for (let area of areas) {
     innerHtml += `<div class="configItem"><b>${area.area}</b><a class="small">${area.bluetooth}</a></div>`;
@@ -135,7 +136,7 @@ function displayAreas(areas) {
   document.getElementById("areas").innerHTML = innerHtml;
 }
 
-function displayEntities(entities) {
+function updateGuiMainEntities(entities) {
   let entityHtml = "<h3>Configuration Entities</h3>";
   for (let type of SUPPORTED_ENTITIES) {
     for (let entity of entities[type]) {
@@ -145,7 +146,7 @@ function displayEntities(entities) {
   document.getElementById("entities").innerHTML = entityHtml;
 }
 
-function displayIntegrations(integrations) {
+function updateGuiMainIntegrations(integrations) {
   let innerHtml = "<h3>Integrations</h3>";
 
   const keys = Object.keys(integrations);
@@ -159,7 +160,7 @@ function displayIntegrations(integrations) {
   document.getElementById("intergrations").innerHTML = innerHtml;
 }
 
-function displaySettings(settings, ui_config) {
+function updateGuiMainSettings(settings, ui_config) {
   let innerHtml = "<h3>Configuration Settings</h3>";
 
   innerHtml += `<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode" ${isChecked(ui_config.darkmode)}></div></div>`;
@@ -184,7 +185,7 @@ function displaySettings(settings, ui_config) {
   document.getElementById("settings.wifitime").value = settings.wifitime;
 }
 
-function displayUiConfigGroups(uiConfig, entities) {
+function updateGuiMainGroups(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Groups</h3>";
   const keys = Object.keys(uiConfig.groups);
   let ulArray = [];
@@ -218,8 +219,9 @@ function displayUiConfigGroups(uiConfig, entities) {
   makeDragableGroups(ulArray);
 }
 
-function displayUiConfigPages(uiConfig) {
+function updateGuiMainPages(uiConfig) {
   let innerHtml = "<h3>Configuration Pages</h3>";
+  innerHtml += `<button type="button" onclick="mainPageManage();">Add new page</button>`;
 
   const keys = Object.keys(uiConfig.pages);
   let ulArray = [];
@@ -231,7 +233,9 @@ function displayUiConfigPages(uiConfig) {
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
-    innerHtml += `<h4>Page: ${page.name}</h4>`;
+    innerHtml += `<h4>${page.name}</h4>`;
+    innerHtml += `<button type="button" onclick="mainPageManage('${key}');">Edit ${page.name}</button><br>`;
+    innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<div class="configItem"><div>Image: ${page.image}</div></div>`;
     innerHtml += `<ul id="${ulID}" yioConfig="pages" yioConfigKey="${key}" yioSubConfig="groups" class="dragList">`;
     for (let group of page.groups) {
@@ -252,9 +256,9 @@ function displayUiConfigPages(uiConfig) {
   makeDragableGroups(ulArray);
 }
 
-function displayUiConfigProfiles(uiConfig, entities) {
+function updateGuiMainProfiles(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Profiles</h3>";
-  innerHtml += `<button type="button" onclick="manageProfile();">Add new profile</button><button type="button" onclick="changeDragSellection('F');">Edit Favorites</button><button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
+  innerHtml += `<button type="button" onclick="mainProfileManage();">Add new profile</button><button type="button" onclick="changeDragSellection('F');">Edit Favorites</button><button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
   const keys = Object.keys(uiConfig.profiles);
   let ulArrayF = []; // UL array Favorites
   let ulArrayP = []; // UL array Pages
@@ -284,7 +288,7 @@ function displayUiConfigProfiles(uiConfig, entities) {
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
     innerHtml += `<h4>${profile.name}</h4>`;
-    innerHtml += `<button type="button" onclick="manageProfile('${key}');">Edit ${profile.name}</button><br>`;
+    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');">Edit ${profile.name}</button><br>`;
 
     // Favorites //
     innerHtml += `<h5>Favorites:</h5>`;
@@ -329,8 +333,8 @@ function displayUiConfigProfiles(uiConfig, entities) {
   }
 }
 
-function displayToolPages(pages) {
-  let innerHtml = "<h3>Dragable Pages</h3>";
+function updateGuiToolPages(pages) {
+  let innerHtml = "<h3> Pages</h3>";
   innerHtml += `<ul id="tool.pages" class="toolDragList">`;
   innerHtml += `<li class="dragableItem" id="favorites"><b>Favorites</b><a class="small">YIO Reserved</a></li>`;
   innerHtml += `<li class="dragableItem" id="settings"><b>Settings</b><a class="small">YIO Reserved</a></li>`;
@@ -343,8 +347,20 @@ function displayToolPages(pages) {
   makeDragableGroups(["tool.pages"]);
 }
 
-function displayToolEntities(entities) {
-  let innerHtml = "<h3>Dragable Entities</h3>";
+function updateGuiToolGroups(groups) {
+  let innerHtml = "<h3> groups</h3>";
+  innerHtml += `<ul id="tool.groups" class="toolDragList">`;
+  const keys = Object.keys(groups);
+  for (let key of keys) {
+    innerHtml += `<li class="dragableItem" id="${key}"><b>${groups[key].name}</b> </li>`;
+  }
+  innerHtml += `</ul>`;
+  document.getElementById("toolGroups").innerHTML = innerHtml;
+  makeDragableGroups(["tool.groups"]);
+}
+
+function updateGuiToolEntities(entities) {
+  let innerHtml = "<h3> Entities</h3>";
   let ulArray = [];
 
   for (let type of SUPPORTED_ENTITIES) {
@@ -364,28 +380,28 @@ function displayToolEntities(entities) {
 function changeDragSellection(sellection) {
   // used on profiles as there are two dragable types. we don't want to mistake and drag an entity as a page.
   dragSelection = sellection;
-  parseConfigurationJson();
-  setVisibilityOfId("toolEntities", false);
-  setVisibilityOfId("toolPages", false);
-  setVisibilityOfId("manageProfile", false);
-  if (dragSelection === "F") setVisibilityOfId("toolEntities", true);
-  if (dragSelection === "P") setVisibilityOfId("toolPages", true);
-  if (dragSelection === "M") setVisibilityOfId("manageProfile", true);
+  updateGuiByConfigObj();
+  setGuiVisibilityOfId("toolEntities", false);
+  setGuiVisibilityOfId("toolPages", false);
+  setGuiVisibilityOfId("manageProfile", false);
+  if (dragSelection === "F") setGuiVisibilityOfId("toolEntities", true);
+  if (dragSelection === "P") setGuiVisibilityOfId("toolPages", true);
+  if (dragSelection === "M") setGuiVisibilityOfId("manageProfile", true);
 }
 
-function manageProfile(profileKey) {
+function mainProfileManage(profileKey) {
   changeDragSellection("M");
   let manageProfileName = document.getElementById("manageProfile.name");
   if (profileKey) {
     editKey = profileKey;
     manageProfileName.value = configObj.ui_config.profiles[profileKey].name;
   } else {
-    editKey = uuidv4();
+    editKey = toolGenerateUuidv4();
     manageProfileName.value = "";
   }
 }
 
-function saveProfile() {
+function toolProfileSave() {
   let manageProfileName = document.getElementById("manageProfile.name");
   if (manageProfileName.value != "") {
     if (configObj.ui_config.profiles[editKey]) {
@@ -395,31 +411,96 @@ function saveProfile() {
     }
     manageProfileName.value = "";
     editKey = "";
-    setVisibilityOfId("manageProfile", false);
-    parseConfigurationJson();
-    setConfig();
+    setGuiVisibilityOfId("manageProfile", false);
+    updateGuiByConfigObj();
+    wsSetConfig();
   } else {
     alert("ERROR: Name must have a value");
   }
 }
 
-function cancelProfile() {
+function toolProfileCancel() {
   let manageProfileName = document.getElementById("manageProfile.name");
   manageProfileName.value = "";
   editKey = "";
-  setVisibilityOfId("manageProfile", false);
+  setGuiVisibilityOfId("manageProfile", false);
 }
 
-function removeProfile() {
+function toolProfileRemove() {
   if (configObj.ui_config.profiles[editKey]) {
     delete configObj.ui_config.profiles[editKey];
   }
   let manageProfileName = document.getElementById("manageProfile.name");
   manageProfileName.value = "";
   editKey = "";
-  setVisibilityOfId("manageProfile", false);
-  parseConfigurationJson();
-  setConfig();
+  setGuiVisibilityOfId("manageProfile", false);
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+
+function mainPageManage(profileKey) {
+  setGuiVisibilityOfId("toolGroups", false);
+  setGuiVisibilityOfId("managePage", true);
+  let managePageName = document.getElementById("managePage.name");
+  if (profileKey) {
+    editKey = profileKey;
+    managePageName.value = configObj.ui_config.pages[profileKey].name;
+  } else {
+    editKey = toolGenerateUuidv4();
+    managePageName.value = "";
+  }
+}
+
+function toolPageSave() {
+  let managePageName = document.getElementById("managePage.name");
+  if (managePageName.value != "") {
+    if (configObj.ui_config.pages[editKey]) {
+      configObj.ui_config.pages[editKey].name = managePageName.value;
+    } else {
+      configObj.ui_config.pages[editKey] = { name: managePageName.value, groups: [], image: "" };
+    }
+    managePageName.value = "";
+    editKey = "";
+    setGuiVisibilityOfId("toolGroups", true);
+    setGuiVisibilityOfId("managePage", false);
+    updateGuiByConfigObj();
+    wsSetConfig();
+  } else {
+    alert("ERROR: Name must have a value");
+  }
+}
+
+function toolPageCancel() {
+  let managePageName = document.getElementById("managePage.name");
+  managePageName.value = "";
+  editKey = "";
+  setGuiVisibilityOfId("toolGroups", true);
+  setGuiVisibilityOfId("managePage", false);
+}
+
+function toolPageRemove() {
+  // if the page exist then delete it.
+  if (configObj.ui_config.pages[editKey]) {
+    delete configObj.ui_config.pages[editKey];
+  }
+
+  // Clean up all references in profiles.
+  if (configObj.ui_config.profiles) {
+    for (let i in configObj.ui_config.profiles) {
+      let index = configObj.ui_config.profiles[i].pages.indexOf(editKey);
+
+      if (index > -1) {
+        configObj.ui_config.profiles[i].pages.splice(index, 1);
+      }
+    }
+  }
+
+  let managePageName = document.getElementById("managePage.name");
+  managePageName.value = "";
+  editKey = "";
+  setGuiVisibilityOfId("managePage", false);
+  updateGuiByConfigObj();
+  wsSetConfig();
 }
 
 function isChecked(booli) {
@@ -508,8 +589,8 @@ function dragableMoved(evt) {
 
     arrayMove(configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig], oldIndex, newIndex);
   }
-  parseConfigurationJson();
-  setConfig();
+  updateGuiByConfigObj();
+  wsSetConfig();
 }
 
 function dragableAdd(evt) {
@@ -527,8 +608,8 @@ function dragableAdd(evt) {
 
     configObj.ui_config[yioConfigTo][yioConfigKeyTo][yioSubConfigTo].splice(newIndex, 0, itemId);
   }
-  parseConfigurationJson();
-  setConfig();
+  updateGuiByConfigObj();
+  wsSetConfig();
 }
 
 function dragableRemove(evt) {
@@ -545,12 +626,12 @@ function dragableRemove(evt) {
 
     configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig].splice(oldIndex, 1);
   }
-  parseConfigurationJson();
-  setConfig();
+  updateGuiByConfigObj();
+  wsSetConfig();
 }
 
 /////////// Start /////////////////
-setActiveUI("None");
+setGuiActive("None");
 let host = window.location.hostname;
 if (host === "") {
   host = DEBUG_HOST;

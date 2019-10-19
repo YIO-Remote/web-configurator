@@ -66,6 +66,11 @@ button {
   height: 80px;
 }
 
+.blockSmall {
+  display: block;
+  height: 40px;
+}
+
 button:hover,
 .dragableItem:hover,
 .menuItem:hover,
