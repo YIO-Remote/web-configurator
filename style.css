@@ -142,7 +142,7 @@ button:active,
 
 #configJsonTextBox {
   height: 84%;
-  width: 100%;
+  width: 580px;
   background-color: #222332;
   color: #eee;
   padding: 10px;
@@ -211,7 +211,16 @@ button:active,
   scrollbar-width: none;
 }
 
-.toolFrame::-webkit-scrollbar {
+#configJsonTextBox {
+  overflow-y: scroll;
+  align-content: space-between;
+  box-sizing: content-box;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.toolFrame::-webkit-scrollbar,
+#configJsonTextBox::-webkit-scrollbar {
   display: none;
 }
 
