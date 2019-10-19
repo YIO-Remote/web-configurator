@@ -140,7 +140,7 @@ function updateGuiMainEntities(entities) {
   let entityHtml = "<h3>Configuration Entities</h3>";
   for (let type of SUPPORTED_ENTITIES) {
     for (let entity of entities[type]) {
-      entityHtml += `<div class="configItem"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></div>`;
+      entityHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
     }
   }
   document.getElementById("entities").innerHTML = entityHtml;
@@ -202,7 +202,7 @@ function updateGuiMainGroups(uiConfig, entities) {
     innerHtml += `<h4>${group.name}</h4>`;
     innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit ${group.name}</button><br>`;
     innerHtml += `<div class="blockSmall"></div>`;
-    innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)}></div></div>`;
+    innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)} onchange="mainGroupManageSwitch(${key});"></div></div>`;
 
     innerHtml += `<ul id="${ulID}" yioConfig="groups" yioConfigKey="${key}" yioSubConfig="entities" class="dragList">`;
     for (let entity of group.entities) {
@@ -516,6 +516,12 @@ function mainGroupManage(key) {
     editKey = toolGenerateUuidv4();
     manageGroupName.value = "";
   }
+}
+function mainGroupManageSwitch(key) {
+  let manageGroupSwitch = document.getElementById(`groups.${key}.switch`);
+  configObj.ui_config.groups[key].switch = manageGroupSwitch.checked;
+  updateGuiByConfigObj();
+  wsSetConfig();
 }
 function toolGroupSave() {
   let manageGroupName = document.getElementById("manageGroup.name");

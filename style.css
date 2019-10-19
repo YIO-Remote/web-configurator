@@ -61,6 +61,15 @@ button {
   float: right;
 }
 
+.smallButton {
+  margin: 0;
+  margin-top: -2px;
+  width: 60;
+  top: 0;
+  margin-left: 5px;
+  background-color: #1c1b1b;
+}
+
 .blockMedium {
   display: block;
   height: 80px;
