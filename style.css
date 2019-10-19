@@ -29,15 +29,39 @@ h4 {
   display: contents;
 }
 
+h5 {
+  border-bottom-color: #000;
+  border-bottom-width: 0.5;
+  /*border-bottom-style: solid;*/
+  padding-bottom: 11px;
+  font-size: 18px;
+  margin-left: 11px;
+  margin-right: 12px;
+  margin-bottom: -7px;
+  z-index: 9513;
+  position: relative;
+}
+
 li,
 ul {
   list-style-type: none;
 }
 
-input {
+input,
+select {
   width: 100px;
   /* display: block; */
   float: right;
+  background-color: #171717;
+  border: 0;
+  color: #fff;
+  padding: 3;
+  padding-left: 10;
+  border-radius: 8px;
+  outline: none;
+  height: 22px;
+  margin-top: 0;
+  appearance: none;
 }
 
 select {
@@ -50,7 +74,7 @@ button {
   background-color: #2f2e2e;
   display: inline-block;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   color: #eee;
   margin: 5px;
   padding: 5px;
@@ -59,6 +83,26 @@ button {
   font-style: normal;
   font-weight: 100;
   float: right;
+}
+
+.pageName {
+  font-size: 20px;
+  /* font-weight: bold; */
+  margin-top: 27px;
+  margin-left: 14px;
+  float: left;
+}
+
+.profileIcon {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: #918682;
+  float: left;
+  margin-top: 20px;
+  font-size: 30px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .smallButton {
@@ -124,8 +168,9 @@ button:active,
 
 .menuFrame {
   height: 100%;
-  width: 200px;
+  width: 275px;
   position: fixed;
+  background-color: #1c1c1c;
 }
 
 .menuItem {
@@ -138,21 +183,24 @@ button:active,
 
 .mainFrame {
   width: 100%;
+  min-height: 100%;
   position: inherit;
   padding-top: 20px;
+  background-color: #161515;
 }
 
 .toolpage {
-  height: 100%;
-  background-color: #202023;
+  min-height: 100%;
 }
 
 .toolFrame {
-  height: 100%;
+  min-height: 100%;
   width: 330px;
-  position: fixed;
+  position: absolute;
   right: 0px;
   top: 0;
+  padding: 10px;
+  background-color: #313247;
 }
 
 .configPage {
@@ -170,7 +218,7 @@ button:active,
   padding-right: 15px;
   padding-top: 3px;
   padding-bottom: 3px;
-  background-color: #202023;
+  background-color: #1c1c1c;
   margin-bottom: 2px;
   border-radius: 14px;
 }
@@ -182,19 +230,20 @@ button:active,
   padding-right: 15px;
   padding-top: 5px;
   padding-bottom: 7px;
-  background-color: #1c1b1b;
-  margin-bottom: 2px;
+  background-color: #282828;
+  margin-bottom: 10px;
   border-radius: 6px;
 }
 
 .dragableItem,
 .dragableItemError {
-  background-color: #313247;
+  background-color: #1d1e2b;
   list-style-type: none;
 }
 .configItem,
 .dragableItem,
-.dragableItemError {
+.dragableItemError,
+.menuItem {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -208,17 +257,25 @@ button:active,
 }
 
 .dragList,
-.toolDragList {
-  padding-left: 10px;
+.toolDragList,
+.toolDragListInactive {
+  padding-left: 9px;
   padding-right: 10px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  margin-top: 2px;
-  margin-bottom: 30px;
+  padding-top: 13px;
+  padding-bottom: 4px;
+  margin-top: 6px;
+  margin-bottom: 29px;
   border-radius: 15px;
   border-style: dashed;
-  border-width: 2;
-  border-color: #1c1b1b;
+  border-width: 0.5;
+  border-color: #44455d;
+  background-color: #313247;
+  min-height: 41px;
+}
+
+.toolDragListInactive {
+  border-color: #2e2e2e;
+  background-color: #171717;
 }
 
 .configMenu {
@@ -229,6 +286,7 @@ button:active,
   background-color: #1c1b1b;
   margin-bottom: 2px;
   border-radius: 5px;
+  min-height: 36px;
 }
 
 .small {

@@ -137,17 +137,22 @@ function updateGuiMainAreas(areas) {
 }
 
 function updateGuiMainEntities(entities) {
-  let entityHtml = "<h3>Configuration Entities</h3>";
+  let innerHtml = "<h3>Configuration Entities</h3>";
+  innerHtml += `<div class="configGroup">`;
+  innerHtml += `<div class="blockSmall"></div>`;
   for (let type of SUPPORTED_ENTITIES) {
     for (let entity of entities[type]) {
-      entityHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
+      innerHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
     }
   }
-  document.getElementById("entities").innerHTML = entityHtml;
+  innerHtml += `</div>`;
+  document.getElementById("entities").innerHTML = innerHtml;
 }
 
 function updateGuiMainIntegrations(integrations) {
   let innerHtml = "<h3>Integrations</h3>";
+  innerHtml += `<div class="configGroup">`;
+  innerHtml += `<div class="blockSmall"></div>`;
 
   const keys = Object.keys(integrations);
 
@@ -156,13 +161,15 @@ function updateGuiMainIntegrations(integrations) {
       innerHtml += `<div class="configItem"><b>${integration.friendly_name}</b><a class="small">${key}</a></div>`;
     }
   }
-
+  innerHtml += `</div>`;
   document.getElementById("intergrations").innerHTML = innerHtml;
 }
 
 function updateGuiMainSettings(settings, ui_config) {
   let innerHtml = "<h3>Configuration Settings</h3>";
 
+  innerHtml += `<div class="configGroup">`;
+  innerHtml += `<div class="blockSmall"></div>`;
   innerHtml += `<div class="configItem"><div>Dark mode <input type="checkbox" id="ui_config.darkmode" name="darkmode" ${isChecked(ui_config.darkmode)} onchange="settingsChangeDarkmode()"></div></div>`;
   innerHtml += `<div class="configItem"><div>Auto brightness <input type="checkbox" id="settings.autobrightness" name="autobrightness" ${isChecked(settings.autobrightness)} onchange="settingsChangeAutobrightness()"></div></div>`;
   //innerHtml += `<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea" ${isChecked(settings.bluetootharea)}></div></div>`;
@@ -176,8 +183,10 @@ function updateGuiMainSettings(settings, ui_config) {
   innerHtml += `<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250" onchange="settingsChangeProximity()"></div></div>`;
   innerHtml += `<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000" onchange="settingsChangeShutdowntime()"></div></div>`;
   innerHtml += `<div class="configItem"><div>WiFi time <input type="number" id="settings.wifitime" name="wifitime"min="0" max="36000" onchange="settingsChangeWifitime()"></div></div>`;
+  innerHtml += `</div>`;
 
   document.getElementById("settings").innerHTML = innerHtml;
+
   document.getElementById("settings.language").value = settings.language;
   document.getElementById("settings.proximity").value = settings.proximity;
   document.getElementById("settings.shutdowntime").value = settings.shutdowntime;
@@ -199,8 +208,10 @@ function updateGuiMainGroups(uiConfig, entities) {
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
-    innerHtml += `<h4>${group.name}</h4>`;
-    innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit ${group.name}</button><br>`;
+    innerHtml += `<div class="profileIcon">${group.name.charAt(0)}</div>`;
+    innerHtml += `<a class="pageName">${group.name}</a>`;
+    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit</button><br>`;
     innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)} onchange="mainGroupManageSwitch(${key});"></div></div>`;
 
@@ -237,8 +248,10 @@ function updateGuiMainPages(uiConfig) {
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
-    innerHtml += `<h4>${page.name}</h4>`;
-    innerHtml += `<button type="button" onclick="mainPageManage('${key}');">Edit ${page.name}</button><br>`;
+    innerHtml += `<div class="profileIcon">${page.name.charAt(0)}</div>`;
+    innerHtml += `<a class="pageName">${page.name}</a>`;
+    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<button type="button" onclick="mainPageManage('${key}');">Edit</button><br>`;
     innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<div class="configItem"><div>Image: ${page.image}</div></div>`;
     innerHtml += `<ul id="${ulID}" yioConfig="pages" yioConfigKey="${key}" yioSubConfig="groups" class="dragList">`;
@@ -268,17 +281,23 @@ function updateGuiMainProfiles(uiConfig, entities) {
   let ulArrayP = []; // UL array Pages
 
   let cssClassF;
+  let cssClassUlF;
   if (dragSelection === "F") {
     cssClassF = "dragableItem";
+    cssClassUlF = "toolDragList";
   } else {
+    cssClassUlF = "toolDragListInactive";
     cssClassF = "configItem";
   }
 
   let cssClassP;
+  let cssClassUlP;
   if (dragSelection === "P") {
     cssClassP = "dragableItem";
+    cssClassUlP = "toolDragList";
   } else {
     cssClassP = "configItem";
+    cssClassUlP = "toolDragListInactive";
   }
 
   for (let key of keys) {
@@ -291,12 +310,14 @@ function updateGuiMainProfiles(uiConfig, entities) {
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configGroup">`;
-    innerHtml += `<h4>${profile.name}</h4>`;
-    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');">Edit ${profile.name}</button><br>`;
+    innerHtml += `<div class="profileIcon">${profile.name.charAt(0)}</div>`;
+    innerHtml += `<a class="pageName">${profile.name}</a>`;
+    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');">Edit</button><br>`;
 
     // Favorites //
-    innerHtml += `<h5>Favorites:</h5>`;
-    innerHtml += `<ul id="${ulIdF}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="favorites" class="dragList">`;
+    innerHtml += `<div class="blockMedium"></div>`;
+    innerHtml += `<h4>Favorites:</h4>`;
+    innerHtml += `<ul id="${ulIdF}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="favorites" class="${cssClassUlF}">`;
     for (let favorite of profile.favorites) {
       const entity = getEntityById(entities, favorite);
       if (entity.friendly_name) {
@@ -308,8 +329,8 @@ function updateGuiMainProfiles(uiConfig, entities) {
     innerHtml += `</ul>`;
 
     // Pages //
-    innerHtml += `<h5>Pages:</h5>`;
-    innerHtml += `<ul id="${ulIdP}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="pages" class="dragList">`;
+    innerHtml += `<h4>Pages:</h4>`;
+    innerHtml += `<ul id="${ulIdP}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="pages" class="${cssClassUlP}">`;
     for (let page of profile.pages) {
       if (page === "favorites" || page === "settings") {
         let name = page.charAt(0).toUpperCase() + page.slice(1);
@@ -370,6 +391,8 @@ function updateGuiToolEntities(entities) {
   for (let type of SUPPORTED_ENTITIES) {
     let ulID = `tool.entities.${type}`;
     ulArray.push(ulID);
+
+    innerHtml += `<h5>${type}</h5>`;
     innerHtml += `<ul id="${ulID}" class="toolDragList">`;
 
     for (let entity of entities[type]) {
