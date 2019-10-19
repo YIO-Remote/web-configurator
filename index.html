@@ -39,6 +39,9 @@
 
     <div class="ToolFrame" id="tool">
       <div class="toolPage" id="toolEntities" name="toolEntities"></div>
+      <div class="toolPage" id="toolPages" name="toolPages"></div>
+      <div class="toolPage" id="toolGroups" name="toolGroups"></div>
+
       <div class="toolPage" id="areasArea" name="areasArea">
         <h3>Configuration Areas:Area</h3>
         <div class="configItem">
@@ -47,9 +50,20 @@
         </div>
 
         <div class="configItem">
-          <label for="areasArea.bluetooth">Corresponding Bluetooth device</label>
+          <label for="areasArea.bluetooth">Bluetooth MAC</label>
           <input type="text" name="areasArea.bluetooth" placeholder="00:00:00:00:00:00" />
         </div>
+      </div>
+
+      <div class="toolPage" id="manageProfile" name="manageProfile">
+        <h3>manageProfile</h3>
+        <div class="configItem">
+          <label for="areasArea.area">Profile name</label>
+          <input type="text" id="manageProfile.name" placeholder="John Doe" />
+        </div>
+        <button onclick="saveProfile()">Save</button>
+        <button onclick="removeProfile()">Remove</button>
+        <button onclick="cancelProfile()">Cancel</button>
       </div>
     </div>
   </body>

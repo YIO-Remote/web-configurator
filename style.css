@@ -15,19 +15,29 @@ h3 {
   color: #ffffff;
   margin-top: 0;
   text-align: center;
+  margin-bottom: 5px;
 }
 
 h4 {
-  text-align: center;
+  text-align: left;
   margin-top: 50px;
   margin-bottom: 5px;
   text-transform: uppercase;
+  border-bottom-width: 2;
+  border-bottom-style: solid;
+  border-bottom-color: #1d1d1d;
+  display: contents;
+}
+
+li,
+ul {
+  list-style-type: none;
 }
 
 input {
-  /*float: right;*/
   width: 100px;
-  display: block;
+  /* display: block; */
+  float: right;
 }
 
 select {
@@ -42,17 +52,24 @@ button {
   border: none;
   border-radius: 5px;
   color: #eee;
-  margin: 10px;
+  margin: 5px;
   padding: 5px;
   outline: none;
   font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 100;
+  float: right;
+}
+
+.blockMedium {
+  display: block;
+  height: 80px;
 }
 
 button:hover,
 .dragableItem:hover,
-.menuItem:hover {
+.menuItem:hover,
+.dragableItemError:hover {
   background-color: #222332;
 }
 button:active,
@@ -94,7 +111,7 @@ button:active,
 .menuFrame {
   height: 100%;
   width: 200px;
-  position: absolute;
+  position: fixed;
 }
 
 .menuItem {
@@ -113,12 +130,13 @@ button:active,
 
 .toolpage {
   height: 100%;
+  background-color: #202023;
 }
 
 .toolFrame {
   height: 100%;
-  width: 300px;
-  position: absolute;
+  width: 330px;
+  position: fixed;
   right: 0px;
   top: 0;
 }
@@ -133,20 +151,36 @@ button:active,
   width: 600px;
 }
 
-.configItem,
-.dragableItem {
+.configGroup {
   padding-left: 20px;
   padding-right: 15px;
   padding-top: 3px;
   padding-bottom: 3px;
+  background-color: #202023;
+  margin-bottom: 2px;
+  border-radius: 14px;
+}
+
+.configItem,
+.dragableItem,
+.dragableItemError {
+  padding-left: 20px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 7px;
   background-color: #1c1b1b;
   margin-bottom: 2px;
   border-radius: 6px;
 }
 
-.dragableItem {
+.dragableItem,
+.dragableItemError {
   background-color: #313247;
   list-style-type: none;
+}
+.configItem,
+.dragableItem,
+.dragableItemError {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -155,16 +189,21 @@ button:active,
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
 }
 
+.dragableItemError {
+  color: #b00;
+}
+
 .dragList,
 .toolDragList {
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 12px;
   padding-bottom: 12px;
-  margin-bottom: 2px;
+  margin-top: 2px;
+  margin-bottom: 30px;
   border-radius: 15px;
   border-style: dashed;
-  border-width: 1;
+  border-width: 2;
   border-color: #1c1b1b;
 }
 
@@ -176,16 +215,6 @@ button:active,
   background-color: #1c1b1b;
   margin-bottom: 2px;
   border-radius: 5px;
-}
-
-.configItemError {
-  padding-left: 20px;
-  padding-right: 40px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: #1c1b1b;
-  color: #b00;
-  margin-bottom: 2px;
 }
 
 .small {

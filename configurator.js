@@ -7,13 +7,16 @@ const UI_ELEMENTS = {
   areas: ["areas", "areasArea"],
   advanced: ["configFile"],
   settings: ["settings"],
-  profiles: ["ui_config.profiles", "toolEntities"],
+  profiles: ["ui_config.profiles"],
   groups: ["ui_config.groups", "toolEntities"],
-  pages: ["ui_config.pages"]
+  pages: ["ui_config.pages", "toolGroups"],
+  DoNotShowDefault: ["manageProfile", "toolPages"]
 };
 
-let socket;
-let configObj;
+let socket; //websocket handle
+let configObj; //Config.json in object form
+let dragSelection = ""; //Selection for when multiple dragable item groups are possible.
+let editKey; //Global Active Key ID being edited.
 
 function wsConnect(url) {
   socket = new WebSocket(url);
@@ -84,26 +87,30 @@ function parseConfigurationJson() {
   if (configObj) displayJsonConfigText(configObj);
   if (configObj.areas) displayAreas(configObj.areas);
   if (configObj.entities) displayEntities(configObj.entities);
+  if (configObj.entities) displayToolEntities(configObj.entities);
   if (configObj.integrations) displayIntegrations(configObj.integrations);
   if (configObj.settings) displaySettings(configObj.settings, configObj.ui_config);
   if (configObj.ui_config.groups) displayUiConfigGroups(configObj.ui_config, configObj.entities);
   if (configObj.ui_config.pages) displayUiConfigPages(configObj.ui_config);
+  if (configObj.ui_config.pages) displayToolPages(configObj.ui_config.pages);
   if (configObj.ui_config.profiles) displayUiConfigProfiles(configObj.ui_config, configObj.entities);
 }
 
 function setActiveUI(element) {
+  //Set visibility to false on all.
   const keys = Object.keys(UI_ELEMENTS);
   for (let key of keys) {
     for (let elmnt of UI_ELEMENTS[key]) {
-      if (key === element) {
-        setVisibilityOfId(elmnt, true);
-      } else {
-        setVisibilityOfId(elmnt, false);
-      }
+      setVisibilityOfId(elmnt, false);
     }
   }
-  if (element == "groups") {
-  }
+
+  //Set visibility to true for required elements.
+  try {
+    for (let elmnt of UI_ELEMENTS[element]) {
+      setVisibilityOfId(elmnt, true);
+    }
+  } catch (e) {}
 }
 
 function setVisibilityOfId(id, visibility) {
@@ -130,29 +137,12 @@ function displayAreas(areas) {
 
 function displayEntities(entities) {
   let entityHtml = "<h3>Configuration Entities</h3>";
-  let toolHtml = "<h3>Dragable Entities</h3>";
-  let ulArray = [];
-
   for (let type of SUPPORTED_ENTITIES) {
-    //entityHtml += `<h4>${type}</h4>`;
-    //toolHtml += `<h4>${type}</h4>`;
-
-    let ulID = `tool.entities.${type}`;
-    ulArray.push(ulID);
-    toolHtml += `<ul id="${ulID}" class="toolDragList">`;
-
     for (let entity of entities[type]) {
-      toolHtml += `<li class="dragableItem" id="${entity.entity_id}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
       entityHtml += `<div class="configItem"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></div>`;
     }
-    toolHtml += `</ul>`;
   }
   document.getElementById("entities").innerHTML = entityHtml;
-  document.getElementById("toolEntities").innerHTML = toolHtml;
-
-  for (ulID of ulArray) {
-    makeDragableGroups(ulID);
-  }
 }
 
 function displayIntegrations(integrations) {
@@ -162,7 +152,7 @@ function displayIntegrations(integrations) {
 
   for (let key of keys) {
     for (let integration of integrations[key].data) {
-      innerHtml += `<div class="configItem"><b>${integration.friendly_name}</b><a class="small">${JSON.stringify(integration.data)}</a></div>`;
+      innerHtml += `<div class="configItem"><b>${integration.friendly_name}</b><a class="small">${key}</a></div>`;
     }
   }
 
@@ -204,6 +194,8 @@ function displayUiConfigGroups(uiConfig, entities) {
     let ulID = `uiConfig.groups.entities.${key}`;
     ulArray.push(ulID);
 
+    innerHtml += `<div class="blockMedium"></div>`;
+    innerHtml += `<div class="configGroup">`;
     innerHtml += `<h4>${group.name}</h4>`;
     innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)}></div></div>`;
 
@@ -216,19 +208,19 @@ function displayUiConfigGroups(uiConfig, entities) {
         innerHtml += `<li class="configItemError"><b> No entity found with UUID: "${entity}" !</b></li>`;
       }
     }
-    innerHtml += `</ul>`;
+    innerHtml += `</ul></div>`;
   }
 
   document.getElementById("ui_config.groups").innerHTML = innerHtml;
 
   //make list items dragable in ul
-  for (ulID of ulArray) {
-    makeDragableGroups(ulID);
-  }
+
+  makeDragableGroups(ulArray);
 }
 
 function displayUiConfigPages(uiConfig) {
   let innerHtml = "<h3>Configuration Pages</h3>";
+
   const keys = Object.keys(uiConfig.pages);
   let ulArray = [];
 
@@ -237,6 +229,8 @@ function displayUiConfigPages(uiConfig) {
     let ulID = `uiConfig.pages.groups.${key}`;
     ulArray.push(ulID);
 
+    innerHtml += `<div class="blockMedium"></div>`;
+    innerHtml += `<div class="configGroup">`;
     innerHtml += `<h4>Page: ${page.name}</h4>`;
     innerHtml += `<div class="configItem"><div>Image: ${page.image}</div></div>`;
     innerHtml += `<ul id="${ulID}" yioConfig="pages" yioConfigKey="${key}" yioSubConfig="groups" class="dragList">`;
@@ -248,56 +242,184 @@ function displayUiConfigPages(uiConfig) {
         innerHtml += `<div class="configItemError"><b> No group found with UUID: "${group}"</b></div>`;
       }
     }
-    innerHtml += `</ul>`;
+    innerHtml += `</ul></div>`;
   }
+
   document.getElementById("ui_config.pages").innerHTML = innerHtml;
 
   //make list items dragable in ul
-  for (ulID of ulArray) {
-    makeDragableGroups(ulID);
-  }
+
+  makeDragableGroups(ulArray);
 }
 
 function displayUiConfigProfiles(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Profiles</h3>";
+  innerHtml += `<button type="button" onclick="manageProfile();">Add new profile</button><button type="button" onclick="changeDragSellection('F');">Edit Favorites</button><button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
   const keys = Object.keys(uiConfig.profiles);
-  let ulArray = [];
+  let ulArrayF = []; // UL array Favorites
+  let ulArrayP = []; // UL array Pages
+
+  let cssClassF;
+  if (dragSelection === "F") {
+    cssClassF = "dragableItem";
+  } else {
+    cssClassF = "configItem";
+  }
+
+  let cssClassP;
+  if (dragSelection === "P") {
+    cssClassP = "dragableItem";
+  } else {
+    cssClassP = "configItem";
+  }
 
   for (let key of keys) {
     const profile = uiConfig.profiles[key];
-    let ulID = `uiConfig.profiles.favorites.${key}`;
-    ulArray.push(ulID);
 
-    innerHtml += `<h4>Profile: ${profile.name}</h4>`;
-    innerHtml += `Favorites:`;
-    innerHtml += `<ul id="${ulID}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="favorites" class="dragList">`;
+    let ulIdF = `uiConfig.profiles.favorites.${key}`;
+    ulArrayF.push(ulIdF);
+    let ulIdP = `uiConfig.profiles.pages.${key}`;
+    ulArrayP.push(ulIdP);
+
+    innerHtml += `<div class="blockMedium"></div>`;
+    innerHtml += `<div class="configGroup">`;
+    innerHtml += `<h4>${profile.name}</h4>`;
+    innerHtml += `<button type="button" onclick="manageProfile('${key}');">Edit ${profile.name}</button><br>`;
+
+    // Favorites //
+    innerHtml += `<h5>Favorites:</h5>`;
+    innerHtml += `<ul id="${ulIdF}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="favorites" class="dragList">`;
     for (let favorite of profile.favorites) {
       const entity = getEntityById(entities, favorite);
       if (entity.friendly_name) {
-        innerHtml += `<li class="dragableItem" id="${favorite}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
+        innerHtml += `<li class="${cssClassF}" id="${favorite}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
       } else {
-        innerHtml += `<div class="configItemError"><b> No entity fount with UUID: "${favorite}" !</b></div>`;
+        innerHtml += `<li class="${cssClassF}Error" id="ERROR"><b>No entity found with UUID: "${favorite}"</b></li>`;
       }
     }
     innerHtml += `</ul>`;
-    innerHtml += `Pages:`;
-    innerHtml += `<div class="configItem">Assigned pages:`;
+
+    // Pages //
+    innerHtml += `<h5>Pages:</h5>`;
+    innerHtml += `<ul id="${ulIdP}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="pages" class="dragList">`;
     for (let page of profile.pages) {
       if (page === "favorites" || page === "settings") {
-        innerHtml += `<div class="configItem"> ${page}</div>`;
+        let name = page.charAt(0).toUpperCase() + page.slice(1);
+        innerHtml += `<li class="${cssClassP}" id="${page}"><b>${name}</b></li>`;
       } else {
         const pag = uiConfig.pages[page];
         if (pag) {
-          innerHtml += `<div class="configItem">Page: ${pag.name}</div>`;
+          innerHtml += `<li class="${cssClassP}" id="${page}"><b>${pag.name}</b></li>`;
         } else {
-          innerHtml += `<div class="configItemError"><b> No page found with UUID: "${page}"</b></div>`;
+          innerHtml += `<li class="${cssClassP}Error" id="ERROR"><b>No page found with UUID: "${page}"</b></li>`;
         }
       }
     }
-    innerHtml += `</div>`;
+    innerHtml += `</ul></div>`;
+  }
+  document.getElementById("ui_config.profiles").innerHTML = innerHtml;
+
+  //make list items dragable in ul
+  if (dragSelection === "F") {
+    makeDragableGroups(ulArrayF);
   }
 
-  document.getElementById("ui_config.profiles").innerHTML = innerHtml;
+  if (dragSelection === "P") {
+    makeDragableGroups(ulArrayP);
+  }
+}
+
+function displayToolPages(pages) {
+  let innerHtml = "<h3>Dragable Pages</h3>";
+  innerHtml += `<ul id="tool.pages" class="toolDragList">`;
+  innerHtml += `<li class="dragableItem" id="favorites"><b>Favorites</b><a class="small">YIO Reserved</a></li>`;
+  innerHtml += `<li class="dragableItem" id="settings"><b>Settings</b><a class="small">YIO Reserved</a></li>`;
+  const keys = Object.keys(pages);
+  for (let key of keys) {
+    innerHtml += `<li class="dragableItem" id="${key}"><b>${pages[key].name}</b> </li>`;
+  }
+  innerHtml += `</ul>`;
+  document.getElementById("toolPages").innerHTML = innerHtml;
+  makeDragableGroups(["tool.pages"]);
+}
+
+function displayToolEntities(entities) {
+  let innerHtml = "<h3>Dragable Entities</h3>";
+  let ulArray = [];
+
+  for (let type of SUPPORTED_ENTITIES) {
+    let ulID = `tool.entities.${type}`;
+    ulArray.push(ulID);
+    innerHtml += `<ul id="${ulID}" class="toolDragList">`;
+
+    for (let entity of entities[type]) {
+      innerHtml += `<li class="dragableItem" id="${entity.entity_id}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
+    }
+    innerHtml += `</ul>`;
+  }
+  document.getElementById("toolEntities").innerHTML = innerHtml;
+  makeDragableGroups(ulArray);
+}
+
+function changeDragSellection(sellection) {
+  // used on profiles as there are two dragable types. we don't want to mistake and drag an entity as a page.
+  dragSelection = sellection;
+  parseConfigurationJson();
+  setVisibilityOfId("toolEntities", false);
+  setVisibilityOfId("toolPages", false);
+  setVisibilityOfId("manageProfile", false);
+  if (dragSelection === "F") setVisibilityOfId("toolEntities", true);
+  if (dragSelection === "P") setVisibilityOfId("toolPages", true);
+  if (dragSelection === "M") setVisibilityOfId("manageProfile", true);
+}
+
+function manageProfile(profileKey) {
+  changeDragSellection("M");
+  let manageProfileName = document.getElementById("manageProfile.name");
+  if (profileKey) {
+    editKey = profileKey;
+    manageProfileName.value = configObj.ui_config.profiles[profileKey].name;
+  } else {
+    editKey = uuidv4();
+    manageProfileName.value = "";
+  }
+}
+
+function saveProfile() {
+  let manageProfileName = document.getElementById("manageProfile.name");
+  if (manageProfileName.value != "") {
+    if (configObj.ui_config.profiles[editKey]) {
+      configObj.ui_config.profiles[editKey].name = manageProfileName.value;
+    } else {
+      configObj.ui_config.profiles[editKey] = { name: manageProfileName.value, favorites: [], pages: [] };
+    }
+    manageProfileName.value = "";
+    editKey = "";
+    setVisibilityOfId("manageProfile", false);
+    parseConfigurationJson();
+    setConfig();
+  } else {
+    alert("ERROR: Name must have a value");
+  }
+}
+
+function cancelProfile() {
+  let manageProfileName = document.getElementById("manageProfile.name");
+  manageProfileName.value = "";
+  editKey = "";
+  setVisibilityOfId("manageProfile", false);
+}
+
+function removeProfile() {
+  if (configObj.ui_config.profiles[editKey]) {
+    delete configObj.ui_config.profiles[editKey];
+  }
+  let manageProfileName = document.getElementById("manageProfile.name");
+  manageProfileName.value = "";
+  editKey = "";
+  setVisibilityOfId("manageProfile", false);
+  parseConfigurationJson();
+  setConfig();
 }
 
 function isChecked(booli) {
@@ -348,24 +470,26 @@ function arrayMove(arr, oldIndex, newIndex) {
   return arr; // for testing
 }
 
-function makeDragableGroups(id) {
-  let x = document.getElementById(id);
-  new Sortable(x, {
-    group: "words",
-    onStart: function(/**Event*/ evt) {
-      console.log("onStart.foo:", evt.item);
-      console.log(evt.oldIndex);
-    },
-    onAdd: function(evt) {
-      dragableAdd(evt);
-    },
-    onUpdate: function(evt) {
-      dragableMoved(evt);
-    },
-    onRemove: function(evt) {
-      dragableRemove(evt);
-    }
-  });
+function makeDragableGroups(ulArray) {
+  for (let id of ulArray) {
+    let x = document.getElementById(id);
+    new Sortable(x, {
+      group: "words",
+      onStart: function(/**Event*/ evt) {
+        console.log("onStart.foo:", evt.item);
+        console.log(evt.oldIndex);
+      },
+      onAdd: function(evt) {
+        dragableAdd(evt);
+      },
+      onUpdate: function(evt) {
+        dragableMoved(evt);
+      },
+      onRemove: function(evt) {
+        dragableRemove(evt);
+      }
+    });
+  }
 }
 
 function dragableMoved(evt) {
