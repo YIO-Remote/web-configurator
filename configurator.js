@@ -1,4 +1,5 @@
 const SUPPORTED_ENTITIES = ["blind", "light", "media_player"];
+const SUPPORTED_LANGUAGES = ["bg_BG", "cs_CZ", "da_DK", "de_DE", "el_GR", "en_US", "es_ES", "et_EE", "fi_FI", "fr_CA", "fr_FR", "ga_IE", "hr_HR", "hu_HU", "is_IS", "it_IT", "lt_LT", "lv_LV", "mt_MT", "nl_NL", "no_NO", "pl_PL", "pt_BR", "pt_PT", "ro_RO", "ru_BY", "ru_MD", "ru_RU", "ru_UA", "sk_SK", "sl_SI", "sv_SE", "zh_CN", "zh_TW"];
 const DEBUG_HOST = "10.2.1.217";
 
 const UI_ELEMENTS = {
@@ -175,10 +176,9 @@ function updateGuiMainSettings(settings, ui_config) {
   //innerHtml += `<div class="configItem"><div>Bluetooth area <input type="checkbox" id="settings.bluetootharea" name="bluetootharea" ${isChecked(settings.bluetootharea)}></div></div>`;
   innerHtml += `<div class="configItem"><div>Software Updates <input type="checkbox" id="settings.softwareupdate" name="softwareupdate" onchange="settingsChangeSoftwareupdate()"></div></div>`;
   innerHtml += `<div class="configItem"><div>Language <select id="settings.language" name="language" onchange="settingsChangeLanguage()">`;
-  innerHtml += `<option value="en_US">en_US</option>`;
-  innerHtml += `<option value="nl_NL">nl_NL</option>`;
-  innerHtml += `<option value="de_DE">de_DE</option>`;
-  innerHtml += `<option value="jp_JS">jp_JS</option>`;
+  for (let language of SUPPORTED_LANGUAGES) {
+    innerHtml += `<option value="${language}">${language}</option>`;
+  }
   innerHtml += `</select></div></div>`;
   innerHtml += `<div class="configItem"><div>Proximity <input type="number" id="settings.proximity" name="proximity"min="10" max="250" onchange="settingsChangeProximity()"></div></div>`;
   innerHtml += `<div class="configItem"><div>Shutdowntime <input type="number" id="settings.shutdowntime" name="shutdowntime"min="0" max="36000" onchange="settingsChangeShutdowntime()"></div></div>`;
