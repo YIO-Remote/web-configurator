@@ -6,7 +6,7 @@
 //
 // Global Constants
 //
-const SUPPORTED_ENTITIES = ["blind", "light", "media_player"];
+const SUPPORTED_ENTITIES = ["blind", "light", "media_player", "remote"];
 const SUPPORTED_LANGUAGES = ["bg_BG", "cs_CZ", "da_DK", "de_DE", "el_GR", "en_US", "es_ES", "et_EE", "fi_FI", "fr_CA", "fr_FR", "ga_IE", "hr_HR", "hu_HU", "is_IS", "it_IT", "lt_LT", "lv_LV", "mt_MT", "nl_NL", "no_NO", "pl_PL", "pt_BR", "pt_PT", "ro_RO", "ru_BY", "ru_MD", "ru_RU", "ru_UA", "sk_SK", "sl_SI", "sv_SE", "zh_CN", "zh_TW"];
 const DEBUG_HOST = "10.2.1.217";
 const UI_ELEMENTS = {
