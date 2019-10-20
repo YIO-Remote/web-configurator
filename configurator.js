@@ -1,7 +1,14 @@
+// YIO Configuration Code.
+// Coded by Niels de Klerk 2019.
+//
+
+//
+//
+// Global Constants
+//
 const SUPPORTED_ENTITIES = ["blind", "light", "media_player"];
 const SUPPORTED_LANGUAGES = ["bg_BG", "cs_CZ", "da_DK", "de_DE", "el_GR", "en_US", "es_ES", "et_EE", "fi_FI", "fr_CA", "fr_FR", "ga_IE", "hr_HR", "hu_HU", "is_IS", "it_IT", "lt_LT", "lv_LV", "mt_MT", "nl_NL", "no_NO", "pl_PL", "pt_BR", "pt_PT", "ro_RO", "ru_BY", "ru_MD", "ru_RU", "ru_UA", "sk_SK", "sl_SI", "sv_SE", "zh_CN", "zh_TW"];
 const DEBUG_HOST = "10.2.1.217";
-
 const UI_ELEMENTS = {
   integrations: ["intergrations"],
   entities: ["entities"],
@@ -14,11 +21,24 @@ const UI_ELEMENTS = {
   DoNotShowDefault: ["manageProfile", "toolPages", "managePage", "manageGroup"]
 };
 
+//
+//
+//  Global Variables
+//
 let socket; //websocket handle
 let configObj; //Config.json in object form
 let dragSelection = ""; //Selection for when multiple dragable item groups are possible.
 let editKey; //Global Active Key ID being edited.
+let unfoldProfiles = "";
+let unfoldPages = "";
+let unfoldGroups = "";
 
+/////////////////////////////// CODE ///////////////////////////////
+
+//
+//
+//  Connection Functions
+//
 function wsConnect(url) {
   socket = new WebSocket(url);
   console.log(`Connecting to host: "${host}"`);
@@ -57,11 +77,9 @@ function wsConnect(url) {
     console.log(`[error] ${error.message}`);
   };
 }
-
 function wsGetConfig() {
   socket.send(`{"type":"getconfig"}`);
 }
-
 function wsSetConfig() {
   try {
     //Try parsing configuration. Fail on error
@@ -75,29 +93,48 @@ function wsSetConfig() {
     console.log(`Failed to save configuration with error: ${e.message}`);
   }
 }
-
 function buildAuthPacket(token) {
   return `{"type":"auth","token": "${token}"}`;
 }
 
+//
+//
+//  Tooling functions
+//
 function toolGenerateUuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 }
-
-function updateGuiByConfigObj() {
-  if (configObj) updateGuiMainConfigJsonText(configObj);
-  if (configObj.areas) updateGuiMainAreas(configObj.areas);
-  if (configObj.entities) updateGuiMainEntities(configObj.entities);
-  if (configObj.entities) updateGuiToolEntities(configObj.entities);
-  if (configObj.integrations) updateGuiMainIntegrations(configObj.integrations);
-  if (configObj.settings) updateGuiMainSettings(configObj.settings, configObj.ui_config);
-  if (configObj.ui_config.groups) updateGuiMainGroups(configObj.ui_config, configObj.entities);
-  if (configObj.ui_config.groups) updateGuiToolGroups(configObj.ui_config.groups);
-  if (configObj.ui_config.pages) updateGuiMainPages(configObj.ui_config);
-  if (configObj.ui_config.pages) updateGuiToolPages(configObj.ui_config.pages);
-  if (configObj.ui_config.profiles) updateGuiMainProfiles(configObj.ui_config, configObj.entities);
+function isChecked(booli) {
+  if (booli) {
+    return "checked";
+  } else {
+    return "";
+  }
+}
+function getEntityById(entities, key) {
+  let returnEntity = {};
+  for (let type of SUPPORTED_ENTITIES) {
+    for (let entity of entities[type]) {
+      if (entity.entity_id === key) returnEntity = entity;
+    }
+  }
+  return returnEntity;
+}
+function arrayMove(arr, oldIndex, newIndex) {
+  if (newIndex >= arr.length) {
+    var k = newIndex - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  return arr; // for testing
 }
 
+//
+//
+//  GUI Manipulations
+//
 function setGuiActive(element) {
   //Set visibility to false on all.
   const keys = Object.keys(UI_ELEMENTS);
@@ -114,7 +151,6 @@ function setGuiActive(element) {
     }
   } catch (e) {}
 }
-
 function setGuiVisibilityOfId(id, visibility) {
   let element = document.getElementById(id);
   if (visibility) {
@@ -123,12 +159,85 @@ function setGuiVisibilityOfId(id, visibility) {
     element.style.display = "none";
   }
 }
+function changeDragSellection(sellection) {
+  // used on profiles as there are two dragable types. we don't want to mistake and drag an entity as a page.
+  if (sellection === dragSelection) sellection = "";
+  dragSelection = sellection;
+  updateGuiByConfigObj();
+  setGuiVisibilityOfId("toolEntities", false);
+  setGuiVisibilityOfId("toolPages", false);
+  setGuiVisibilityOfId("manageProfile", false);
+  if (dragSelection === "F") setGuiVisibilityOfId("toolEntities", true);
+  if (dragSelection === "P") setGuiVisibilityOfId("toolPages", true);
+  if (dragSelection === "M") setGuiVisibilityOfId("manageProfile", true);
+}
+function makeDragableGroups(ulArray) {
+  for (let id of ulArray) {
+    let x = document.getElementById(id);
+    new Sortable(x, {
+      group: "words",
+      onStart: function(/**Event*/ evt) {
+        console.log("onStart.foo:", evt.item);
+        console.log(evt.oldIndex);
+      },
+      onAdd: function(evt) {
+        dragableAdd(evt);
+      },
+      onUpdate: function(evt) {
+        dragableMoved(evt);
+      },
+      onRemove: function(evt) {
+        dragableRemove(evt);
+      }
+    });
+  }
+}
+function configGroupFold(name, key) {
+  if (name === "unfoldProfiles") {
+    if (unfoldProfiles === key) {
+      unfoldProfiles = "";
+    } else {
+      unfoldProfiles = key;
+    }
+  }
+  if (name === "unfoldPages") {
+    if (unfoldPages === key) {
+      unfoldPages = "";
+    } else {
+      unfoldPages = key;
+    }
+  }
+  if (name === "unfoldGroups") {
+    if (unfoldGroups === key) {
+      unfoldGroups = "";
+    } else {
+      unfoldGroups = key;
+    }
+  }
+  updateGuiByConfigObj();
+}
 
+//
+//
+// Update GUI based on the configuraion Object
+//
+function updateGuiByConfigObj() {
+  if (configObj) updateGuiMainConfigJsonText(configObj);
+  if (configObj.areas) updateGuiMainAreas(configObj.areas);
+  if (configObj.entities) updateGuiMainEntities(configObj.entities);
+  if (configObj.entities) updateGuiToolEntities(configObj.entities);
+  if (configObj.integrations) updateGuiMainIntegrations(configObj.integrations);
+  if (configObj.settings) updateGuiMainSettings(configObj.settings, configObj.ui_config);
+  if (configObj.ui_config.groups) updateGuiMainGroups(configObj.ui_config, configObj.entities);
+  if (configObj.ui_config.groups) updateGuiToolGroups(configObj.ui_config.groups);
+  if (configObj.ui_config.pages) updateGuiMainPages(configObj.ui_config);
+  if (configObj.ui_config.pages) updateGuiToolPages(configObj.ui_config.pages);
+  if (configObj.ui_config.profiles) updateGuiMainProfiles(configObj.ui_config, configObj.entities);
+}
 function updateGuiMainConfigJsonText(confObj) {
   let confJson = JSON.stringify(confObj, null, 2);
   document.getElementById("configJsonTextBox").value = confJson;
 }
-
 function updateGuiMainAreas(areas) {
   let innerHtml = "<h3>Configuration Areas</h3>";
   for (let area of areas) {
@@ -136,7 +245,6 @@ function updateGuiMainAreas(areas) {
   }
   document.getElementById("areas").innerHTML = innerHtml;
 }
-
 function updateGuiMainEntities(entities) {
   let innerHtml = "<h3>Configuration Entities</h3>";
   innerHtml += `<div class="configGroup">`;
@@ -149,7 +257,6 @@ function updateGuiMainEntities(entities) {
   innerHtml += `</div>`;
   document.getElementById("entities").innerHTML = innerHtml;
 }
-
 function updateGuiMainIntegrations(integrations) {
   let innerHtml = "<h3>Integrations</h3>";
   innerHtml += `<div class="configGroup">`;
@@ -165,7 +272,6 @@ function updateGuiMainIntegrations(integrations) {
   innerHtml += `</div>`;
   document.getElementById("intergrations").innerHTML = innerHtml;
 }
-
 function updateGuiMainSettings(settings, ui_config) {
   let innerHtml = "<h3>Configuration Settings</h3>";
 
@@ -193,7 +299,6 @@ function updateGuiMainSettings(settings, ui_config) {
   document.getElementById("settings.softwareupdate").checked = settings.softwareupdate;
   document.getElementById("settings.wifitime").value = settings.wifitime;
 }
-
 function updateGuiMainGroups(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Groups</h3>";
   innerHtml += `<button type="button" onclick="mainGroupManage();">Add new group</button>`;
@@ -201,18 +306,26 @@ function updateGuiMainGroups(uiConfig, entities) {
   const keys = Object.keys(uiConfig.groups);
   let ulArray = [];
 
+  innerHtml += `<div class="blockMedium"></div>`;
   for (let key of keys) {
     const group = uiConfig.groups[key];
     let ulID = `uiConfig.groups.entities.${key}`;
     ulArray.push(ulID);
 
-    innerHtml += `<div class="blockMedium"></div>`;
-    innerHtml += `<div class="configGroup">`;
+    foldedStyle = "height: 80px;";
+    foldedButtonStyle = "transform: rotate(180deg);";
+    if (key === unfoldGroups) foldedStyle = "height: unset;";
+    if (key === unfoldGroups) foldedButtonStyle = "transform: rotate(0deg);";
+
+    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<div class="configGroup" style="${foldedStyle}">`;
+
     innerHtml += `<div class="profileIcon">${group.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${group.name}</a>`;
-    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<button type="button" onclick="configGroupFold('unfoldGroups', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
     innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit</button><br>`;
-    innerHtml += `<div class="blockSmall"></div>`;
+
+    innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)} onchange="mainGroupManageSwitch(${key});"></div></div>`;
 
     innerHtml += `<ul id="${ulID}" yioConfig="groups" yioConfigKey="${key}" yioSubConfig="entities" class="dragList">`;
@@ -233,7 +346,6 @@ function updateGuiMainGroups(uiConfig, entities) {
 
   makeDragableGroups(ulArray);
 }
-
 function updateGuiMainPages(uiConfig) {
   let innerHtml = "<h3>Configuration Pages</h3>";
   innerHtml += `<button type="button" onclick="mainPageManage();">Add new page</button>`;
@@ -241,18 +353,26 @@ function updateGuiMainPages(uiConfig) {
   const keys = Object.keys(uiConfig.pages);
   let ulArray = [];
 
+  innerHtml += `<div class="blockMedium"></div>`;
   for (let key of keys) {
     const page = uiConfig.pages[key];
     let ulID = `uiConfig.pages.groups.${key}`;
     ulArray.push(ulID);
 
-    innerHtml += `<div class="blockMedium"></div>`;
-    innerHtml += `<div class="configGroup">`;
+    foldedStyle = "height: 80px;";
+    foldedButtonStyle = "transform: rotate(180deg);";
+    if (key === unfoldPages) foldedStyle = "height: unset;";
+    if (key === unfoldPages) foldedButtonStyle = "transform: rotate(0deg);";
+
+    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<div class="configGroup" style="${foldedStyle}">`;
+
     innerHtml += `<div class="profileIcon">${page.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${page.name}</a>`;
-    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<button type="button" onclick="configGroupFold('unfoldPages', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
     innerHtml += `<button type="button" onclick="mainPageManage('${key}');">Edit</button><br>`;
-    innerHtml += `<div class="blockSmall"></div>`;
+
+    innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configItem"><div>Image: ${page.image}</div></div>`;
     innerHtml += `<ul id="${ulID}" yioConfig="pages" yioConfigKey="${key}" yioSubConfig="groups" class="dragList">`;
     for (let group of page.groups) {
@@ -272,7 +392,6 @@ function updateGuiMainPages(uiConfig) {
 
   makeDragableGroups(ulArray);
 }
-
 function updateGuiMainProfiles(uiConfig, entities) {
   let innerHtml = "<h3>Configuration Profiles</h3>";
   innerHtml += `<button type="button" onclick="mainProfileManage();">Add new profile</button><button type="button" onclick="changeDragSellection('F');">Edit Favorites</button><button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
@@ -300,6 +419,7 @@ function updateGuiMainProfiles(uiConfig, entities) {
     cssClassUlP = "toolDragListInactive";
   }
 
+  innerHtml += `<div class="blockMedium"></div>`;
   for (let key of keys) {
     const profile = uiConfig.profiles[key];
 
@@ -308,11 +428,18 @@ function updateGuiMainProfiles(uiConfig, entities) {
     let ulIdP = `uiConfig.profiles.pages.${key}`;
     ulArrayP.push(ulIdP);
 
-    innerHtml += `<div class="blockMedium"></div>`;
-    innerHtml += `<div class="configGroup">`;
+    foldedStyle = "height: 80px;";
+    foldedButtonStyle = "transform: rotate(180deg);";
+    if (key === unfoldProfiles) foldedStyle = "height: unset;";
+    if (key === unfoldProfiles) foldedButtonStyle = "transform: rotate(0deg);";
+
+    innerHtml += `<div class="blockSmall"></div>`;
+    innerHtml += `<div class="configGroup" style="${foldedStyle}">`;
+
     innerHtml += `<div class="profileIcon">${profile.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${profile.name}</a>`;
-    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');">Edit</button><br>`;
+    innerHtml += `<button type="button" onclick="configGroupFold('unfoldProfiles', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
+    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');" class="">Edit</button>`;
 
     // Favorites //
     innerHtml += `<div class="blockMedium"></div>`;
@@ -359,8 +486,7 @@ function updateGuiMainProfiles(uiConfig, entities) {
 }
 
 function updateGuiToolPages(pages) {
-  let innerHtml = "<h3> Pages</h3>";
-  innerHtml += `<div class="blockSmall"></div>`;
+  let innerHtml = "<h5> Pages</h5>";
   innerHtml += `<ul id="tool.pages" class="toolDragList">`;
   innerHtml += `<li class="dragableItem" id="favorites"><b>Favorites</b><a class="small">YIO Reserved</a></li>`;
   innerHtml += `<li class="dragableItem" id="settings"><b>Settings</b><a class="small">YIO Reserved</a></li>`;
@@ -372,10 +498,9 @@ function updateGuiToolPages(pages) {
   document.getElementById("toolPages").innerHTML = innerHtml;
   makeDragableGroups(["tool.pages"]);
 }
-
 function updateGuiToolGroups(groups) {
-  let innerHtml = "<h3> groups</h3>";
-  innerHtml += `<div class="blockSmall"></div>`;
+  let innerHtml = "<h5> groups</h5>";
+  //innerHtml += `<div class="blockSmall"></div>`;
   innerHtml += `<ul id="tool.groups" class="toolDragList">`;
   const keys = Object.keys(groups);
   for (let key of keys) {
@@ -385,7 +510,6 @@ function updateGuiToolGroups(groups) {
   document.getElementById("toolGroups").innerHTML = innerHtml;
   makeDragableGroups(["tool.groups"]);
 }
-
 function updateGuiToolEntities(entities) {
   let innerHtml = "<h3> Entities</h3>";
   let ulArray = [];
@@ -406,19 +530,10 @@ function updateGuiToolEntities(entities) {
   makeDragableGroups(ulArray);
 }
 
-function changeDragSellection(sellection) {
-  // used on profiles as there are two dragable types. we don't want to mistake and drag an entity as a page.
-  dragSelection = sellection;
-  updateGuiByConfigObj();
-  setGuiVisibilityOfId("toolEntities", false);
-  setGuiVisibilityOfId("toolPages", false);
-  setGuiVisibilityOfId("manageProfile", false);
-  if (dragSelection === "F") setGuiVisibilityOfId("toolEntities", true);
-  if (dragSelection === "P") setGuiVisibilityOfId("toolPages", true);
-  if (dragSelection === "M") setGuiVisibilityOfId("manageProfile", true);
-}
-
-// Managing Profiles
+//
+//
+//  Managing Profiles
+//
 function mainProfileManage(key) {
   changeDragSellection("M");
   let manageProfileName = document.getElementById("manageProfile.name");
@@ -465,7 +580,10 @@ function toolProfileRemove() {
   wsSetConfig();
 }
 
-// Managing Pages
+//
+//
+//  Managing Pages
+//
 function mainPageManage(key) {
   setGuiVisibilityOfId("toolGroups", false);
   setGuiVisibilityOfId("managePage", true);
@@ -529,7 +647,10 @@ function toolPageRemove() {
   wsSetConfig();
 }
 
-// Managing Groups
+//
+//
+//  Managing Groups
+//
 function mainGroupManage(key) {
   setGuiVisibilityOfId("toolEntities", false);
   setGuiVisibilityOfId("manageGroup", true);
@@ -599,133 +720,10 @@ function toolGroupRemove() {
   wsSetConfig();
 }
 
-function isChecked(booli) {
-  if (booli) {
-    return "checked";
-  } else {
-    return "";
-  }
-}
-
-function getEntityById(entities, key) {
-  let returnEntity = {};
-  for (let type of SUPPORTED_ENTITIES) {
-    for (let entity of entities[type]) {
-      if (entity.entity_id === key) returnEntity = entity;
-    }
-  }
-  return returnEntity;
-}
-
-function downloadConfig() {
-  let confJson = document.getElementById("configJsonTextBox").value;
-  download("config.json", confJson);
-}
-
-function download(filename, text) {
-  var pom = document.createElement("a");
-  pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
-  pom.setAttribute("download", filename);
-
-  if (document.createEvent) {
-    var event = document.createEvent("MouseEvents");
-    event.initEvent("click", true, true);
-    pom.dispatchEvent(event);
-  } else {
-    pom.click();
-  }
-}
-
-function arrayMove(arr, oldIndex, newIndex) {
-  if (newIndex >= arr.length) {
-    var k = newIndex - arr.length + 1;
-    while (k--) {
-      arr.push(undefined);
-    }
-  }
-  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-  return arr; // for testing
-}
-
-function makeDragableGroups(ulArray) {
-  for (let id of ulArray) {
-    let x = document.getElementById(id);
-    new Sortable(x, {
-      group: "words",
-      onStart: function(/**Event*/ evt) {
-        console.log("onStart.foo:", evt.item);
-        console.log(evt.oldIndex);
-      },
-      onAdd: function(evt) {
-        dragableAdd(evt);
-      },
-      onUpdate: function(evt) {
-        dragableMoved(evt);
-      },
-      onRemove: function(evt) {
-        dragableRemove(evt);
-      }
-    });
-  }
-}
-
-function dragableMoved(evt) {
-  if (evt.from.attributes.yioConfig && evt.from.attributes.yioConfigKey && evt.from.attributes.yioSubConfig) {
-    let yioConfig = evt.from.attributes.yioConfig.value;
-    let yioConfigKey = evt.from.attributes.yioConfigKey.value;
-    let yioSubConfig = evt.from.attributes.yioSubConfig.value;
-    let oldIndex = evt.oldIndex;
-    let newIndex = evt.newIndex;
-    console.log("Item moved");
-    console.log(`yioConfig ${yioConfig}`);
-    console.log(`yioConfigKey ${yioConfigKey}`);
-    console.log(`yioSubConfig ${yioSubConfig}`);
-    console.log("From:", oldIndex);
-    console.log("To:", newIndex);
-
-    arrayMove(configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig], oldIndex, newIndex);
-  }
-  updateGuiByConfigObj();
-  wsSetConfig();
-}
-
-function dragableAdd(evt) {
-  if (evt.to.attributes.yioConfig && evt.to.attributes.yioConfigKey && evt.to.attributes.yioSubConfig) {
-    let yioConfigTo = evt.to.attributes.yioConfig.value;
-    let yioConfigKeyTo = evt.to.attributes.yioConfigKey.value;
-    let yioSubConfigTo = evt.to.attributes.yioSubConfig.value;
-    let newIndex = evt.newIndex;
-    let itemId = evt.item.id;
-    console.log("Item Added");
-    console.log(`yioConfigTo ${yioConfigTo}`);
-    console.log(`yioConfigKeyTo ${yioConfigKeyTo}`);
-    console.log(`yioSubConfigTo ${yioSubConfigTo}`);
-    console.log("To:", newIndex);
-
-    configObj.ui_config[yioConfigTo][yioConfigKeyTo][yioSubConfigTo].splice(newIndex, 0, itemId);
-  }
-  updateGuiByConfigObj();
-  wsSetConfig();
-}
-
-function dragableRemove(evt) {
-  if (evt.from.attributes.yioConfig && evt.from.attributes.yioConfigKey && evt.from.attributes.yioSubConfig) {
-    let yioConfig = evt.from.attributes.yioConfig.value;
-    let yioConfigKey = evt.from.attributes.yioConfigKey.value;
-    let yioSubConfig = evt.from.attributes.yioSubConfig.value;
-    let oldIndex = evt.oldIndex;
-    console.log("Item Removed");
-    console.log(`yioConfig ${yioConfig}`);
-    console.log(`yioConfigKey ${yioConfigKey}`);
-    console.log(`yioSubConfig ${yioSubConfig}`);
-    console.log("From:", oldIndex);
-
-    configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig].splice(oldIndex, 1);
-  }
-  updateGuiByConfigObj();
-  wsSetConfig();
-}
-
+//
+//
+//  Managing Settings
+//
 function settingsChangeDarkmode() {
   let element = document.getElementById(`ui_config.darkmode`);
   configObj.ui_config.darkmode = element.checked;
@@ -769,7 +767,89 @@ function settingsChangeWifitime() {
   wsSetConfig();
 }
 
-/////////// Start /////////////////
+//
+//
+//  Download functions
+//
+function downloadConfig() {
+  let confJson = document.getElementById("configJsonTextBox").value;
+  download("config.json", confJson);
+}
+function download(filename, text) {
+  var pom = document.createElement("a");
+  pom.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  pom.setAttribute("download", filename);
+
+  if (document.createEvent) {
+    var event = document.createEvent("MouseEvents");
+    event.initEvent("click", true, true);
+    pom.dispatchEvent(event);
+  } else {
+    pom.click();
+  }
+}
+
+//
+//
+//  Drag and Drop Handles
+//
+function dragableMoved(evt) {
+  if (evt.from.attributes.yioConfig && evt.from.attributes.yioConfigKey && evt.from.attributes.yioSubConfig) {
+    let yioConfig = evt.from.attributes.yioConfig.value;
+    let yioConfigKey = evt.from.attributes.yioConfigKey.value;
+    let yioSubConfig = evt.from.attributes.yioSubConfig.value;
+    let oldIndex = evt.oldIndex;
+    let newIndex = evt.newIndex;
+    console.log("Item moved");
+    console.log(`yioConfig ${yioConfig}`);
+    console.log(`yioConfigKey ${yioConfigKey}`);
+    console.log(`yioSubConfig ${yioSubConfig}`);
+    console.log("From:", oldIndex);
+    console.log("To:", newIndex);
+
+    arrayMove(configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig], oldIndex, newIndex);
+  }
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function dragableAdd(evt) {
+  if (evt.to.attributes.yioConfig && evt.to.attributes.yioConfigKey && evt.to.attributes.yioSubConfig) {
+    let yioConfigTo = evt.to.attributes.yioConfig.value;
+    let yioConfigKeyTo = evt.to.attributes.yioConfigKey.value;
+    let yioSubConfigTo = evt.to.attributes.yioSubConfig.value;
+    let newIndex = evt.newIndex;
+    let itemId = evt.item.id;
+    console.log("Item Added");
+    console.log(`yioConfigTo ${yioConfigTo}`);
+    console.log(`yioConfigKeyTo ${yioConfigKeyTo}`);
+    console.log(`yioSubConfigTo ${yioSubConfigTo}`);
+    console.log("To:", newIndex);
+
+    configObj.ui_config[yioConfigTo][yioConfigKeyTo][yioSubConfigTo].splice(newIndex, 0, itemId);
+  }
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+function dragableRemove(evt) {
+  if (evt.from.attributes.yioConfig && evt.from.attributes.yioConfigKey && evt.from.attributes.yioSubConfig) {
+    let yioConfig = evt.from.attributes.yioConfig.value;
+    let yioConfigKey = evt.from.attributes.yioConfigKey.value;
+    let yioSubConfig = evt.from.attributes.yioSubConfig.value;
+    let oldIndex = evt.oldIndex;
+    console.log("Item Removed");
+    console.log(`yioConfig ${yioConfig}`);
+    console.log(`yioConfigKey ${yioConfigKey}`);
+    console.log(`yioSubConfig ${yioSubConfig}`);
+    console.log("From:", oldIndex);
+
+    configObj.ui_config[yioConfig][yioConfigKey][yioSubConfig].splice(oldIndex, 1);
+  }
+  updateGuiByConfigObj();
+  wsSetConfig();
+}
+
+/////////////////////////////// START ///////////////////////////////
+
 setGuiActive("None");
 let host = window.location.hostname;
 if (host === "") {
