@@ -551,7 +551,7 @@ function toolProfileSave() {
     if (configObj.ui_config.profiles[editKey]) {
       configObj.ui_config.profiles[editKey].name = manageProfileName.value;
     } else {
-      configObj.ui_config.profiles[editKey] = { name: manageProfileName.value, favorites: [], pages: [] };
+      configObj.ui_config.profiles[editKey] = { name: manageProfileName.value, favorites: [], pages: ["favorites", "settings"] };
     }
     manageProfileName.value = "";
     editKey = "";
