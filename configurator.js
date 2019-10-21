@@ -239,7 +239,7 @@ function updateGuiMainConfigJsonText(confObj) {
   document.getElementById("configJsonTextBox").value = confJson;
 }
 function updateGuiMainAreas(areas) {
-  let innerHtml = "<h3>Configuration Areas</h3>";
+  let innerHtml = "<h3>Manage Areas</h3>";
   for (let area of areas) {
     innerHtml += `<div class="configItem"><b>${area.area}</b><a class="small">${area.bluetooth}</a></div>`;
   }
@@ -300,8 +300,8 @@ function updateGuiMainSettings(settings, ui_config) {
   document.getElementById("settings.wifitime").value = settings.wifitime;
 }
 function updateGuiMainGroups(uiConfig, entities) {
-  let innerHtml = "<h3>Configuration Groups</h3>";
-  innerHtml += `<button type="button" onclick="mainGroupManage();">Add new group</button>`;
+  let innerHtml = "<h3>Manage Groups</h3>";
+  innerHtml += `<button type="button" onclick="mainGroupManage();">Add a Group</button>`;
 
   const keys = Object.keys(uiConfig.groups);
   let ulArray = [];
@@ -323,7 +323,6 @@ function updateGuiMainGroups(uiConfig, entities) {
     innerHtml += `<div class="profileIcon">${group.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${group.name}</a>`;
     innerHtml += `<button type="button" onclick="configGroupFold('unfoldGroups', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
-    innerHtml += `<button type="button" onclick="mainGroupManage('${key}');">Edit</button><br>`;
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configItem"><div>Group switch <input type="checkbox" id="groups.${key}.switch" name="groups.${key}.switch" ${isChecked(group.switch)} onchange="mainGroupManageSwitch(${key});"></div></div>`;
@@ -337,7 +336,7 @@ function updateGuiMainGroups(uiConfig, entities) {
         innerHtml += `<li class="configItemError"><b> No entity found with UUID: "${entity}" !</b></li>`;
       }
     }
-    innerHtml += `</ul></div>`;
+    innerHtml += `</ul><button type="button" onclick="mainGroupManage('${key}');">Edit...</button></div>`;
   }
 
   document.getElementById("ui_config.groups").innerHTML = innerHtml;
@@ -347,8 +346,8 @@ function updateGuiMainGroups(uiConfig, entities) {
   makeDragableGroups(ulArray);
 }
 function updateGuiMainPages(uiConfig) {
-  let innerHtml = "<h3>Configuration Pages</h3>";
-  innerHtml += `<button type="button" onclick="mainPageManage();">Add new page</button>`;
+  let innerHtml = "<h3>Manage Pages</h3>";
+  innerHtml += `<button type="button" onclick="mainPageManage();">Add a Page</button>`;
 
   const keys = Object.keys(uiConfig.pages);
   let ulArray = [];
@@ -370,7 +369,6 @@ function updateGuiMainPages(uiConfig) {
     innerHtml += `<div class="profileIcon">${page.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${page.name}</a>`;
     innerHtml += `<button type="button" onclick="configGroupFold('unfoldPages', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
-    innerHtml += `<button type="button" onclick="mainPageManage('${key}');">Edit</button><br>`;
 
     innerHtml += `<div class="blockMedium"></div>`;
     innerHtml += `<div class="configItem"><div>Image: ${page.image}</div></div>`;
@@ -383,7 +381,7 @@ function updateGuiMainPages(uiConfig) {
         innerHtml += `<div class="configItemError"><b> No group found with UUID: "${group}"</b></div>`;
       }
     }
-    innerHtml += `</ul></div>`;
+    innerHtml += `</ul><button type="button" onclick="mainPageManage('${key}');">Edit...</button></div>`;
   }
 
   document.getElementById("ui_config.pages").innerHTML = innerHtml;
@@ -393,8 +391,9 @@ function updateGuiMainPages(uiConfig) {
   makeDragableGroups(ulArray);
 }
 function updateGuiMainProfiles(uiConfig, entities) {
-  let innerHtml = "<h3>Configuration Profiles</h3>";
-  innerHtml += `<button type="button" onclick="mainProfileManage();">Add new profile</button><button type="button" onclick="changeDragSellection('F');">Edit Favorites</button><button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
+  let innerHtml = "<h3>Manage Profiles</h3>";
+  innerHtml += `<button type="button" onclick="mainProfileManage();">Add a Profile</button>`;
+
   const keys = Object.keys(uiConfig.profiles);
   let ulArrayF = []; // UL array Favorites
   let ulArrayP = []; // UL array Pages
@@ -435,14 +434,14 @@ function updateGuiMainProfiles(uiConfig, entities) {
 
     innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<div class="configGroup" style="${foldedStyle}">`;
-
     innerHtml += `<div class="profileIcon">${profile.name.charAt(0)}</div>`;
     innerHtml += `<a class="pageName">${profile.name}</a>`;
     innerHtml += `<button type="button" onclick="configGroupFold('unfoldProfiles', '${key}');" class="miniButton" style="${foldedButtonStyle}">^</button>`;
-    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');" class="">Edit</button>`;
 
     // Favorites //
     innerHtml += `<div class="blockMedium"></div>`;
+    innerHtml += `<button type="button" onclick="changeDragSellection('F');">Edit Favorites</button>`;
+    innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<h4>Favorites:</h4>`;
     innerHtml += `<ul id="${ulIdF}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="favorites" class="${cssClassUlF}">`;
     for (let favorite of profile.favorites) {
@@ -456,6 +455,8 @@ function updateGuiMainProfiles(uiConfig, entities) {
     innerHtml += `</ul>`;
 
     // Pages //
+    innerHtml += `<button type="button" onclick="changeDragSellection('P');"> Edit Pages</button>`;
+    innerHtml += `<div class="blockSmall"></div>`;
     innerHtml += `<h4>Pages:</h4>`;
     innerHtml += `<ul id="${ulIdP}" yioConfig="profiles" yioConfigKey="${key}" yioSubConfig="pages" class="${cssClassUlP}">`;
     for (let page of profile.pages) {
@@ -471,7 +472,8 @@ function updateGuiMainProfiles(uiConfig, entities) {
         }
       }
     }
-    innerHtml += `</ul></div>`;
+    innerHtml += `</ul>`;
+    innerHtml += `<button type="button" onclick="mainProfileManage('${key}');" class="">Edit...</button></div>`;
   }
   document.getElementById("ui_config.profiles").innerHTML = innerHtml;
 
