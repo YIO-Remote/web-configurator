@@ -250,8 +250,10 @@ function updateGuiMainEntities(entities) {
   innerHtml += `<div class="configGroup">`;
   innerHtml += `<div class="blockSmall"></div>`;
   for (let type of SUPPORTED_ENTITIES) {
-    for (let entity of entities[type]) {
-      innerHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
+    if (entities[type]){ //Validation
+      for (let entity of entities[type]) {
+        innerHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
+      }
     }
   }
   innerHtml += `</div>`;
