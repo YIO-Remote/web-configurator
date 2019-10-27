@@ -123,8 +123,10 @@ function isChecked(booli) {
 function getEntityById(entities, key) {
   let returnEntity = {};
   for (let type of SUPPORTED_ENTITIES) {
-    for (let entity of entities[type]) {
-      if (entity.entity_id === key) returnEntity = entity;
+    if (entities[type]) {
+      for (let entity of entities[type]) {
+        if (entity.entity_id === key) returnEntity = entity;
+      }
     }
   }
   return returnEntity;
@@ -534,9 +536,10 @@ function updateGuiToolEntities(entities) {
 
     innerHtml += `<h5>${type}</h5>`;
     innerHtml += `<ul id="${ulID}" class="toolDragList">`;
-
-    for (let entity of entities[type]) {
-      innerHtml += `<li class="dragableItem" id="${entity.entity_id}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
+    if (entities[type]) {
+      for (let entity of entities[type]) {
+        innerHtml += `<li class="dragableItem" id="${entity.entity_id}"><b>${entity.friendly_name}</b> <a class="small">${entity.area}</a></li>`;
+      }
     }
     innerHtml += `</ul>`;
   }
