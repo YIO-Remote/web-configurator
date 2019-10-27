@@ -330,3 +330,58 @@ button:active,
   font-size: small;
   text-transform: uppercase;
 }
+
+.messageContainer {
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  max-height: 60%;
+}
+
+.notificationError,
+.notificationOk {
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  text-align-last: center;
+  font-weight: 800;
+  background-color: #222332;
+
+  border-width: 3px;
+  border-left-style: solid;
+  border-right-style: solid;
+}
+
+.notificationOk {
+  color: #fff;
+  border-color: #313247;
+  animation-name: notificationAnimation;
+  animation-duration: 10s;
+  opacity: 0;
+}
+
+.notificationError {
+  color: #ff0044;
+  border-color: #ff0044;
+  animation-name: notificationAnimation;
+  animation-duration: 10s;
+  opacity: 0;
+}
+
+@keyframes notificationAnimation {
+  0% {
+    opacity: 0.1;
+  }
+  6% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}

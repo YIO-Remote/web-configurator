@@ -32,6 +32,7 @@ let editKey; //Global Active Key ID being edited.
 let unfoldProfiles = "";
 let unfoldPages = "";
 let unfoldGroups = "";
+let notification = 0;
 
 /////////////////////////////// CODE ///////////////////////////////
 
@@ -42,6 +43,7 @@ let unfoldGroups = "";
 function wsConnect(url) {
   socket = new WebSocket(url);
   console.log(`Connecting to host: "${host}"`);
+  newNotification("ok", `Connecting to host: "${host}"`);
 
   socket.onopen = function(e) {
     console.log("[open] Connection established");
@@ -54,11 +56,14 @@ function wsConnect(url) {
     messageObj = JSON.parse(messageJson);
     console.log(`[message] Data received from server`);
     if (messageObj.type && messageObj.type === "auth_ok") {
+      newNotification("ok", "Authenticated to YIO");
+
       console.log("Sending configJson request to server");
       wsGetConfig();
     }
     if (messageObj.type && messageObj.type === "config") {
       configObj = messageObj.config;
+      newNotification("ok", "Configuration received.");
       updateGuiByConfigObj();
     }
   };
@@ -66,14 +71,17 @@ function wsConnect(url) {
   socket.onclose = function(event) {
     if (event.wasClean) {
       console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+      newNotification("error", "Connection to YIO closed.");
     } else {
       // e.g. server process killed or network down
       // event.code is usually 1006 in this case
       console.log("[close] Connection died");
+      newNotification("error", "Connection to YIO broken.");
     }
   };
 
   socket.onerror = function(error) {
+    newNotification("error", "Cannot connect to YIO.");
     console.log(`[error] ${error.message}`);
   };
 }
@@ -87,6 +95,7 @@ function wsSetConfig() {
     configObj = JSON.parse(confJson);
     socket.send(`{"type":"setconfig", "config":${confJson}}`);
     console.log("Config save requested");
+    newNotification("ok", "Configuration saved.");
     updateGuiByConfigObj();
   } catch (e) {
     alert(`Failed to save configuration with error: ${e.message}`);
@@ -250,7 +259,8 @@ function updateGuiMainEntities(entities) {
   innerHtml += `<div class="configGroup">`;
   innerHtml += `<div class="blockSmall"></div>`;
   for (let type of SUPPORTED_ENTITIES) {
-    if (entities[type]){ //Validation
+    if (entities[type]) {
+      //Validation
       for (let entity of entities[type]) {
         innerHtml += `<div class="configItem"><b>${entity.friendly_name}</b><button class="smallButton">Remove</button><button class="smallButton">Edit</button></div>`;
       }
@@ -850,6 +860,38 @@ function dragableRemove(evt) {
   }
   updateGuiByConfigObj();
   wsSetConfig();
+}
+
+//
+//
+//  Notifications
+//
+function newNotification(type, message) {
+  notification++;
+  if (type == "ok") {
+    var messagePara = document.createElement("DIV");
+    messagePara.innerHTML = message;
+    //messagePara.id = `message${notification}`;
+    messagePara.className = "notificationOk";
+    document.getElementById("messageContainer").appendChild(messagePara);
+  } else if (type == "error") {
+    var messagePara = document.createElement("DIV");
+    messagePara.innerHTML = message;
+    //messagePara.id = `message${notification}`;
+    messagePara.className = "notificationError";
+    document.getElementById("messageContainer").appendChild(messagePara);
+  }
+  setTimeout(
+    messagePara => {
+      cleanNotification(messagePara);
+    },
+    10000,
+    messagePara
+  );
+}
+function cleanNotification(notification) {
+  let x = document.getElementById("messageContainer");
+  x.removeChild(notification);
 }
 
 /////////////////////////////// START ///////////////////////////////
