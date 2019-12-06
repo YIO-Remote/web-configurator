@@ -5,7 +5,9 @@ https://github.com/YIO-Remote/documentation
 
 ### Installation
 Install dependencies - `npm install`
+
 Run development server - `npm run serve`
+
 Production build - `npm run build` <--- This probably won't work yet
 
 ### TODO
