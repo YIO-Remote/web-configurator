@@ -1,0 +1,12 @@
+<div v-if="isDisconnected" class="disconnected-overlay">
+    <div class="message-container">
+        <h1 class="title">Oh No!</h1>
+        <p class="message">
+            It looks like we lost connection with your remote.
+            Please make sure it is accessible on the network.
+        </p>
+        <p class="reconnecting">
+            Attempting to reconnect{{loadingDots}}
+        </p>
+    </div>
+</div>

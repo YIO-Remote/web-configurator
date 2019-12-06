@@ -1,11 +1,11 @@
 import { getType } from 'typesafe-actions';
-import { IConfig } from '../../types';
 import initialState from './initial-state';
 import actions, { ConfigActionType } from './actions';
 import { DIContainer } from '../../utilities/dependency-injection';
 import { ServerConnection } from '../../utilities/server';
+import { IConfigState } from '../../types';
 
-export default function reducer(state: IConfig = initialState, action: ConfigActionType): IConfig {
+export default function reducer(state: IConfigState = initialState, action: ConfigActionType): IConfigState {
     switch (action.type) {
         case getType(actions.updateConfig):
             const newState = {

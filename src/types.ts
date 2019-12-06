@@ -98,7 +98,7 @@ export interface IUiConfig {
     };
 }
 
-export interface IConfig {
+export interface IConfigState {
     settings: ISettings;
     ui_config: IUiConfig;
     entities: {
@@ -110,5 +110,5 @@ export interface IConfig {
 }
 
 export interface IState {
-    config: IConfig;
+    config: IConfigState;
 }

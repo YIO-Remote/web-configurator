@@ -1,8 +1,8 @@
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import { IConfig, UpdateFromServer } from '../../types';
+import { IConfigState, UpdateFromServer } from '../../types';
 
 const actions = {
-    updateConfig: createStandardAction('store/config/update')<IConfig, UpdateFromServer>()
+    updateConfig: createStandardAction('store/config/update')<IConfigState, UpdateFromServer>()
 };
 
 export default actions;

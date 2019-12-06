@@ -1,6 +1,6 @@
-import { IConfig } from '../../types';
+import { IConfigState } from '../../types';
 
-const initialState: IConfig = {
+const initialState: IConfigState = {
     entities: {},
     integrations: {},
     settings: {
