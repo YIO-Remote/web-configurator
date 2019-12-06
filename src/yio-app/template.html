@@ -1,0 +1,21 @@
+<div class="app">
+    <header class="header">
+        <h1 class="title">Web Configurator</h1>
+        <h3 class="version">Version 0.0.1</h3>
+    </header>
+    <div class="body">
+        <section class="menu">
+            <MainMenu></MainMenu>
+        </section>
+        <section class="content">
+            <h1 class="title">{{$route.name}}</h1>
+            <transition name="fade" mode="out-in" @beforeLeave="beforeLeave" @enter="enter" @afterEnter="afterEnter">
+                <router-view></router-view>
+            </transition>
+        </section>
+        <section :class="{ 'show': !!$menu.component }" class="context-menu">
+            <component :is="$menu.component" v-bind="$menu.props"></component>
+        </section>
+    </div>
+    <disconnected-overlay></disconnected-overlay>
+</div>

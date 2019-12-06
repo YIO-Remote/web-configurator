@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "strict": true,
+      "module": "esNext",
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "strictPropertyInitialization": false,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true
+    }
+  }

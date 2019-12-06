@@ -1,0 +1,21 @@
+.menu {
+    font-family: OpenSans;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    padding: 17px 0 0 0;
+
+    .menu-item {
+        margin: 0 40px;
+        padding: 17px 0;
+        cursor: pointer;
+
+        &--active {
+            list-style-type: disc;
+            color: #91bf4c;
+        }
+
+        &:hover {
+            color: #91bf4c;
+        }
+    }
+}
