@@ -14,5 +14,7 @@ Production build - `npm run build` <--- This probably won't work yet
 - [x] Add localisation plugin example usage
 - [x] Make websocket and store use RxJS streams
 - [ ] Make layout responsive
-- [ ] Start building reusable components (e.g. buttons, tabs etc.)
+- [ ] Create <card> component
+- [ ] Create <list> and <list-item> component
+- [ ] Create <table> component
 - [ ] Add production build output configuration

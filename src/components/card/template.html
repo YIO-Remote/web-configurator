@@ -1,0 +1,6 @@
+<div class="card" @click="onClick()">
+    <div class="badge" :class="{ 'selected': isSelected }">
+        <div class="text">{{profile.name.substr(0, 1)}}</div>
+    </div>
+    <div class="label">{{profile.name}}</div>
+</div>

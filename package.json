@@ -37,6 +37,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "browser-lang": "^0.1.0",
     "core-js": "^3.4.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",

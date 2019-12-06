@@ -1,12 +1,13 @@
 <div v-if="isDisconnected" class="disconnected-overlay">
     <div class="message-container">
-        <h1 class="title">Oh No!</h1>
+        <h1 class="title">
+            {{ $t('disconnectionOverlay.title') }}
+        </h1>
         <p class="message">
-            It looks like we lost connection with your remote.
-            Please make sure it is accessible on the network.
+            {{ $t('disconnectionOverlay.message') }}
         </p>
         <p class="reconnecting">
-            Attempting to reconnect{{loadingDots}}
+            {{ $t('disconnectionOverlay.reconnecting') }}{{loadingDots}}
         </p>
     </div>
 </div>
