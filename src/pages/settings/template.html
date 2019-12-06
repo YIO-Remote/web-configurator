@@ -1,0 +1,33 @@
+<div>
+    <div class="left-column">
+        <div class="item">
+            <button @click="toggleLanguage()">Toggle Language Test ({{$i18n.locale}})</button>
+            <switch-toggle v-model="autoBrightness" @onToggle="updateAutoBrightness">
+                {{ $t('settingsPage.autoBrightness') }}
+            </switch-toggle>
+        </div>
+        <div class="item">
+            <switch-toggle v-model="darkMode" @onToggle="updateDarkMode">Dark Mode</switch-toggle>
+        </div>
+        <div class="item">
+            <switch-toggle v-model="autoSoftwareUpdate">Auto Software Update</switch-toggle>
+        </div>
+        <div class="item">
+            Language
+        </div>
+    </div>
+    <div class="right-column">
+        <div class="description">
+            Meow
+        </div>
+        <div class="description">
+            Automatically adjust the brightness based on ambient light
+        </div>
+        <div class="description">
+            Automatically look for updates and update when a new software version is available
+        </div>
+        <div class="description">
+            Meow
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+.app {
+    height: 100%;
+    padding: 0 70px;
+}
+
+.header {
+    width: 100%;
+    height: 70px;
+    background-image: url('../../assets/images/logo.svg');
+    background-size: auto 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    .title {
+        float: left;
+        font-family: OpenSans;
+        position: relative;
+        transform: translateY(-50%);
+        top: 50%;
+        color: #FFFFFF;
+    }
+
+    .version {
+        float: right;
+        font-family: OpenSans-Light;
+        position: relative;
+        transform: translateY(-50%);
+        top: 50%;
+        color: #AAAAAA;
+        font-size: 0.6rem;
+    }
+}
+
+.body {
+    height: 100%;
+    display: flex;
+
+    .menu {
+        width: 230px;
+        height: 100%;
+        background: #1C1C1C;
+    }
+
+    .content {
+        flex: 1;
+        height: 100%;
+        background: #171717;
+        color: #FFFFFF;
+        font-family: OpenSans;
+        padding: 30px;
+    }
+
+    .context-menu {
+        transition: all 0.2s;
+        opacity: 0;
+        width: 0;
+        height: 100%;
+        background: #0B0B0B;
+        color: #FFFFFF;
+        font-family: OpenSans;
+
+        &.show {
+            width: 320px;
+            opacity: 1;
+        }
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition-duration: 0.2s;
+    transition-property: opacity;
+    transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
+}

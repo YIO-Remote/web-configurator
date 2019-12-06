@@ -1,0 +1,18 @@
+<svg id="YIO_Logo" data-name="YIO Logo" xmlns="http://www.w3.org/2000/svg" width="106.184" height="40" viewBox="0 0 106.184 40">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Group_1" data-name="Group 1" transform="translate(0 0.839)">
+    <path id="Path_1" data-name="Path 1" class="cls-1" d="M48.3,75.082h1.66V65.438L48.3,63.3Z" transform="translate(-28.258 -37.598)"/>
+    <path id="Path_2" data-name="Path 2" class="cls-1" d="M39.585,2,20.872,24.432,2.158,2H0L20.042,26.025H21.7L41.743,2Z" transform="translate(0 -2)"/>
+  </g>
+  <g id="Group_2" data-name="Group 2" transform="translate(52.2 0.839)">
+    <path id="Path_3" data-name="Path 3" class="cls-1" d="M125.8,45.059h1.66V13.738L125.8,11.6Z" transform="translate(-125.8 -7.575)"/>
+    <rect id="Rectangle_1" data-name="Rectangle 1" class="cls-1" width="1.66" height="2.306"/>
+  </g>
+  <path id="Path_4" data-name="Path 4" class="cls-1" d="M198.343,21.719A18.124,18.124,0,0,1,162.16,20a18.134,18.134,0,1,1,36.266,0h1.66A19.794,19.794,0,1,0,160.5,20a19.765,19.765,0,0,0,39.253,3.522Z" transform="translate(-93.902)"/>
+</svg>

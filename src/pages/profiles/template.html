@@ -1,0 +1,9 @@
+<div>
+    <profile-card
+        v-for="(profile, key) in profiles"
+        :profile="profile"
+        :key="key"
+        :is-selected="profile === selectedProfile"
+        @onClick="onProfileSelected(profile)">
+    </profile-card>
+</div>
