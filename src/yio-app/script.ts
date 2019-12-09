@@ -28,6 +28,6 @@ export default class ProfilesPage extends Vue {
     }
 
     public afterEnter(element: HTMLElement) {
-        element.style.height = 'auto';
+        element.style.height = '100%';
     }
 }

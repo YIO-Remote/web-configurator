@@ -1,6 +1,18 @@
-<div class="card" @click="onClick()">
-    <div class="badge" :class="{ 'selected': isSelected }">
-        <div class="text">{{profile.name.substr(0, 1)}}</div>
+<div :class="cardClasses" @click="onClick()">
+    <div class="card-face">
+        <div class="left-icon-container" v-if="hasLeftIconContent">
+            <slot name="leftIcon" :is-selected="isSelected"></slot>
+        </div>
+        <div class="title-container">
+            <span class="title">{{title}}</span>
+        </div>
+        <div class="right-icon-container" v-if="hasRightIconContent || hasBodyContent">
+            <slot name="rightIcon" class="icon">
+                <i v-if="!hasRightIconContent" :class="arrowClasses"></i>
+            </slot>
+        </div>
     </div>
-    <div class="label">{{profile.name}}</div>
+    <div :class="bodyContainerClasses" v-if="hasBodyContent">
+        <slot name="body" class="body" :is-selected="isSelected"></slot>
+    </div>
 </div>
