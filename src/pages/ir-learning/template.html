@@ -2,13 +2,14 @@
     <div class="message">
         Select the dock to use to turn on IR learning:
     </div>
-
-    <card v-for="(dock, index) in docks" :key="index" :title="dock.name" @onSelected="onSelected">
-        <template v-slot:leftIcon>
-            <div class="dock-icon"></div>
-        </template>
-        <template v-slot:rightIcon>
-            <div class="select-tick"></div>
-        </template>
-    </card>
+    <card-list>
+        <card v-for="(dock, index) in docks" :key="index" :title="dock.name">
+            <template v-slot:leftIcon>
+                <div class="dock-icon"></div>
+            </template>
+            <template v-slot:rightIcon>
+                <div class="select-tick"></div>
+            </template>
+        </card>
+    </card-list>
 </div>

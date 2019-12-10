@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop, Emit } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 @Component({
     name: 'Card'
@@ -11,6 +11,10 @@ export default class Card extends Vue {
     })
     public title: string;
     public isSelected: boolean = false;
+
+    public get isInCardList() {
+        return (typeof (this.$parent as any).addCard === 'function');
+    }
 
     public get hasLeftIconContent() {
         return this.$slots['leftIcon'] || this.$scopedSlots['leftIcon'];
@@ -50,9 +54,17 @@ export default class Card extends Vue {
         this.isSelected = isSelected;
     }
 
-    @Emit('onSelected')
     public onClick() {
+        if (this.isInCardList) {
+            return (this.$parent as any).selectCard(this);
+        }
+
         this.setSelected(!this.isSelected);
-        return this;
+    }
+
+    public mounted() {
+        if (this.isInCardList) {
+            (this.$parent as any).addCard(this);
+        }
     }
 }

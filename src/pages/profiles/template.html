@@ -1,15 +1,17 @@
 <div class="profiles-page">
     <div class="profiles-container">
-        <card v-for="(profile, key) in profiles" :title="profile.name" :key="key" @onSelected="onProfileSelected">
-            <template v-slot:leftIcon="{ isSelected }">
-                <div :class="getBadgeClasses(isSelected)">
-                    {{profile.name.substr(0, 1).toUpperCase()}}
-                </div>
-            </template>
-            <template v-slot:body>
-                Pages
-            </template>
-        </card>
+        <card-list :initial-index="0" @onSelected="onSelected">
+            <card v-for="(profile, index) in profiles" :title="profile.name" :key="index">
+                <template v-slot:leftIcon="{ isSelected }">
+                    <div :class="getBadgeClasses(isSelected)">
+                        {{profile.name.substr(0, 1).toUpperCase()}}
+                    </div>
+                </template>
+                <template v-slot:body>
+                    Pages
+                </template>
+            </card>
+        </card-list>
     </div>
     <div class="remote-control-container">
         <div class="remote-control">
@@ -23,7 +25,7 @@
                         Favorites
                     </div>
                     <ul class="item-list">
-                        <li class="item added" v-for="entity in foo" :key="entity.id">
+                        <li class="item added" v-for="entity in profileEntities" :key="entity.id">
                             <div class="icon-container">
                                 <span class="icon" :class="entity.type"></span>
                             </div>

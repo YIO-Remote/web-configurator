@@ -23,4 +23,10 @@ export default class ProfileOptions extends Vue {
         required: true
     })
     public groups: any[];
+
+    @Prop({
+        type: Array,
+        required: true
+    })
+    public pages: any[];
 }

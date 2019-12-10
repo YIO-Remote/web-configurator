@@ -1,24 +1,45 @@
 import Vue from 'vue';
+import { map, withLatestFrom } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
-import { IProfile, IEntity } from '../../types';
+import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import ProfileOptions from '../../components/profile-options/index.vue';
-import { map, withLatestFrom, combineLatest } from 'rxjs/operators';
 
 @Component({
     name: 'ProfilesPage',
     components: {
+        CardList,
         Card
     },
     subscriptions(this: ProfilesPage) {
         return {
-            profiles: this.store.select('config', 'ui_config', 'profiles'),
+            profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
+                return Object.keys(profiles).map((id) => ({
+                    id,
+                    name: profiles[id].name,
+                    favorites: profiles[id].favorites,
+                    pages: profiles[id].pages,
+                }));
+            })),
+            pages: this.store.select('config', 'ui_config', 'pages')
+                .pipe(withLatestFrom(this.store.select('config', 'ui_config', 'groups')))
+                .pipe(map(([pages, groups]) => {
+                    return Object.keys(pages).reduce((array: any[], key: string) => {
+                        return [
+                            ...array,
+                            ...[{
+                                id: key,
+                                name: pages[key].name,
+                                groups: groups
+                            }]
+                        ];
+                    }, [] as any[]);
+                })),
             groups: this.store.select('config', 'ui_config', 'groups')
-                .pipe(combineLatest(this.store.select('config', 'entities')))
+                .pipe(withLatestFrom(this.store.select('config', 'entities')))
                 .pipe(map(([groups, entities]) => {
-                    console.log(groups, entities)
                     return Object.keys(groups).reduce((array: any[], key: string) => {
                         return [
                             ...array,
@@ -58,27 +79,34 @@ export default class ProfilesPage extends Vue {
         };
     }
 
-    public selectedCard: any;
-    public selectedCardIndex: number = 0;
-
-    public profiles: { [key: string]: IProfile; };
+    public selectedIndex: number = 0;
+    public profiles: any[];
     public entities: any[];
     public groups: any[];
+    public pages: any[];
 
-    public onProfileSelected(card: Card) {
-        if (this.selectedCard === card) {
-            this.selectedCard = void 0;
+    public onSelected(index: number) {
+        if (index === -1) {
+            this.selectedIndex = -1;
             this.$menu.hide();
             return;
         }
 
-        this.selectedCard && this.selectedCard.setSelected(false);
-        this.selectedCardIndex = this.$children.findIndex((child) => child === card);
+        this.selectedIndex = index;
+
         this.$menu.show(ProfileOptions, {
             entities: this.entities,
             groups: this.groups,
+            pages: this.pages
         });
-        this.selectedCard = card;
+    }
+
+    public get profileEntities() {
+        if (this.selectedIndex === -1) {
+            return [];
+        }
+
+        return this.entities.filter((entity) => this.profiles[this.selectedIndex].favorites.includes(entity.id));
     }
 
     public buttonPress(side: string, direction: string) {
@@ -87,9 +115,5 @@ export default class ProfilesPage extends Vue {
 
     public beforeDestroy() {
         this.$menu.hide();
-    }
-
-    public get foo() {
-        return this.entities.filter((entity) => this.profiles[this.selectedCardIndex].favorites.includes(entity.id));
     }
 }

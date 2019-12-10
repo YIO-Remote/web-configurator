@@ -1,10 +1,12 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 
 @Component({
     name: 'IRLearningPage',
     components: {
+        CardList,
         Card
     }
 })
@@ -16,16 +18,4 @@ export default class IRLearningPage extends Vue {
     }, {
         name: 'Test'
     }];
-
-    public selectedCard: any;
-
-    public onSelected(card: Card) {
-        if (this.selectedCard === card) {
-            this.selectedCard = void 0;
-            return;
-        }
-
-        this.selectedCard && this.selectedCard.setSelected(false);
-        this.selectedCard = card;
-    }
 }

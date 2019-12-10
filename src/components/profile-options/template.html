@@ -10,18 +10,21 @@
         <Tab name="Groups">
             <ul>
                <li v-for="(group, index) in groups" :key="index">
-                  {{group.name}}
+                  ------ {{group.name}} ------
                   <ul>
                      <li v-for="(entity, key) in entities" :key="key">
                         {{entity.name}}
                      </li>
                   </ul>
-                  >--------
                </li>
             </ul>
         </Tab>
         <Tab name="Pages">
-           PPP
+            <ul>
+               <li v-for="(page, index) in pages" :key="index">
+                  {{page.name}}
+               </li>
+            </ul>
         </Tab>
     </TabContainer>
 </ul>
