@@ -22,7 +22,7 @@ function padZero(num: number): string {
         return {
             time: timer(0, 1000).pipe(map(() => {
                 const now = new Date();
-                return `${ padZero(now.getHours())}:${padZero(now.getMinutes())}`;
+                return `${padZero(now.getHours())}:${padZero(now.getMinutes())}`;
             })),
             profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
                 return Object.keys(profiles).map((id) => ({
