@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { timer } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
@@ -6,6 +7,10 @@ import { YioStore } from '../../store';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import ProfileOptions from '../../components/profile-options/index.vue';
+
+function padZero(num: number): string {
+    return (num < 10) ? `0${num}` : `${num}`;
+}
 
 @Component({
     name: 'ProfilesPage',
@@ -15,6 +20,10 @@ import ProfileOptions from '../../components/profile-options/index.vue';
     },
     subscriptions(this: ProfilesPage) {
         return {
+            time: timer(0, 1000).pipe(map(() => {
+                const now = new Date();
+                return `${ padZero(now.getHours())}:${padZero(now.getMinutes())}`;
+            })),
             profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
                 return Object.keys(profiles).map((id) => ({
                     id,
