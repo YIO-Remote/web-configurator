@@ -1,2 +1,26 @@
 <div>
+    <h1 class="title">Configured Integrations</h1>
+    <yio-table :items="configuredIntegrations" max-height="525px" @onItemSelected="onItemSelected">
+        <template v-slot:header>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th :style="{ width: '80px' }"></th>
+        </template>
+        <template v-slot:item="{ item }">
+            <td>
+                {{item.data[0].friendly_name}}
+            </td>
+            <td>
+                {{item.data[0].id}}
+            </td>
+            <td :style="{ width: '80px' }">
+                <div class="delete-button"></div>
+            </td>
+        </template>
+    </yio-table>
+    <h1 class="title">Discovered Integrations</h1>
 </div>

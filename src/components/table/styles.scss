@@ -1,0 +1,50 @@
+.table {
+  	width: 100%;
+	margin: 10px 0;
+
+	thead,
+	tbody tr {
+	  display: table;
+	  width: 100%;
+	  table-layout: fixed;
+	}
+
+	tbody {
+		display: block;
+		overflow-y: scroll;
+	}
+	
+	.header-row {
+		font-size: 12px;
+		padding: 10px;
+		border-bottom: 1px solid #3A3A3A;
+		color: #FFFFFF;
+		text-align: left;
+		opacity: 0.5;
+
+		th {
+			padding: 15px;
+		}
+	}
+
+	.body-row {
+		font-family: OpenSans-Light;
+		font-size: 12px;
+		padding: 10px;
+		margin: 10px 0;
+		color: #FFFFFF;
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+		cursor: pointer;
+
+		&.selected {
+			background-color: #313247;
+			border-radius: 8px;
+		}
+
+		td {
+			padding: 15px;
+		}
+	}
+}

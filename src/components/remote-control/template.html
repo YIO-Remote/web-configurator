@@ -1,0 +1,44 @@
+<div class="remote-control-container">
+    <div class="remote-control">
+        <div class="screen">
+            <div class="notification-bar">
+                <div class="time">{{time}}</div>
+                <div class="battery">98%</div>
+            </div>
+            <div class="contents">
+                <div class="title">
+                    Favorites
+                </div>
+                <ul class="item-list">
+                    <li class="item added" v-for="entity in entities" :key="entity.id">
+                        <div class="icon-container">
+                            <span class="icon" :class="entity.type"></span>
+                        </div>
+                        <div class="name-container">
+                            <div class="name">{{entity.name}}</div>
+                        </div>
+                        <div class="delete-button-container">
+                            <div class="delete-button"></div>
+                        </div>
+                    </li>
+                    <li class="item drop-zone">
+                        <div class="name-container">
+                            <div class="name">Drag an entry here</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="button-container">
+            <div class="up-down-button">
+                <div class="up-button" @click="buttonPress('left', 'up')"></div>
+                <div class="down-button" @click="buttonPress('left', 'down')"></div>
+            </div>
+            <div class="dpad-button"></div>
+            <div class="up-down-button">
+                <div class="up-button" @click="buttonPress('right', 'up')"></div>
+                <div class="down-button" @click="buttonPress('right', 'down')"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,6 @@
             <MainMenu></MainMenu>
         </section>
         <section class="content">
-            <h1 class="title">{{$route.name}}</h1>
             <transition name="fade" mode="out-in" @beforeLeave="beforeLeave" @enter="enter" @afterEnter="afterEnter">
                 <router-view></router-view>
             </transition>

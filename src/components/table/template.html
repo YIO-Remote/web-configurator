@@ -1,0 +1,12 @@
+<table class="table">
+	<thead>
+		<tr class="header-row">
+			<slot name="header"></slot>
+		</tr>
+	</thead>
+	<tbody :style="{ 'max-height': maxHeight }">
+		<tr v-for="item in items" class="body-row" :class="{ selected: item === selectedItem }" @click="rowSelected(item)">
+			<slot name="item" :item="item"></slot>
+		</tr>
+	</tbody>
+</table>
