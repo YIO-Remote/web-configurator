@@ -1,6 +1,9 @@
 <div class="integration-settings">
-   Settings
-   <ul>
-      <li>{{integration.data[0].friendly_name}}</li>
-   </ul>
+   <div v-if="hasIntegrationSelected">
+         Settings
+         <ul>
+            <li>{{integration.data[0].friendly_name}}</li>
+         </ul>
+   </div>
+   <action-button text="Add new integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
 </div>

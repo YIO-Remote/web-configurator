@@ -55,6 +55,7 @@ export default class Card extends Vue {
     }
 
     public onClick() {
+        this.$emit('onClick');
         if (this.isInCardList) {
             return (this.$parent as any).selectCard(this);
         }

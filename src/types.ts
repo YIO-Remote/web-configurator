@@ -112,3 +112,16 @@ export interface IConfigState {
 export interface IState {
     config: IConfigState;
 }
+
+// Locale
+export interface ILocale {
+    settingsPage: {
+        darkMode: string;
+        autoBrightness: string;
+    },
+    disconnectionOverlay: {
+        title: string;
+        message: string;
+        reconnecting: string;
+    }
+}

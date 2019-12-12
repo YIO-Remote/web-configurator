@@ -4,13 +4,13 @@ import MainMenu from '../components/main-menu/index.vue';
 import DisconnectedOverlay from '../components/disconnected-overlay/index.vue';
 
 @Component({
-    name: 'ProfilesPage',
+    name: 'YioApp',
     components: {
         MainMenu,
         DisconnectedOverlay
     }
 })
-export default class ProfilesPage extends Vue {
+export default class YioApp extends Vue {
     private previousHeight: string | null;
 
     public beforeLeave(element: HTMLElement) {

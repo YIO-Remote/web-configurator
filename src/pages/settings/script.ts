@@ -1,13 +1,15 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import SwitchToggle from '../../components/switch-toggle/index.vue';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
+import SwitchToggle from '../../components/switch-toggle/index.vue';
+import Card from '../../components/card/index.vue';
 
 
 @Component({
     name: 'SettingsPage',
     components: {
+        Card,
         SwitchToggle
     },
     subscriptions(this: SettingsPage) {
@@ -23,12 +25,17 @@ export default class SettingsPage extends Vue {
     @Inject(() => YioStore)
     public store: YioStore;
 
-    public toggleLanguage() {
-        if (this.$i18n.locale === 'en_US') {
-            this.$i18n.locale = 'nl_NL';
-        } else {
-            this.$i18n.locale = 'en_US';
-        }
+    public get languageButtonText() {
+        return `Language: ${this.$i18n.locale}`;
+    }
+
+    public onLanguageSelected($event: Event, locale: string) {
+        $event.stopPropagation();
+        this.$i18n.locale = locale;
+    }
+
+    public onClickDarkMode() {
+        this.updateDarkMode(!this.store.value.config.ui_config.darkmode);
     }
 
     public updateDarkMode(value: boolean) {
@@ -43,6 +50,10 @@ export default class SettingsPage extends Vue {
         }, false));
     }
 
+    public onClickAutoBrightness() {
+        this.updateAutoBrightness(!this.store.value.config.settings.autobrightness);
+    }
+
     public updateAutoBrightness(value: boolean) {
         this.store.dispatch(this.store.actions.updateConfig({
             ...this.store.value.config,
@@ -53,6 +64,10 @@ export default class SettingsPage extends Vue {
                 }
             }
         }, false));
+    }
+
+    public onClickSoftwareUpdate() {
+        this.updateAutoSoftwareUpdate(!this.store.value.config.settings.softwareupdate);
     }
 
     public updateAutoSoftwareUpdate(value: boolean) {

@@ -4,12 +4,14 @@ import { map } from 'rxjs/operators';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import YioTable from '../../components/table/index.vue';
+import DeleteButton from '../../components/delete-icon-button/index.vue';
 import AvailableEntities from '../../components/sub-menus/available-entities/index.vue';
 
 @Component({
     name: 'EntitiesPage',
     components: {
-        YioTable
+        YioTable,
+        DeleteButton
     },
     subscriptions(this: EntitiesPage) {
         return {
@@ -35,10 +37,20 @@ export default class EntitiesPage extends Vue {
     public store: YioStore;
     public entities: any[];
 
-    public onItemSelected() {
+    public onItemSelected(item?: any) {
+        if (!item) {
+            this.$menu.hide();
+            return;
+        }
+
         this.$menu.show(AvailableEntities, {
             entities: this.entities
         });
+    }
+
+    public onItemDeleted(item: any) {
+        console.log(item);
+        alert('TODO: Remove Entity...');
     }
 
     public beforeDestroy() {

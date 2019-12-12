@@ -1,34 +1,48 @@
 <div>
     <h1 class="title">Settings</h1>
-    <div class="left-column">
-        <div class="item">
-            <button @click="toggleLanguage()">Toggle Language Test ({{$i18n.locale}})</button>
-            <switch-toggle v-model="autoBrightness" @onToggle="updateAutoBrightness">
-                {{ $t('settingsPage.autoBrightness') }}
-            </switch-toggle>
+    <div class="settings-container">
+        <div class="row">
+            <card :title="$t('settingsPage.darkMode')" class="settings-item" @onClick="onClickDarkMode">
+                <template v-slot:rightIcon>
+                    <switch-toggle v-model="darkMode" @onToggle="updateDarkMode"></switch-toggle>
+                </template>
+            </card>
         </div>
-        <div class="item">
-            <switch-toggle v-model="darkMode" @onToggle="updateDarkMode">Dark Mode</switch-toggle>
+        <div class="row">
+            <card :title="$t('settingsPage.autoBrightness')" class="settings-item" @onClick="onClickAutoBrightness">
+                <template v-slot:rightIcon>
+                    <switch-toggle v-model="autoBrightness" @onToggle="updateAutoBrightness"></switch-toggle>
+                </template>
+            </card>
+            <div class="settings-description">
+                <div class="text">
+                    Automatically adjust the brightness based on ambient light.
+                </div>
+            </div>
         </div>
-        <div class="item">
-            <switch-toggle v-model="autoSoftwareUpdate">Auto Software Update</switch-toggle>
+        <div class="row">
+            <card title="Auto Software Update" class="settings-item" @onClick="onClickSoftwareUpdate">
+                <template v-slot:rightIcon>
+                    <switch-toggle v-model="autoSoftwareUpdate" @onToggle="updateAutoBrightness"></switch-toggle>
+                </template>
+            </card>
+            <div class="settings-description">
+                <div class="text">
+                    Automatically look for updates and update when a new software version is available.
+                    Updates are installed at 04.00 am.
+                </div>
+            </div>
         </div>
-        <div class="item">
-            Language
-        </div>
-    </div>
-    <div class="right-column">
-        <div class="description">
-            Meow
-        </div>
-        <div class="description">
-            Automatically adjust the brightness based on ambient light
-        </div>
-        <div class="description">
-            Automatically look for updates and update when a new software version is available
-        </div>
-        <div class="description">
-            Meow
+        <div class="row">
+            <card :title="languageButtonText" class="settings-item">
+                <template v-slot:body>
+                    <ul>
+                        <li v-for="locale in $i18n.availableLocales">
+                            <button @click="onLanguageSelected($event, locale)">{{locale}}</button>
+                        </li>
+                    </ul>
+                </template>
+            </card>
         </div>
     </div>
 </div>

@@ -1,3 +1,10 @@
+.delete-button {
+	transform: translateY(-50%);
+	position: absolute;
+	top: 50%;
+	background-color: #000000;
+}
+
 .remote-control-container {
 	width: 60%;
 	height: calc(100% + 14px);
@@ -95,26 +102,6 @@
 						.delete-button-container {
 							position: relative;
 							width: 15%;
-	
-							.delete-button {
-								transform: translateY(-50%);
-								position: absolute;
-								top: 50%;
-								width: 24px;
-								height: 24px;
-								background: #000000;
-								border-radius: 50%;
-								color: #FFFFFF;
-								font-size: 14px;
-								line-height: 1.6;
-								padding-left: 8px;
-								cursor: pointer;
-								font-family: OpenSans-Bold;
-								
-								&:after {
-									content: 'x';
-								}
-							}
 						}
 					}
 				}

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
+import DeleteButton from '../delete-icon-button/index.vue';
 
 function padZero(num: number): string {
     return (num < 10) ? `0${num}` : `${num}`;
@@ -9,6 +10,9 @@ function padZero(num: number): string {
 
 @Component({
     name: 'CardList',
+    components: {
+        DeleteButton
+    },
     subscriptions(this: RemoteControl) {
         return {
             time: timer(0, 1000).pipe(map(() => {
@@ -24,4 +28,8 @@ export default class RemoteControl extends Vue {
         default: []
     })
     public entities: any[];
+
+    public onDeleteEntity(entity: any) {
+        alert(`TODO: Remove ${entity.name}`);
+    }
 }

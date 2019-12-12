@@ -5,7 +5,7 @@ import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
-import ProfileOptions from '../../components/profile-options/index.vue';
+import ProfileOptions from '../../components/sub-menus/profile-options/index.vue';
 import RemoteControl from '../../components/remote-control/index.vue';
 
 @Component({
@@ -81,7 +81,7 @@ export default class ProfilesPage extends Vue {
         };
     }
 
-    public selectedIndex: number = 0;
+    public selectedIndex: number = -1;
     public profiles: any[];
     public entities: any[];
     public groups: any[];

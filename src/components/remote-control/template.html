@@ -18,7 +18,7 @@
                             <div class="name">{{entity.name}}</div>
                         </div>
                         <div class="delete-button-container">
-                            <div class="delete-button"></div>
+                            <delete-button @onClick="onDeleteEntity(entity)"></delete-button>
                         </div>
                     </li>
                     <li class="item drop-zone">

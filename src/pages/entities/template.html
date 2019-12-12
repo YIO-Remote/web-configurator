@@ -24,7 +24,7 @@
                 {{item.type}}
             </td>
             <td :style="{ width: '80px' }">
-                <div class="delete-button"></div>
+                <delete-button :item="item" @onClick="onItemDeleted"></delete-button>
             </td>
         </template>
     </yio-table>
