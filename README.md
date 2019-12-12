@@ -19,7 +19,7 @@ Production build - `npm run build` <--- This probably won't work yet
 - [ ] Create <list> and <list-item> component (optional drag/drop functionality)
 - [x] Create <table> component
 - [x] Create <remote-control> component
-- [ ] Create <delete-icon> component (little one in tables etc.)
+- [x] Create <delete-icon> component (little one in tables etc.)
 - [ ] Add interface types for components (e.g. no use of "any" type for component references)
 - [ ] Create RxJs data fragments (e.g. entities/pages/groups by profile)
 - [ ] Add license link to files
