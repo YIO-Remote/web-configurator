@@ -35,22 +35,32 @@ import AvailableEntities from '../../components/sub-menus/available-entities/ind
 export default class EntitiesPage extends Vue {
     @Inject(() => YioStore)
     public store: YioStore;
+
+    public selectedItem: any = {};
+
     public entities: any[];
 
-    public onItemSelected(item?: any) {
-        if (!item) {
+    public onItemSelected(index: number) {
+        if (this.selectedItem === this.entities[index]) {
+            this.selectedItem = undefined;
             this.$menu.hide();
             return;
         }
+
+        this.selectedItem = this.entities[index];
 
         this.$menu.show(AvailableEntities, {
             entities: this.entities
         });
     }
 
+    public onItemsDeselected() {
+        this.selectedItem = undefined;
+        this.$menu.hide();
+    }
+
     public onItemDeleted(item: any) {
-        console.log(item);
-        alert('TODO: Remove Entity...');
+        alert(`TODO: Remove Entity --> ${item.name}`);
     }
 
     public beforeDestroy() {

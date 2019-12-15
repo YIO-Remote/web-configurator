@@ -1,6 +1,6 @@
 <div>
     <h1 class="title">Configured Integrations</h1>
-    <yio-table :items="configuredIntegrations" max-height="525px" @onItemSelected="onItemSelected">
+    <yio-table :items="configuredIntegrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemsDeselected">
         <template v-slot:header>
             <th>
                 Name
@@ -18,7 +18,7 @@
                 {{item.data[0].id}}
             </td>
             <td :style="{ width: '80px' }">
-                <delete-button :item="item" @onClick="onItemDeleted"></delete-button>
+                <delete-button @onClick="onItemDeleted(item)"></delete-button>
             </td>
         </template>
     </yio-table>

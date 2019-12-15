@@ -30,21 +30,28 @@ export default class IntegrationsPage extends Vue {
     @Inject(() => YioStore)
     public store: YioStore;
 
+    public configuredIntegrations: any[];
+
     public mounted() {
         this.$menu.show(IntegrationSettings, {
             integration: null
         });
     }
 
-    public onItemSelected(item?: any) {
+    public onItemSelected(index: number) {
         this.$menu.show(IntegrationSettings, {
-            integration: item
+            integration: this.configuredIntegrations[index]
+        });
+    }
+
+    public onItemsDeselected() {
+        this.$menu.show(IntegrationSettings, {
+            integration: undefined
         });
     }
 
     public onItemDeleted(item: any) {
-        console.log(item);
-        alert('TODO: Remove Integration...');
+        alert(`TODO: Remove Entity --> ${item.data[0].friendly_name}`);
     }
 
     public beforeDestroy() {

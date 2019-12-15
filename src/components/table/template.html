@@ -5,7 +5,7 @@
 		</tr>
 	</thead>
 	<tbody :style="{ 'max-height': maxHeight }">
-		<tr v-for="item in items" class="body-row" :class="{ selected: item === selectedItem }" @click="rowSelected(item)">
+		<tr v-for="(item, index) in items" class="body-row" :class="{ selected: index === selectedIndex }" @click="rowSelected(index)">
 			<slot name="item" :item="item"></slot>
 		</tr>
 	</tbody>

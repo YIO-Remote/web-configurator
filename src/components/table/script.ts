@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Emit } from 'vue-property-decorator';
 
 @Component({
     name: 'YioTable'
@@ -11,21 +11,22 @@ export default class YioTable extends Vue {
     })
     public items: any[];
 
+    public selectedIndex: number = -1;
+
     @Prop({
         type: String,
         default: '100%'
     })
     public maxHeight: string;
-
-    public selectedItem: any = null;
     
-    public rowSelected(item: any) {
-        if (this.selectedItem === item) {
-            this.selectedItem = null;
-        } else {
-            this.selectedItem = item;
+    public rowSelected(index: number) {
+        if (this.selectedIndex === index) {
+            this.selectedIndex = -1;
+            this.$emit('onItemsDeselected', index);
+            return;
         }
-        
-        this.$emit('onItemSelected', this.selectedItem);
+
+        this.selectedIndex = index;
+        this.$emit('onItemSelected', index);
     }
 }
