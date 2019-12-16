@@ -4,6 +4,7 @@
   "description": "Web configurator for YIO Remote",
   "main": "configurator.js",
   "scripts": {
+    "lint": "tslint --format codeFrame 'src/**/*.ts?(x)'",
     "serve": "webpack-dev-server --config .config/webpack.config.dev.js",
     "build": "webpack --config .config/webpack.config.prod.js"
   },
@@ -28,6 +29,8 @@
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.0",
+    "tslint": "^5.20.1",
+    "tslint-config-standard": "^9.0.0",
     "typescript": "^3.6.4",
     "vue-loader": "^15.7.1",
     "vue-template-compiler": "^2.6.10",

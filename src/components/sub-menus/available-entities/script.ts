@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
 
 @Component({
-    name: 'AvailableEntities'
+	name: "AvailableEntities"
 })
 export default class AvailableEntities extends Vue {}

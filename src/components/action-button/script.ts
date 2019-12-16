@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import { Component, Emit, Prop } from 'vue-property-decorator';
+import Vue from "vue";
+import { Component, Emit, Prop } from "vue-property-decorator";
 
 @Component({
-	name: 'ActionButton'
+	name: "ActionButton"
 })
 export default class ActionButton extends Vue {
 	@Prop({
@@ -15,7 +15,7 @@ export default class ActionButton extends Vue {
 	})
 	public primary: boolean;
 
-	@Emit('onClick')
+	@Emit("onClick")
 	public onClick($event: Event) {
 		$event.stopPropagation();
 	}

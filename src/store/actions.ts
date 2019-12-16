@@ -1,6 +1,6 @@
-import configActions from './config/actions';
+import configActions from "./config/actions";
 const actions = {
-    ...configActions
+	...configActions,
 };
 
 export default actions;
