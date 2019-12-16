@@ -4,6 +4,7 @@
 // tslint:disable:only-arrow-functions
 // tslint:disable:variable-name
 // tslint:disable:no-empty
+// tslint:disable:no-any
 import "reflect-metadata";
 
 export type Constructor<T> = Function & { prototype: T };

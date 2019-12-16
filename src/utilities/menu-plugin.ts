@@ -1,4 +1,5 @@
 import Vue, { VueConstructor } from "vue";
+import { IMenuPlugin } from "../types";
 
 export default class MenuPlugin {
 	// tslint:disable-next-line: no-shadowed-variable
@@ -8,14 +9,14 @@ export default class MenuPlugin {
 			props: void 0,
 
 			show<T extends object>(component: VueConstructor<Vue>, propsObject?: T) {
-				this.component = component as any;
-				this.props = propsObject || {} as any;
+				this.component = component;
+				this.props = propsObject || {};
 			},
 
 			hide() {
 				this.component = void 0;
 				this.props = void 0;
 			},
-		});
+		} as IMenuPlugin);
 	}
 }

@@ -1,28 +1,40 @@
+import Vue, { VueConstructor, PropOptions } from "vue";
+import { LocaleMessageObject } from "vue-i18n";
+
 // Store Types
 export interface IStoreState {
+	// tslint:disable-next-line:no-any
 	[stateSliceKey: string]: any;
 }
 
+// tslint:disable-next-line:no-any
 export interface IEmptyAction<T = any> {
 	type: T;
 }
 
+// tslint:disable-next-line:no-any
 export interface IAction<T = any> {
 	type: T;
+	// tslint:disable-next-line:no-any
 	payload: any;
+	// tslint:disable-next-line:no-any
 	meta: any;
 }
 
 export interface IAnyEmptyAction extends IEmptyAction {
+	// tslint:disable-next-line:no-any
 	[extraProps: string]: any;
 }
 
 export interface IAnyAction extends IAction {
+	// tslint:disable-next-line:no-any
 	[extraProps: string]: any;
 }
 
+// tslint:disable-next-line:no-any
 export type Reducer<S = any, A extends IAction = IAnyAction> = (state: S, action: A) => S;
 
+// tslint:disable-next-line:no-any
 export type ReducersMapObject<S = any, A extends IAction = IAction> = {
 	[K in keyof S]: Reducer<S[K], A>;
 };
@@ -114,7 +126,7 @@ export interface IState {
 }
 
 // Locale
-export interface ILocale {
+export interface ILocale extends LocaleMessageObject {
 	settingsPage: {
 		darkMode: string;
 		autoBrightness: string;
@@ -124,4 +136,10 @@ export interface ILocale {
 		message: string;
 		reconnecting: string;
 	};
+}
+
+// Plugins
+export interface IMenuPlugin {
+	component?: VueConstructor<Vue>;
+	props?: PropOptions;
 }

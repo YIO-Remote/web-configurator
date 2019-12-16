@@ -6,6 +6,7 @@
         "indent": [true, "tabs", 4],
         "ordered-imports": false,
         "max-line-length": false,
-        "no-console": false
+        "no-console": false,
+        "no-any": true
     }
 }

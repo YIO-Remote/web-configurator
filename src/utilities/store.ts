@@ -61,7 +61,7 @@ export class Store<S, A> extends BehaviorSubject<S> {
 			);
 	}
 
-	private onError(initialState: S, error: any): S {
+	private onError(initialState: S, error: Error): S {
 		this.error$.next(error);
 		return initialState;
 	}

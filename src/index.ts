@@ -20,7 +20,7 @@ Vue.use(VueI18n);
 const server = DIContainer.resolve(ServerConnection);
 server.connect();
 const app = new Vue({
-	i18n: i18n as any,
+	i18n,
 	el: "#app",
 	router: new Router(),
 	render: (h) => h(YioApp)

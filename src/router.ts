@@ -5,13 +5,8 @@ import ProfilesPage from "./pages/profiles/index.vue";
 import SettingsPage from "./pages/settings/index.vue";
 import IRLearningPage from "./pages/ir-learning/index.vue";
 import SoftwareUpdatePage from "./pages/update/index.vue";
-import { Inject } from "./utilities/dependency-injection";
-import { ServerConnection } from "./utilities/server";
 
 export class Router extends VueRouter {
-	@Inject(() => ServerConnection)
-	private server: ServerConnection;
-
 	constructor() {
 		super({
 			routes: [
