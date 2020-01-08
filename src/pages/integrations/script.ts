@@ -1,21 +1,22 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import { map } from "rxjs/operators";
-import { Inject } from "../../utilities/dependency-injection";
-import { YioStore } from "../../store";
-import YioTable from "../../components/table/index.vue";
-import DeleteButton from "../../components/delete-icon-button/index.vue";
-import IntegrationSettings from "../../components/sub-menus/integration-settings/index.vue";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import { map } from 'rxjs/operators';
+import { Inject } from '../../utilities/dependency-injection';
+import { YioStore } from '../../store';
+import YioTable from '../../components/table/index.vue';
+import DeleteButton from '../../components/delete-icon-button/index.vue';
+import IntegrationSettings from '../../components/sub-menus/integration-settings/index.vue';
 
+// tslint:disable:no-any
 @Component({
-	name: "IntegrationsPage",
+	name: 'IntegrationsPage',
 	components: {
 		YioTable,
 		DeleteButton
 	},
 	subscriptions(this: IntegrationsPage) {
 		return {
-			configuredIntegrations: this.store.select("config", "integrations").pipe(map((integrations) => {
+			configuredIntegrations: this.store.select('config', 'integrations').pipe(map((integrations) => {
 				return Object.keys(integrations).reduce((array: any[], key: string) => {
 					return [
 						...array,

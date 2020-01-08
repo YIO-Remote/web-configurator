@@ -1,11 +1,11 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import CardList from "../../components/card-list/index.vue";
-import Card from "../../components/card/index.vue";
-import ActionButton from "../../components/action-button/index.vue";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import CardList from '../../components/card-list/index.vue';
+import Card from '../../components/card/index.vue';
+import ActionButton from '../../components/action-button/index.vue';
 
 @Component({
-	name: "IRLearningPage",
+	name: 'IRLearningPage',
 	components: {
 		CardList,
 		Card,
@@ -14,11 +14,11 @@ import ActionButton from "../../components/action-button/index.vue";
 })
 export default class IRLearningPage extends Vue {
 	public docks = [{
-		name: "Living Room"
+		name: 'Living Room'
 	}, {
-		name: "Kitchen"
+		name: 'Kitchen'
 	}, {
-		name: "Test"
+		name: 'Test'
 	}];
 
 	public showNextButton: boolean = false;
@@ -28,6 +28,6 @@ export default class IRLearningPage extends Vue {
 	}
 
 	public onNext() {
-		alert("TODO: Build a proper wizard component");
+		alert('TODO: Build a proper wizard component');
 	}
 }

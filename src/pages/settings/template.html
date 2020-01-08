@@ -2,14 +2,14 @@
     <h1 class="title">Settings</h1>
     <div class="settings-container">
         <div class="row">
-            <card :title="$t('settingsPage.darkMode')" class="settings-item" @onClick="onClickDarkMode">
+            <card :title="$t('settingsPage.darkMode')" class="settings-item" @onClick="updateDarkMode(!darkMode)">
                 <template v-slot:rightIcon>
                     <switch-toggle v-model="darkMode" @onToggle="updateDarkMode"></switch-toggle>
                 </template>
             </card>
         </div>
         <div class="row">
-            <card :title="$t('settingsPage.autoBrightness')" class="settings-item" @onClick="onClickAutoBrightness">
+            <card :title="$t('settingsPage.autoBrightness')" class="settings-item" @onClick="updateAutoBrightness(!autoBrightness)">
                 <template v-slot:rightIcon>
                     <switch-toggle v-model="autoBrightness" @onToggle="updateAutoBrightness"></switch-toggle>
                 </template>
@@ -21,9 +21,9 @@
             </div>
         </div>
         <div class="row">
-            <card title="Auto Software Update" class="settings-item" @onClick="onClickSoftwareUpdate">
+            <card title="Auto Software Update" class="settings-item" @onClick="updateAutoSoftwareUpdate(!autoSoftwareUpdate)">
                 <template v-slot:rightIcon>
-                    <switch-toggle v-model="autoSoftwareUpdate" @onToggle="updateAutoBrightness"></switch-toggle>
+                    <switch-toggle v-model="autoSoftwareUpdate" @onToggle="updateAutoSoftwareUpdate"></switch-toggle>
                 </template>
             </card>
             <div class="settings-description">

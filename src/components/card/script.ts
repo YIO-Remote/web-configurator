@@ -1,8 +1,9 @@
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { ICardListComponent } from '../../types';
 
 @Component({
-	name: "Card"
+	name: 'Card'
 })
 export default class Card extends Vue {
 	@Prop({
@@ -11,9 +12,10 @@ export default class Card extends Vue {
 	})
 	public title: string;
 	public isSelected: boolean = false;
+	public $parent: ICardListComponent;
 
 	public get isInCardList() {
-		return (typeof (this.$parent as any).addCard === "function");
+		return (typeof this.$parent.addCard === 'function');
 	}
 
 	public get hasLeftIconContent() {
@@ -30,15 +32,15 @@ export default class Card extends Vue {
 
 	public get cardClasses() {
 		return {
-			"card": true,
-			"is-selected": this.isSelected
+			'card': true,
+			'is-selected': this.isSelected
 		};
 	}
 
 	public get bodyContainerClasses() {
 		return {
-			"body-container": true,
-			"is-visible": this.isSelected
+			'body-container': true,
+			'is-visible': this.isSelected
 		};
 	}
 
@@ -55,9 +57,9 @@ export default class Card extends Vue {
 	}
 
 	public onClick() {
-		this.$emit("onClick");
+		this.$emit('onClick');
 		if (this.isInCardList) {
-			return (this.$parent as any).selectCard(this);
+			return this.$parent.selectCard(this);
 		}
 
 		this.setSelected(!this.isSelected);
@@ -65,7 +67,7 @@ export default class Card extends Vue {
 
 	public mounted() {
 		if (this.isInCardList) {
-			(this.$parent as any).addCard(this);
+			this.$parent.addCard(this);
 		}
 	}
 }

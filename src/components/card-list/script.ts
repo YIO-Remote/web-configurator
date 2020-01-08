@@ -1,8 +1,9 @@
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { ICardComponent } from '../../types';
 
 @Component({
-	name: "CardList"
+	name: 'CardList'
 })
 export default class CardList extends Vue {
 	@Prop({
@@ -11,9 +12,9 @@ export default class CardList extends Vue {
 	})
 	public initialIndex: number;
 
-	public cards: any[] = [];
+	public cards: ICardComponent[] = [];
 
-	public addCard(card: any) {
+	public addCard(card: ICardComponent) {
 		this.cards.push(card);
 
 		if (this.initialIndex === (this.cards.length - 1)) {
@@ -21,7 +22,7 @@ export default class CardList extends Vue {
 		}
 	}
 
-	public selectCard(cardToSelect: any) {
+	public selectCard(cardToSelect: ICardComponent) {
 		this.cards.forEach((card, index) => {
 			let isSelected = (cardToSelect === card);
 
@@ -33,7 +34,7 @@ export default class CardList extends Vue {
 			card.setSelected(isSelected);
 
 			if (isSelected || index === -1) {
-				this.$emit("onSelected", index);
+				this.$emit('onSelected', index);
 			}
 		});
 	}

@@ -1,5 +1,5 @@
-import Vue, { VueConstructor } from "vue";
-import { IMenuPlugin } from "../types";
+import Vue, { VueConstructor } from 'vue';
+import { IMenuPlugin } from '../types';
 
 export default class MenuPlugin {
 	// tslint:disable-next-line: no-shadowed-variable

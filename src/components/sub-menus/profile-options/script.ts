@@ -1,11 +1,11 @@
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import { IEntity } from "../../../types";
-import TabContainer from "../../tabs/tab-container/index.vue";
-import Tab from "../../tabs/tab/index.vue";
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { IEntity, IGroup, IPage } from '../../../types';
+import TabContainer from '../../tabs/tab-container/index.vue';
+import Tab from '../../tabs/tab/index.vue';
 
 @Component({
-	name: "ProfileOptions",
+	name: 'ProfileOptions',
 	components: {
 		TabContainer,
 		Tab
@@ -22,11 +22,11 @@ export default class ProfileOptions extends Vue {
 		type: Array,
 		required: true
 	})
-	public groups: any[];
+	public groups: IGroup[];
 
 	@Prop({
 		type: Array,
 		required: true
 	})
-	public pages: any[];
+	public pages: IPage[];
 }

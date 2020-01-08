@@ -1,10 +1,10 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import DisconnectedOverlay from "../components/disconnected-overlay/index.vue";
-import MainMenu from "../components/main-menu/index.vue";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import DisconnectedOverlay from '../components/disconnected-overlay/index.vue';
+import MainMenu from '../components/main-menu/index.vue';
 
 @Component({
-	name: "YioApp",
+	name: 'YioApp',
 	components: {
 		MainMenu,
 		DisconnectedOverlay
@@ -28,6 +28,6 @@ export default class YioApp extends Vue {
 	}
 
 	public afterEnter(element: HTMLElement) {
-		element.style.height = "100%";
+		element.style.height = '100%';
 	}
 }

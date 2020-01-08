@@ -1,11 +1,11 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import { Inject } from "../../utilities/dependency-injection";
-import { ServerConnection } from "../../utilities/server";
-import { map } from "rxjs/operators";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import { Inject } from '../../utilities/dependency-injection';
+import { ServerConnection } from '../../utilities/server';
+import { map } from 'rxjs/operators';
 
 @Component({
-	name: "DisconnectedOverlay",
+	name: 'DisconnectedOverlay',
 	subscriptions(this: DisconnectedOverlay) {
 		return {
 			isDisconnected: this.server.isConnected$.pipe(map((isConnected) => !isConnected))
@@ -15,14 +15,14 @@ import { map } from "rxjs/operators";
 export default class DisconnectedOverlay extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
-	public loadingDots: string = "";
+	public loadingDots: string = '';
 
 	public mounted() {
 		window.setInterval(() => {
 			if (this.loadingDots.length === 4) {
-				this.loadingDots = "";
+				this.loadingDots = '';
 			} else {
-				this.loadingDots += ".";
+				this.loadingDots += '.';
 			}
 		}, 500);
 	}

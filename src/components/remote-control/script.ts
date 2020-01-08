@@ -1,15 +1,16 @@
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import { timer } from "rxjs";
-import { map } from "rxjs/operators";
-import DeleteButton from "../delete-icon-button/index.vue";
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { timer } from 'rxjs';
+import { map } from 'rxjs/operators';
+import DeleteButton from '../delete-icon-button/index.vue';
+import { IEntity } from '../../types';
 
 function padZero(num: number): string {
 	return (num < 10) ? `0${num}` : `${num}`;
 }
 
 @Component({
-	name: "CardList",
+	name: 'RemoteControl',
 	components: {
 		DeleteButton
 	},
@@ -27,9 +28,9 @@ export default class RemoteControl extends Vue {
 		type: Array,
 		default: []
 	})
-	public entities: any[];
+	public entities: IEntity[];
 
-	public onDeleteEntity(entity: any) {
-		alert(`TODO: Remove ${entity.name}`);
+	public onDeleteEntity(entity: IEntity) {
+		alert(`TODO: Remove ${entity.friendly_name}`);
 	}
 }

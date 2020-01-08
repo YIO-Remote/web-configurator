@@ -1,21 +1,22 @@
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import { map } from "rxjs/operators";
-import { Inject } from "../../utilities/dependency-injection";
-import { YioStore } from "../../store";
-import YioTable from "../../components/table/index.vue";
-import DeleteButton from "../../components/delete-icon-button/index.vue";
-import AvailableEntities from "../../components/sub-menus/available-entities/index.vue";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import { map } from 'rxjs/operators';
+import { Inject } from '../../utilities/dependency-injection';
+import { YioStore } from '../../store';
+import YioTable from '../../components/table/index.vue';
+import DeleteButton from '../../components/delete-icon-button/index.vue';
+import AvailableEntities from '../../components/sub-menus/available-entities/index.vue';
 
+// tslint:disable:no-any
 @Component({
-	name: "EntitiesPage",
+	name: 'EntitiesPage',
 	components: {
 		YioTable,
 		DeleteButton
 	},
 	subscriptions(this: EntitiesPage) {
 		return {
-			entities: this.store.select("config", "entities").pipe(map((entities) => {
+			entities: this.store.select('config', 'entities').pipe(map((entities) => {
 				return Object.keys(entities).reduce((array: any[], key: string) => {
 					return [
 						...array,

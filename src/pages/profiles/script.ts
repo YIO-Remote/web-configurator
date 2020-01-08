@@ -1,15 +1,16 @@
-import Vue from "vue";
-import { map, withLatestFrom } from "rxjs/operators";
-import { Component } from "vue-property-decorator";
-import { Inject } from "../../utilities/dependency-injection";
-import { YioStore } from "../../store";
-import CardList from "../../components/card-list/index.vue";
-import Card from "../../components/card/index.vue";
-import ProfileOptions from "../../components/sub-menus/profile-options/index.vue";
-import RemoteControl from "../../components/remote-control/index.vue";
+import Vue from 'vue';
+import { map, withLatestFrom } from 'rxjs/operators';
+import { Component } from 'vue-property-decorator';
+import { Inject } from '../../utilities/dependency-injection';
+import { YioStore } from '../../store';
+import CardList from '../../components/card-list/index.vue';
+import Card from '../../components/card/index.vue';
+import ProfileOptions from '../../components/sub-menus/profile-options/index.vue';
+import RemoteControl from '../../components/remote-control/index.vue';
 
+// tslint:disable:no-any
 @Component({
-	name: "ProfilesPage",
+	name: 'ProfilesPage',
 	components: {
 		CardList,
 		Card,
@@ -17,7 +18,7 @@ import RemoteControl from "../../components/remote-control/index.vue";
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
-			profiles: this.store.select("config", "ui_config", "profiles").pipe(map((profiles) => {
+			profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
 				return Object.keys(profiles).map((id) => ({
 					id,
 					name: profiles[id].name,
@@ -25,8 +26,8 @@ import RemoteControl from "../../components/remote-control/index.vue";
 					pages: profiles[id].pages,
 				}));
 			})),
-			pages: this.store.select("config", "ui_config", "pages")
-				.pipe(withLatestFrom(this.store.select("config", "ui_config", "groups")))
+			pages: this.store.select('config', 'ui_config', 'pages')
+				.pipe(withLatestFrom(this.store.select('config', 'ui_config', 'groups')))
 				.pipe(map(([pages, groups]) => {
 					return Object.keys(pages).reduce((array: any[], key: string) => {
 						return [
@@ -39,8 +40,8 @@ import RemoteControl from "../../components/remote-control/index.vue";
 						];
 					}, [] as any[]);
 				})),
-			groups: this.store.select("config", "ui_config", "groups")
-				.pipe(withLatestFrom(this.store.select("config", "entities")))
+			groups: this.store.select('config', 'ui_config', 'groups')
+				.pipe(withLatestFrom(this.store.select('config', 'entities')))
 				.pipe(map(([groups, entities]) => {
 					return Object.keys(groups).reduce((array: any[], key: string) => {
 						return [
@@ -53,7 +54,7 @@ import RemoteControl from "../../components/remote-control/index.vue";
 						];
 					}, [] as any[]);
 				})),
-			entities: this.store.select("config", "entities").pipe(map((entities) => {
+			entities: this.store.select('config', 'entities').pipe(map((entities) => {
 				return Object.keys(entities).reduce((array: any[], key: string) => {
 					return [
 						...array,

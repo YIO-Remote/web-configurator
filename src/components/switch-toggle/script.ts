@@ -1,12 +1,16 @@
-import Vue from "vue";
-import {Component, Model} from "vue-property-decorator";
+import Vue from 'vue';
+import {Component, Model} from 'vue-property-decorator';
 
 @Component({
-	name: "SwitchToggle"
+	name: 'SwitchToggle'
 })
 export default class SwitchToggle extends Vue {
-	@Model("onToggle", {
+	@Model('onToggle', {
 		type: Boolean
 	})
 	public readonly checked!: boolean;
+
+	public onChange($event: Event) {
+		this.$emit('onToggle', ($event.target as HTMLInputElement).checked);
+	}
 }

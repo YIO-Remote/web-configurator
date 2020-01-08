@@ -1,5 +1,5 @@
-import Vue, { VueConstructor, PropOptions } from "vue";
-import { LocaleMessageObject } from "vue-i18n";
+import Vue, { VueConstructor, PropOptions } from 'vue';
+import { LocaleMessageObject } from 'vue-i18n';
 
 // Store Types
 export interface IStoreState {
@@ -46,6 +46,10 @@ export type Reducers<S> = {
 export type UpdateFromServer = boolean | undefined;
 
 // State Types
+export interface IKeyValuePair<T> {
+	[key: string]: T;
+}
+
 export interface ISettings {
 	language: string;
 	autobrightness: boolean;
@@ -99,26 +103,16 @@ export interface IIntegration {
 export interface IUiConfig {
 	darkmode: boolean;
 	selected_profile: number;
-	profiles: {
-		[key: string]: IProfile;
-	};
-	pages: {
-		[key: string]: IPage;
-	};
-	groups: {
-		[key: string]: IPage;
-	};
+	profiles: IKeyValuePair<IProfile>;
+	pages: IKeyValuePair<IPage>;
+	groups: IKeyValuePair<IPage>;
 }
 
 export interface IConfigState {
 	settings: ISettings;
 	ui_config: IUiConfig;
-	entities: {
-		[key: string]: IEntity[];
-	};
-	integrations: {
-		[key: string]: IIntegration;
-	};
+	entities: IKeyValuePair<IEntity[]>;
+	integrations: IKeyValuePair<IIntegration>;
 }
 
 export interface IState {
@@ -142,4 +136,20 @@ export interface ILocale extends LocaleMessageObject {
 export interface IMenuPlugin {
 	component?: VueConstructor<Vue>;
 	props?: PropOptions;
+}
+
+// Components
+export interface ICardComponent extends Vue {
+	isSelected: boolean;
+	setSelected(isSelected: boolean): void;
+}
+
+export interface ICardListComponent extends Vue {
+	addCard(card: ICardComponent): void;
+	selectCard(cardToSelect: ICardComponent): void;
+}
+
+export interface ITabComponent extends Vue {
+	setIsActive(isActive: boolean): void;
+	selectCard(cardToSelect: ICardComponent): void;
 }

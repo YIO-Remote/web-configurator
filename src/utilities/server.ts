@@ -1,7 +1,7 @@
-import { BehaviorSubject } from "rxjs";
-import { YioStore } from "../store";
-import { IConfigState } from "../types";
-import { Inject, Singleton } from "./dependency-injection";
+import { BehaviorSubject } from 'rxjs';
+import { YioStore } from '../store';
+import { IConfigState } from '../types';
+import { Inject, Singleton } from './dependency-injection';
 
 @Singleton
 export class ServerConnection {
@@ -14,14 +14,14 @@ export class ServerConnection {
 	private socket: WebSocket | null;
 
 	constructor() {
-		this.host = "192.168.12.20";
+		this.host = '192.168.12.52';
 		this.port = 946;
 		this.isConnected$ = new BehaviorSubject<boolean>(false);
 	}
 
 	public connect() {
 		this.socket = new WebSocket(`ws://${this.host}:${this.port}`);
-		this.socket.onopen = () => this.onOpen("0");
+		this.socket.onopen = () => this.onOpen('0');
 		this.socket.onmessage = (event) => this.onMessage(event);
 		this.socket.onclose = (event) => this.onClose(event);
 		this.socket.onerror = (event) => this.onError(event);
@@ -57,11 +57,11 @@ export class ServerConnection {
 	private onMessage(event: MessageEvent) {
 		const message = JSON.parse(event.data);
 
-		if (message.type && message.type === "auth_ok") {
+		if (message.type && message.type === 'auth_ok') {
 			this.getConfig();
 		}
 
-		if (message.type && message.type === "config") {
+		if (message.type && message.type === 'config') {
 			this.isConnected$.next(true);
 			this.store.dispatch(this.store.actions.updateConfig(message.config, true));
 			this.pollForData();
@@ -73,7 +73,7 @@ export class ServerConnection {
 			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
 		} else {
 			window.setTimeout(() => this.connect(), 5000);
-			console.log("[close] Connection died");
+			console.log('[close] Connection died');
 		}
 
 		this.socket!.close();

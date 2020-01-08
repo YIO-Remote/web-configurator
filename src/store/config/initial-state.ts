@@ -1,4 +1,4 @@
-import { IConfigState } from "../../types";
+import { IConfigState } from '../../types';
 
 const initialState: IConfigState = {
 	entities: {},
@@ -6,8 +6,8 @@ const initialState: IConfigState = {
 	settings: {
 		autobrightness: false,
 		bluetootharea: false,
-		language: "en-US",
-		paired_dock: "",
+		language: 'en-US',
+		paired_dock: '',
 		proximity: 0,
 		shutdowntime: 0,
 		softwareupdate: false,

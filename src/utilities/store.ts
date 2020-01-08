@@ -1,7 +1,8 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { distinctUntilChanged, pluck, scan } from "rxjs/operators";
-import { IAction, IAnyAction, IAnyEmptyAction, IStoreState, Reducer, ReducersMapObject } from "../types";
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { distinctUntilChanged, pluck, scan } from 'rxjs/operators';
+import { IAction, IAnyAction, IAnyEmptyAction, IStoreState, Reducer, ReducersMapObject } from '../types';
 
+// tslint:disable:no-any
 class Dispatcher<A extends IAction = IAnyAction> extends Subject<A> {
 	public dispatch<T extends A>(action: T) {
 		this.next(action);
@@ -52,7 +53,7 @@ export class Store<S, A> extends BehaviorSubject<S> {
 	public select<K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2], K4 extends keyof S[K1][K2][K3]>(key1: K1, key2: K2, key3: K3, key4: K4): Observable<S[K1][K2][K3][K4]>;
 	public select<K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2], K4 extends keyof S[K1][K2][K3], K5 extends keyof S[K1][K2][K3][K4]>(key1: K1, key2: K2, key3: K3, key4: K4, key5: K5): Observable<S[K1][K2][K3][K4][K5]>;
 	public select(...args: string[]): any {
-		const keys = args.length > 1 ? args : args[0].split(".");
+		const keys = args.length > 1 ? args : args[0].split('.');
 
 		return this.asObservable()
 			.pipe(

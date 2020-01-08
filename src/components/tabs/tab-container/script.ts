@@ -1,8 +1,9 @@
-import Vue from "vue";
-import {Component, Prop} from "vue-property-decorator";
+import Vue from 'vue';
+import {Component, Prop} from 'vue-property-decorator';
+import { ITabComponent } from '../../../types';
 
 @Component({
-	name: "TabContainer"
+	name: 'TabContainer'
 })
 export default class TabContainer extends Vue {
 	@Prop({
@@ -12,19 +13,21 @@ export default class TabContainer extends Vue {
 	})
 	public initialIndex: number;
 
-	public tabs: Vue[] = [];
+	public $children: ITabComponent[];
+
+	public tabs: ITabComponent[] = [];
 
 	public created() {
 		this.tabs = this.$children;
 	}
 
 	public mounted() {
-		(this.tabs[this.initialIndex] as any).setIsActive(true);
+		this.tabs[this.initialIndex].setIsActive(true);
 	}
 
 	public selectTab(selectedTab: Vue) {
 		this.tabs.forEach((tab) => {
-			(tab as any).setIsActive(selectedTab === tab);
+			tab.setIsActive(selectedTab === tab);
 		});
 	}
 }

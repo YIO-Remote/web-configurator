@@ -5,7 +5,7 @@
 // tslint:disable:variable-name
 // tslint:disable:no-empty
 // tslint:disable:no-any
-import "reflect-metadata";
+import 'reflect-metadata';
 
 export type Constructor<T> = Function & { prototype: T };
 export type IConcreteConstructor<T> = new (...args: any[]) => T;
@@ -175,7 +175,7 @@ export class Container {
 	}
 
 	private register<From, To extends From>(when: Constructor<From>, then: IConcreteConstructor<To>, registration: IRegistration): void {
-		const paramTypes: any[] = Reflect.getMetadata("design:paramtypes", then);
+		const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', then);
 		this._parameterTypes.set(then, paramTypes);
 		this._providers.set(when, registration);
 	}

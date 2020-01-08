@@ -1,8 +1,8 @@
-import Vue from "vue";
-import {Component, Prop} from "vue-property-decorator";
+import Vue from 'vue';
+import {Component, Prop} from 'vue-property-decorator';
 
 @Component({
-	name: "Tab"
+	name: 'Tab'
 })
 export default class Tab extends Vue {
 	@Prop({

@@ -1,11 +1,12 @@
-import Vue from "vue";
-import {Component} from "vue-property-decorator";
+import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import { Router } from '../../router';
 
 @Component({
-	name: "MainMenu"
+	name: 'MainMenu'
 })
 export default class MainMenu extends Vue {
 	public get routes() {
-		return (this as any).$router.options.routes.filter((route: any) => route.path !== "/");
+		return Router.routes.filter((route) => route.path !== '/');
 	}
 }
