@@ -17,6 +17,10 @@ export default class MenuPlugin {
 				this.component = void 0;
 				this.props = void 0;
 			},
+
+			updateProps<T extends object>(propsObject?: T) {
+				this.props = propsObject || {};
+			}
 		} as IMenuPlugin);
 	}
 }

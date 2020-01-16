@@ -138,6 +138,13 @@ export interface IMenuPlugin {
 	props?: PropOptions;
 }
 
+export interface IContextMenu {
+	hide(): void;
+	// tslint:disable-next-line:no-any
+	show<T extends object>(component: VueConstructor<Vue>, props: T): void;
+	updateProps<T extends object>(props: T): void;
+}
+
 // Components
 export interface ICardComponent extends Vue {
 	isSelected: boolean;

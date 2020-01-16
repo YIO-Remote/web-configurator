@@ -1,11 +1,11 @@
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import { IConfigState, UpdateFromServer } from '../../types';
+import { IConfigState } from '../../types';
 
 const actions = {
-	updateConfig: createStandardAction('store/config/update')<IConfigState, UpdateFromServer>(),
-	updateDarkMode: createStandardAction('store/config/settings/update-dark-mode')<boolean, UpdateFromServer>(),
-	updateAutoBrightness: createStandardAction('store/config/settings/update-auto-brightness')<boolean, UpdateFromServer>(),
-	updateAutoSoftwareUpdate: createStandardAction('store/config/settings/update-auto-software-update')<boolean, UpdateFromServer>()
+	updateConfig: createStandardAction('store/config/update')<IConfigState>(),
+	updateDarkMode: createStandardAction('store/config/settings/update-dark-mode')<boolean>(),
+	updateAutoBrightness: createStandardAction('store/config/settings/update-auto-brightness')<boolean>(),
+	updateAutoSoftwareUpdate: createStandardAction('store/config/settings/update-auto-software-update')<boolean>()
 };
 
 export default actions;

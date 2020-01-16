@@ -14,7 +14,7 @@ export class ServerConnection {
 	private socket: WebSocket | null;
 
 	constructor() {
-		this.host = '192.168.12.52';
+		this.host = '192.168.12.108';
 		this.port = 946;
 		this.isConnected$ = new BehaviorSubject<boolean>(false);
 	}
@@ -63,7 +63,7 @@ export class ServerConnection {
 
 		if (message.type && message.type === 'config') {
 			this.isConnected$.next(true);
-			this.store.dispatch(this.store.actions.updateConfig(message.config, true));
+			this.store.dispatch(this.store.actions.updateConfig(message.config));
 			this.pollForData();
 		}
 	}

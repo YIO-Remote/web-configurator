@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { IEntity, IGroup, IPage } from '../../../types';
+import { IEntity, IGroup, IPage, IKeyValuePair } from '../../../types';
 import TabContainer from '../../tabs/tab-container/index.vue';
 import Tab from '../../tabs/tab/index.vue';
 
@@ -13,10 +13,10 @@ import Tab from '../../tabs/tab/index.vue';
 })
 export default class ProfileOptions extends Vue {
 	@Prop({
-		type: Array,
+		type: Object,
 		required: true
 	})
-	public entities: IEntity[];
+	public entities: IKeyValuePair<IEntity[]>;
 
 	@Prop({
 		type: Array,

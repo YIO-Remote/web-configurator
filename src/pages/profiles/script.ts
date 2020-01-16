@@ -7,6 +7,7 @@ import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import ProfileOptions from '../../components/sub-menus/profile-options/index.vue';
 import RemoteControl from '../../components/remote-control/index.vue';
+import { IKeyValuePair, IEntity } from '../../types';
 
 // tslint:disable:no-any
 @Component({
@@ -18,14 +19,15 @@ import RemoteControl from '../../components/remote-control/index.vue';
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
-			profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
-				return Object.keys(profiles).map((id) => ({
-					id,
-					name: profiles[id].name,
-					favorites: profiles[id].favorites,
-					pages: profiles[id].pages,
-				}));
-			})),
+			profiles: this.store.select('config', 'ui_config', 'profiles'),
+			// profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
+			// 	return Object.keys(profiles).map((id) => ({
+			// 		id,
+			// 		name: profiles[id].name,
+			// 		favorites: profiles[id].favorites,
+			// 		pages: profiles[id].pages,
+			// 	}));
+			// })),
 			pages: this.store.select('config', 'ui_config', 'pages')
 				.pipe(withLatestFrom(this.store.select('config', 'ui_config', 'groups')))
 				.pipe(map(([pages, groups]) => {
@@ -54,40 +56,30 @@ import RemoteControl from '../../components/remote-control/index.vue';
 						];
 					}, [] as any[]);
 				})),
-			entities: this.store.select('config', 'entities').pipe(map((entities) => {
-				return Object.keys(entities).reduce((array: any[], key: string) => {
-					return [
-						...array,
-						...entities[key].map((entity) => ({
-							type: key,
-							id: entity.entity_id,
-							name: entity.friendly_name,
-							integration: entity.integration,
-							features: entity.supported_features,
-						}))
-					];
-				}, [] as any[]);
-			}))
+			entities: this.store.select('config', 'entities')
 		};
 	}
 })
 export default class ProfilesPage extends Vue {
+	@Inject(() => YioStore)
+	public store: YioStore;
+	public selectedIndex: number = -1;
+	public profiles: any[];
+	public entities: IKeyValuePair<IEntity[]>;
+	public groups: any[];
+	public pages: any[];
 
 	public get profileEntities() {
 		if (this.selectedIndex === -1) {
 			return [];
 		}
 
-		return this.entities.filter((entity) => this.profiles[this.selectedIndex].favorites.includes(entity.id));
-	}
-	@Inject(() => YioStore)
-	public store: YioStore;
+		const selectedProfile = this.profiles[this.selectedIndex];
+		const allEntities = Object.values(this.entities).flat();
 
-	public selectedIndex: number = -1;
-	public profiles: any[];
-	public entities: any[];
-	public groups: any[];
-	public pages: any[];
+		console.log(allEntities.filter((entity) => selectedProfile.favorites.includes(entity.entity_id)));
+		return allEntities.filter((entity) => selectedProfile.favorites.includes(entity.entity_id));
+}
 
 	public getBadgeClasses(isSelected: boolean) {
 		return {

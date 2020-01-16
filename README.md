@@ -22,7 +22,6 @@ Production build - `npm run build` <--- This probably won't work yet
 - [x] Create <remote-control> component
 - [x] Create <delete-icon> component (little one in tables etc.)
 - [x] Add interface types for components (e.g. no use of "any" type for component references)
-- [ ] Split up Redux state
 - [ ] Create RxJs data fragments (e.g. entities/pages/groups by profile)
 - [ ] Remove any types from page components
 - [ ] Add license link to files

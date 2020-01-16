@@ -1,3 +1,18 @@
 <div class="available-entities">
-   Available Entities
+   <h1 class="title">Available Entities</h1>
+
+   <div v-for="(integration, key) in integrations">
+      <h2 class="integration-title">{{key}}</h2>
+      <ul class="integration-list">
+         <li v-for="entity in integration" class="integration">
+            <div class="details">
+               <div class="name">{{entity.friendly_name}}</div>
+               <div class="id">{{entity.entity_id}}</div>
+            </div>
+            <div class="action">
+               <action-icon-button @onClick="addEntity(entity)" type="add" class="button"></action-icon-button>
+            </div>
+         </li>
+      </ul>
+   </div>
 </div>

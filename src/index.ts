@@ -1,4 +1,4 @@
-import 'core-js/es';
+import 'core-js';
 import '../assets/styles/reset.scss';
 import '../assets/styles/main.scss';
 import Vue from 'vue';
@@ -18,7 +18,6 @@ Vue.use(MenuPlugin);
 Vue.use(VueI18n);
 
 const server = DIContainer.resolve(ServerConnection);
-server.connect();
 const app = new Vue({
 	i18n,
 	el: '#app',
@@ -26,4 +25,5 @@ const app = new Vue({
 	render: (h) => h(YioApp)
 });
 
+server.connect();
 app.$mount();

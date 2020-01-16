@@ -1,9 +1,9 @@
 <div class="integration-settings">
    <div v-if="hasIntegrationSelected">
-         Settings
-         <ul>
-            <li>{{integration.data[0].friendly_name}}</li>
-         </ul>
+      <h1 class="title">Available Entities</h1>
+      <h2 class="integration-title">{{integration.data[0].friendly_name}}</h2>
    </div>
-   <action-button text="Add new integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
+   <div v-else>
+      <action-button text="Add new integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
+   </div>
 </div>

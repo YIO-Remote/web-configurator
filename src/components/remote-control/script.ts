@@ -2,8 +2,8 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
-import DeleteButton from '../delete-icon-button/index.vue';
 import { IEntity } from '../../types';
+import ActionIconButton from '../action-icon-button/index.vue';
 
 function padZero(num: number): string {
 	return (num < 10) ? `0${num}` : `${num}`;
@@ -12,7 +12,7 @@ function padZero(num: number): string {
 @Component({
 	name: 'RemoteControl',
 	components: {
-		DeleteButton
+		ActionIconButton
 	},
 	subscriptions(this: RemoteControl) {
 		return {

@@ -37,14 +37,16 @@
 		width: 100%;
 		table-layout: fixed;
 		border-radius: 8px;
-		cursor: pointer;
 
-		&:hover {
-			background-color: #0A0A0A;
-		}
-
-		&.selected {
-			background-color: #313247;
+		&.enabled {
+			&:hover {
+				background-color: #0A0A0A;
+				cursor: pointer;
+			}
+	
+			&.selected {
+				background-color: #313247;
+			}
 		}
 
 		td {

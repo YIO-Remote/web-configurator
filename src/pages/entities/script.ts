@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { map } from 'rxjs/operators';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
+import { IEntity, IKeyValuePair } from '../../types';
 import YioTable from '../../components/table/index.vue';
-import DeleteButton from '../../components/delete-icon-button/index.vue';
+import ActionIconButton from '../../components/action-icon-button/index.vue';
 import AvailableEntities from '../../components/sub-menus/available-entities/index.vue';
 
 // tslint:disable:no-any
@@ -12,56 +12,35 @@ import AvailableEntities from '../../components/sub-menus/available-entities/ind
 	name: 'EntitiesPage',
 	components: {
 		YioTable,
-		DeleteButton
+		ActionIconButton
 	},
 	subscriptions(this: EntitiesPage) {
 		return {
-			entities: this.store.select('config', 'entities').pipe(map((entities) => {
-				return Object.keys(entities).reduce((array: any[], key: string) => {
-					return [
-						...array,
-						...entities[key].map((entity) => ({
-							type: key,
-							id: entity.entity_id,
-							name: entity.friendly_name,
-							integration: entity.integration,
-							features: entity.supported_features,
-						}))
-					];
-				}, [] as any[]);
-			}))
+			configuredEntities: this.store.entities.configured,
+			availableByIntegrations: this.store.entities.availableByIntegrations
 		};
 	}
 })
 export default class EntitiesPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
+	public configuredEntities: IEntity[] = [];
+	public availableByIntegrations: IKeyValuePair<IEntity[]> = {};
 
-	public selectedItem: any = {};
+	public onItemDeleted(item: IEntity) {
+		alert(`TODO: Remove Entity --> ${item.friendly_name}`);
+	}
 
-	public entities: any[];
-
-	public onItemSelected(index: number) {
-		if (this.selectedItem === this.entities[index]) {
-			this.selectedItem = undefined;
-			this.$menu.hide();
-			return;
-		}
-
-		this.selectedItem = this.entities[index];
-
+	public mounted() {
 		this.$menu.show(AvailableEntities, {
-			entities: this.entities
+			integrations: this.availableByIntegrations
 		});
-	}
 
-	public onItemsDeselected() {
-		this.selectedItem = undefined;
-		this.$menu.hide();
-	}
-
-	public onItemDeleted(item: any) {
-		alert(`TODO: Remove Entity --> ${item.name}`);
+		this.$subscribeTo(this.store.entities.availableByIntegrations, (availableByIntegrations) => {
+			this.$menu.updateProps({
+				integrations: availableByIntegrations
+			});
+		});
 	}
 
 	public beforeDestroy() {

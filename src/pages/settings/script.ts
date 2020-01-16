@@ -34,14 +34,14 @@ export default class SettingsPage extends Vue {
 	}
 
 	public updateDarkMode(value: boolean) {
-		this.store.dispatch(this.store.actions.updateDarkMode(value, false));
+		this.store.dispatch(this.store.actions.updateDarkMode(value));
 	}
 
 	public updateAutoBrightness(value: boolean) {
-		this.store.dispatch(this.store.actions.updateAutoBrightness(value, false));
+		this.store.dispatch(this.store.actions.updateAutoBrightness(value));
 	}
 
 	public updateAutoSoftwareUpdate(value: boolean) {
-		this.store.dispatch(this.store.actions.updateAutoSoftwareUpdate(value, false));
+		this.store.dispatch(this.store.actions.updateAutoSoftwareUpdate(value));
 	}
 }

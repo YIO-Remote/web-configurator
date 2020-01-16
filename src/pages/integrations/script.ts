@@ -1,29 +1,23 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { map } from 'rxjs/operators';
+// import { map } from 'rxjs/operators';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import YioTable from '../../components/table/index.vue';
-import DeleteButton from '../../components/delete-icon-button/index.vue';
+import ActionIconButton from '../../components/action-icon-button/index.vue';
 import IntegrationSettings from '../../components/sub-menus/integration-settings/index.vue';
+import { IIntegration, IKeyValuePair } from '../../types';
 
 // tslint:disable:no-any
 @Component({
 	name: 'IntegrationsPage',
 	components: {
 		YioTable,
-		DeleteButton
+		ActionIconButton
 	},
 	subscriptions(this: IntegrationsPage) {
 		return {
-			configuredIntegrations: this.store.select('config', 'integrations').pipe(map((integrations) => {
-				return Object.keys(integrations).reduce((array: any[], key: string) => {
-					return [
-						...array,
-						...[integrations[key]]
-					];
-				}, [] as any[]);
-			}))
+			configuredIntegrations: this.store.select('config', 'integrations')
 		};
 	}
 })
@@ -31,7 +25,7 @@ export default class IntegrationsPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
 
-	public configuredIntegrations: any[];
+	public configuredIntegrations: IKeyValuePair<IIntegration>;
 
 	public mounted() {
 		this.$menu.show(IntegrationSettings, {
@@ -39,9 +33,9 @@ export default class IntegrationsPage extends Vue {
 		});
 	}
 
-	public onItemSelected(index: number) {
+	public onItemSelected(name: string) {
 		this.$menu.show(IntegrationSettings, {
-			integration: this.configuredIntegrations[index]
+			integration: this.configuredIntegrations[name]
 		});
 	}
 

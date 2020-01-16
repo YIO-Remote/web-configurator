@@ -6,12 +6,16 @@ import { Component, Prop } from 'vue-property-decorator';
 })
 export default class YioTable extends Vue {
 	@Prop({
-		type: Array,
+		type: [Array, Object],
 		required: true
 	})
 	public items: object[];
 
-	public selectedIndex: number = -1;
+	@Prop({
+		type: Boolean,
+		default: false
+	})
+	public disableSelection: boolean;
 
 	@Prop({
 		type: String,
@@ -19,7 +23,13 @@ export default class YioTable extends Vue {
 	})
 	public maxHeight: string;
 
+	public selectedIndex: number = -1;
+
 	public rowSelected(index: number) {
+		if (this.disableSelection) {
+			return;
+		}
+
 		if (this.selectedIndex === index) {
 			this.selectedIndex = -1;
 			this.$emit('onItemsDeselected', index);

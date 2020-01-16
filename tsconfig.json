@@ -8,6 +8,14 @@
       "strictPropertyInitialization": false,
       "resolveJsonModule": true,
       "allowSyntheticDefaultImports": true,
-      "noUnusedLocals": true
+      "noUnusedLocals": true,
+      "lib": [
+        "DOM",
+        "ES2019"
+      ],
+      "typeRoots": [
+        "./node_modules/@types",
+        "./typings"
+      ]
     }
   }

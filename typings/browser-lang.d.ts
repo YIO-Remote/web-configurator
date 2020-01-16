@@ -1,10 +1,10 @@
 declare module 'browser-lang' {
-    interface IBrowserLangOptions {
-        languages?: string[]; 
-        fallback?: string;
-    }
+	interface IBrowserLangOptions {
+		languages?: string[];
+		fallback?: string;
+	}
 
-    function browserLang (options?: IBrowserLangOptions): string; 
+	function browserLang(options?: IBrowserLangOptions): string;
 
-    export default browserLang;
+	export default browserLang;
 }

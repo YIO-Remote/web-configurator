@@ -1,11 +1,14 @@
 <ul>
     <TabContainer>
         <Tab name="Entities">
-           <ul>
-              <li v-for="(entity, index) in entities" :key="index">
-                 {{entity.name}}
-              </li>
-           </ul>
+            <div class="description">
+               Drag entities to the remote view to add them to favorites or a group.
+            </div>
+            <ul>
+               <li v-for="(entity, index) in entities" :key="index">
+                  {{entity}}
+               </li>
+            </ul>
         </Tab>
         <Tab name="Groups">
             <ul>
