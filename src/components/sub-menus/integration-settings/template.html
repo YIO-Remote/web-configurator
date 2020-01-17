@@ -1,9 +1,14 @@
 <div class="integration-settings">
-   <div v-if="hasIntegrationSelected">
-      <h1 class="title">Available Entities</h1>
-      <h2 class="integration-title">{{integration.data[0].friendly_name}}</h2>
+   <h1 class="title">Settings</h1>
+   <h2 class="integration-title">{{integrationName}}</h2>
+   <div v-for="setting in settings" class="setting">
+      <div class="setting-name">
+         {{setting.fieldName}}
+      </div>
+      <div class="setting-value">
+         <input class="setting-input" type="text" :value="setting.fieldValue" />
+      </div>
    </div>
-   <div v-else>
-      <action-button text="Add new integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
-   </div>
+   <action-button text="Save" :primary="true" @onClick="onSave"></action-button>
+   <action-button class="right-button" text="Cancel" :primary="false" @onClick="onCancel"></action-button>
 </div>

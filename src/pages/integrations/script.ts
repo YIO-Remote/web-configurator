@@ -3,10 +3,11 @@ import { Component } from 'vue-property-decorator';
 // import { map } from 'rxjs/operators';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
+import { IIntegration, IKeyValuePair } from '../../types';
 import YioTable from '../../components/table/index.vue';
 import ActionIconButton from '../../components/action-icon-button/index.vue';
 import IntegrationSettings from '../../components/sub-menus/integration-settings/index.vue';
-import { IIntegration, IKeyValuePair } from '../../types';
+import AddIntegration from '../../components/sub-menus/add-integration/index.vue';
 
 // tslint:disable:no-any
 @Component({
@@ -28,21 +29,18 @@ export default class IntegrationsPage extends Vue {
 	public configuredIntegrations: IKeyValuePair<IIntegration>;
 
 	public mounted() {
-		this.$menu.show(IntegrationSettings, {
-			integration: null
-		});
+		this.$menu.show(AddIntegration, {});
 	}
 
 	public onItemSelected(name: string) {
 		this.$menu.show(IntegrationSettings, {
-			integration: this.configuredIntegrations[name]
+			integration: this.configuredIntegrations[name],
+			onCancel: this.onItemDeselected
 		});
 	}
 
-	public onItemsDeselected() {
-		this.$menu.show(IntegrationSettings, {
-			integration: undefined
-		});
+	public onItemDeselected() {
+		this.$menu.show(AddIntegration, {});
 	}
 
 	public onItemDeleted(item: any) {

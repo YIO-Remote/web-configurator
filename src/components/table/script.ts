@@ -9,7 +9,7 @@ export default class YioTable extends Vue {
 		type: [Array, Object],
 		required: true
 	})
-	public items: object[];
+	public items: object[] | object;
 
 	@Prop({
 		type: Boolean,

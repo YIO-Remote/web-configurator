@@ -90,9 +90,7 @@ export interface IEntity {
 export interface IIntegrationData {
 	friendly_name: string;
 	id: string;
-	data?: {
-		ip?: string;
-	};
+	data: IKeyValuePair<string>;
 }
 
 export interface IIntegration {
