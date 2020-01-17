@@ -7,7 +7,7 @@ import { ServerConnection } from '../../utilities/server';
 import { IConfigState } from '../../types';
 
 export default function reducer(state: IConfigState = initialState, action: ConfigActionType): IConfigState {
-	let newState;
+	let newState: IConfigState = state;
 
 	switch (action.type) {
 		case getType(actions.updateDarkMode):
@@ -36,6 +36,27 @@ export default function reducer(state: IConfigState = initialState, action: Conf
 					softwareupdate: action.payload
 				}
 			};
+			break;
+		case getType(actions.addIntegration):
+			newState = {
+				...state,
+				integrations: {
+					...state.integrations,
+					[`${action.meta}`]: action.payload
+				}
+			};
+			break;
+		case getType(actions.removeIntegration):
+			const integrationsCopy = Object.assign({}, state.integrations);
+			const matchingKey = Object.keys(integrationsCopy).find((key) => integrationsCopy[key] === action.payload);
+
+			if (matchingKey) {
+				delete integrationsCopy[matchingKey];
+				newState = {
+					...state,
+					integrations: integrationsCopy
+				};
+			}
 			break;
 		case getType(actions.updateConfig):
 			newState = {

@@ -43,8 +43,8 @@ export default class IntegrationsPage extends Vue {
 		this.$menu.show(AddIntegration, {});
 	}
 
-	public onItemDeleted(item: any) {
-		alert(`TODO: Remove Entity --> ${item.data[0].friendly_name}`);
+	public onItemDeleted(item: IIntegration) {
+		this.store.dispatch(this.store.actions.removeIntegration(item));
 	}
 
 	public beforeDestroy() {
