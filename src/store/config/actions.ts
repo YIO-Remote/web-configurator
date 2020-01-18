@@ -7,6 +7,7 @@ const actions = {
 	updateAutoBrightness: createStandardAction('store/config/settings/update-auto-brightness')<boolean>(),
 	updateAutoSoftwareUpdate: createStandardAction('store/config/settings/update-auto-software-update')<boolean>(),
 	addIntegration: createStandardAction('store/config/settings/add-integration')<IIntegration, string>(),
+	updateIntegration: createStandardAction('store/config/settings/update-integration')<IIntegration, string>(),
 	removeIntegration: createStandardAction('store/config/settings/remove-integration')<IIntegration>()
 };
 

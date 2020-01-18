@@ -38,6 +38,7 @@ export default function reducer(state: IConfigState = initialState, action: Conf
 			};
 			break;
 		case getType(actions.addIntegration):
+		case getType(actions.updateIntegration):
 			newState = {
 				...state,
 				integrations: {

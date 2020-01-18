@@ -1,3 +1,40 @@
 <div class="add-integration">
-   <action-button text="Add new integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
+   <action-button v-if="!isAddingNewIntegration" text="Add Integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
+   <div v-else>
+      <h1 class="title">New Integration</h1>
+      <div class="setting">
+         <div class="setting-name">
+            Name
+         </div>
+         <div class="setting-value">
+            <input class="setting-input" type="input" v-model="name" />
+         </div>
+      </div>
+      <div class="setting">
+         <div class="setting-name">
+            Type
+         </div>
+         <div class="setting-value">
+            <input class="setting-input" type="input" v-model="type" />
+         </div>
+      </div>
+      <div v-for="item in data" class="setting">
+         <div class="setting-name">
+            {{item.key}}
+         </div>
+         <div class="setting-value">
+            <input class="setting-input" type="text" :value="item.value" />
+         </div>
+      </div>
+      <h1 class="title">Data Values</h1>
+      <div class="setting">
+         <div class="setting-value">
+            <input class="setting-input key" type="input" v-model="newDataKey" /> :
+            <input  class="setting-input value" type="input" v-model="newDataValue" />
+            <action-icon-button class="add-data-item-button" type="add" @onClick="onAddNewSetting"></action-icon-button>
+         </div>
+      </div>
+      <action-button text="Save" :primary="true" @onClick="onSave"></action-button>
+      <action-button class="right-button" text="Cancel" :primary="false" @onClick="onCancel"></action-button>
+   </div>
 </div>
