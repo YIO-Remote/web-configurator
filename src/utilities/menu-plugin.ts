@@ -20,6 +20,10 @@ export default class MenuPlugin {
 
 			updateProps<T extends object>(propsObject?: T) {
 				this.props = propsObject || {};
+			},
+
+			get key() {
+				return Date.now();
 			}
 		} as IMenuPlugin);
 	}

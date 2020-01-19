@@ -13,7 +13,7 @@
             </transition>
         </section>
         <section :class="{ 'show': !!$menu.component }" class="context-menu">
-            <component :is="$menu.component" v-bind="$menu.props"></component>
+            <component :is="$menu.component" v-bind="$menu.props" :key="$menu.key"></component>
         </section>
     </div>
     <disconnected-overlay></disconnected-overlay>

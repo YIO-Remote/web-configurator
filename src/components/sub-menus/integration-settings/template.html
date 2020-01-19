@@ -1,12 +1,12 @@
 <div class="integration-settings">
    <h1 class="title">Settings</h1>
-   <h2 class="integration-title">{{integrationName}}</h2>
-   <div v-for="(setting, key) in integration.data[0].data" class="setting">
+   <h2 class="integration-title">{{name}}</h2>
+   <div v-for="(setting, key) in settings" class="setting">
       <div class="setting-name">
          {{key}}
       </div>
       <div class="setting-value">
-         <input class="setting-input" type="text" v-model="integration.data[0].data[key]" />
+         <input class="setting-input" type="text" v-model="updatedSettings[key]" />
       </div>
    </div>
    <action-button text="Save" :primary="true" @onClick="onSave"></action-button>

@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import ActionButton from '../../action-button/index.vue';
-import { IIntegration } from '../../../types';
+import { IIntegration, IKeyValuePair } from '../../../types';
 import { YioStore } from '../../../store';
 import { Inject } from '../../../utilities/dependency-injection';
 
@@ -14,7 +14,7 @@ import { Inject } from '../../../utilities/dependency-injection';
 export default class IntegrationSettings extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
-	public updatedSettings = {};
+	public updatedSettings: IKeyValuePair<string> = {};
 
 	@Prop({
 		type: Object,
@@ -28,23 +28,30 @@ export default class IntegrationSettings extends Vue {
 	})
 	public onCancel: () => void;
 
-	@Watch('integration', { deep: true, immediate: true })
-	public onIntegrationChange(value: IIntegration) {
-		if (value) {
-			this.updatedSettings = Object.assign({}, value.data[0].data);
-		}
-	}
-
-	public get hasIntegrationSelected() {
-		return !!this.integration;
-	}
-
-	public get integrationName() {
+	public get name() {
 		return this.integration.data[0].friendly_name;
 	}
 
+	public get settings() {
+		return { ...this.integration.data[0].data };
+	}
+
+	public mounted() {
+		this.updatedSettings = { ...this.integration.data[0].data };
+	}
+
 	public onSave() {
-		this.store.dispatch(this.store.actions.updateIntegration(this.integration, this.integration.data[0].id));
+		const updatedIntegration: IIntegration = {
+			...this.integration,
+			...{
+				data: [{
+					...this.integration.data[0],
+					data: this.updatedSettings,
+				}]
+			}
+		};
+
+		this.store.dispatch(this.store.actions.updateIntegration(updatedIntegration, this.integration.data[0].id));
 		this.onCancel();
 	}
 }

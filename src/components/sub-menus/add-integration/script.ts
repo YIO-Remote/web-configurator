@@ -20,7 +20,7 @@ export default class AddIntegration extends Vue {
 	public isAddingNewIntegration: boolean = false;
 	public name: string = '';
 	public type: string = '';
-	public data: any[] = [];
+	public data: Array<{ key: string, value: string }> = [];
 	public newDataKey: string = '';
 	public newDataValue: string = '';
 
