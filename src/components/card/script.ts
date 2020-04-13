@@ -10,7 +10,7 @@ export default class Card extends Vue {
 		type: String,
 		required: true
 	})
-	public title: string;
+	public title?: string;
 	public isSelected: boolean = false;
 	public $parent: ICardListComponent;
 

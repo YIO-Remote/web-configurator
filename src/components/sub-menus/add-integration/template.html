@@ -4,7 +4,15 @@
       <h1 class="title">New Integration</h1>
       <div class="setting">
          <div class="setting-name">
-            Name
+            ID
+         </div>
+         <div class="setting-value">
+            <input class="setting-input" type="input" v-model="id" />
+         </div>
+      </div>
+      <div class="setting">
+         <div class="setting-name">
+            Friendly Name
          </div>
          <div class="setting-value">
             <input class="setting-input" type="input" v-model="name" />
@@ -15,23 +23,17 @@
             Type
          </div>
          <div class="setting-value">
-            <input class="setting-input" type="input" v-model="type" />
+            <drop-down :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
          </div>
       </div>
-      <div v-for="item in data" class="setting">
-         <div class="setting-name">
-            {{item.key}}
-         </div>
-         <div class="setting-value">
-            <input class="setting-input" type="text" :value="item.value" />
-         </div>
-      </div>
-      <h1 class="title">Data Values</h1>
-      <div class="setting">
-         <div class="setting-value">
-            <input class="setting-input key" type="input" v-model="newDataKey" /> :
-            <input  class="setting-input value" type="input" v-model="newDataValue" />
-            <action-icon-button class="add-data-item-button" type="add" @onClick="onAddNewSetting"></action-icon-button>
+      <div v-if="integrationTypeSelected">
+         <div v-for="(setting, key) in fields" class="setting">
+            <div class="setting-name">
+               {{key}}
+            </div>
+            <div class="setting-value">
+               <input class="setting-input" type="text" v-model="fields[key]" />
+            </div>
          </div>
       </div>
       <action-button text="Save" :primary="true" @onClick="onSave"></action-button>

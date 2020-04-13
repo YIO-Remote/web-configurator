@@ -3,11 +3,12 @@ import { map, withLatestFrom } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
+import { IKeyValuePair, IEntity } from '../../types';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import ProfileOptions from '../../components/sub-menus/profile-options/index.vue';
 import RemoteControl from '../../components/remote-control/index.vue';
-import { IKeyValuePair, IEntity } from '../../types';
+import ActionButton from '../../components/action-button/index.vue';
 
 // tslint:disable:no-any
 @Component({
@@ -15,7 +16,8 @@ import { IKeyValuePair, IEntity } from '../../types';
 	components: {
 		CardList,
 		Card,
-		RemoteControl
+		RemoteControl,
+		ActionButton
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
@@ -68,6 +70,7 @@ export default class ProfilesPage extends Vue {
 	public entities: IKeyValuePair<IEntity[]>;
 	public groups: any[];
 	public pages: any[];
+	public newProfileName: string = '';
 
 	public get profileEntities() {
 		if (this.selectedIndex === -1) {
@@ -77,7 +80,6 @@ export default class ProfilesPage extends Vue {
 		const selectedProfile = this.profiles[this.selectedIndex];
 		const allEntities = Object.values(this.entities).flat();
 
-		console.log(allEntities.filter((entity) => selectedProfile.favorites.includes(entity.entity_id)));
 		return allEntities.filter((entity) => selectedProfile.favorites.includes(entity.entity_id));
 }
 
@@ -106,6 +108,10 @@ export default class ProfilesPage extends Vue {
 
 	public buttonPress(side: string, direction: string) {
 		alert(`You pressed the ${side} hand side button, ${direction}`);
+	}
+
+	public createNewProfile() {
+		alert(1);
 	}
 
 	public beforeDestroy() {

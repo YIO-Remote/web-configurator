@@ -98,6 +98,8 @@ export interface IGroup {
 }
 
 export interface IEntity {
+	area: string;
+	type: string;
 	entity_id: string;
 	friendly_name: string;
 	integration: string;
@@ -116,11 +118,6 @@ export interface IIntegration {
 	data: IIntegrationInstance[];
 }
 
-export interface IEntityByIntegration {
-	integration: IIntegration;
-	entity: IEntity[];
-}
-
 export interface IUiConfig {
 	darkmode: boolean;
 	selected_profile: string;
@@ -136,8 +133,18 @@ export interface IConfigState {
 	integrations: IKeyValuePair<IIntegration>;
 }
 
+export interface ISupportedIntegrationsState {
+	integrations: IKeyValuePair<object>;
+}
+
+export interface IAvailableEntitiesState {
+	entities: IKeyValuePair<IEntity[]>;
+}
+
 export interface IState {
 	config: IConfigState;
+	supportedIntegrations: ISupportedIntegrationsState;
+	availableEntities: IAvailableEntitiesState;
 }
 
 // Locale
@@ -166,6 +173,26 @@ export interface IContextMenu {
 	updateProps<T extends object>(props: T): void;
 }
 
+export interface IToastOptions {
+	message: string;
+	type: 'success' | 'info' | 'warning' | 'error';
+	position: 'top' | 'bottom' | 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
+	duration?: number;
+	dismissible?: boolean;
+	onClick?: () => void;
+	onClose?: () => void;
+	queue?: boolean;
+}
+
+export interface IToast {
+	open: (options: IToastOptions) => void;
+	success: (message: string, options?: IToastOptions) => void;
+	error: (message: string, options?: IToastOptions) => void;
+	info: (message: string, options?: IToastOptions) => void;
+	warning: (message: string, options?: IToastOptions) => void;
+	clear: () => void;
+}
+
 // Components
 export interface ICardComponent extends Vue {
 	isSelected: boolean;
@@ -186,13 +213,7 @@ export interface IYioTableComponent extends Vue {
 	deselect(): void;
 }
 
-export interface IToastOptions {
-	message: string;
-	type: 'success' | 'info' | 'warning' | 'error';
-	position: 'top' | 'bottom' | 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
-	duration?: number;
-	dismissible?: boolean;
-	onClick?: () => void;
-	onClose?: () => void;
-	queue?: boolean;
+export interface IDropDownItem {
+	text: string;
+	value: string;
 }

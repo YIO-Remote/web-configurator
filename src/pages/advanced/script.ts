@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
@@ -40,21 +41,22 @@ export default class AdvancedEditPage extends Vue {
 
 		try {
 			await this.server.setConfig(JSON.parse(config));
-			this.$toast.success('Successfully Updated Config');
+			this.$ace.getSession().foldAll(1);
 		} catch (error) {
 			this.$ace.getSession().setValue(config);
-			this.$toast.error(`Failed To Update Config - ${error.message}`);
 		}
 	}
 
 	public mounted() {
 		this.$ace = (this.$refs.ace as any).$ace;
 
-		this.$subscribeTo(this.store.select('config'), (value) => {
-			this.code = JSON.stringify(value, null, 4);
-			this.$ace.setValue(this.code);
-			this.$ace.resize();
-			this.$nextTick().then(() => this.$ace.getSession().foldAll(1));
-		});
+		this.$subscribeTo(
+			this.store.select('config').pipe(distinctUntilChanged((x, y) => JSON.stringify(x) === JSON.stringify(y))),
+			(value) => {
+				this.code = JSON.stringify(value, null, 4);
+				this.$ace.setValue(this.code);
+				this.$ace.resize();
+				this.$nextTick().then(() => this.$ace.getSession().foldAll(1));
+			});
 	}
 }

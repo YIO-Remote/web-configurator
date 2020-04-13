@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { IEntity, IKeyValuePair } from '../../../types';
-import ActionIconButton from '../../action-icon-button/index.vue';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../utilities/server';
+import ActionIconButton from '../../action-icon-button/index.vue';
 
 @Component({
 	name: 'AvailableEntities',
@@ -13,7 +13,7 @@ import { ServerConnection } from '../../../utilities/server';
 	},
 	subscriptions(this: AvailableEntities) {
 		return {
-			entities: this.store.entities.availableByIntegrations
+			available: this.store.entities.available
 		};
 	}
 })
@@ -24,21 +24,10 @@ export default class AvailableEntities extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	// @Prop({
-	// 	type: Object,
-	// 	required: true
-	// })
-	public entities: IKeyValuePair<IEntity[]>;
+	public available: IKeyValuePair<IEntity[]>;
 
 	public addEntity(entity: IEntity) {
-		alert(`Add entity ---> ${entity.friendly_name}`);
-	}
-
-	public getFriendlyName(key: string) {
-		return this.entities[key];
-	}
-
-	public mounted() {
-		this.server.getEntities();
+		console.log(entity);
+		this.server.addEntity(entity);
 	}
 }

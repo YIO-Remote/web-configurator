@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { YioStore } from '..';
-import { IIntegrationInstance } from '../../types';
+import { IIntegrationInstance, IKeyValuePair } from '../../types';
 
 export class IntegrationsAggregate {
 	public configured: Observable<IIntegrationInstance[]>;
+	public supported: Observable<IKeyValuePair<object>>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
@@ -22,5 +23,7 @@ export class IntegrationsAggregate {
 				}, [] as IIntegrationInstance[]);
 			}))
 			.pipe(share());
+
+		this.supported = this.store.select('supportedIntegrations', 'integrations');
 	}
 }

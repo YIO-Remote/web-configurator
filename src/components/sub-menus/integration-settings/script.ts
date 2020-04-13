@@ -47,22 +47,20 @@ export default class IntegrationSettings extends Vue {
 		this.updatedSettings = { ...this.integration.data };
 	}
 
+	public get fields() {
+		const clone = { ...this.schema };
+		delete clone.id;
+		delete clone.entity_id;
+		delete clone.friendly_name;
+		return clone;
+	}
+
 	public onSave() {
-		this.server.updateIntegration({
+		const data = {
 			...this.integration,
 			data: this.updatedSettings
-		});
-		// const updatedIntegration: IIntegration = {
-		// 	...this.integration,
-		// 	...{
-		// 		data: [{
-		// 			...this.integration.data[0],
-		// 			data: this.updatedSettings,
-		// 		}]
-		// 	}
-		// };
+		};
 
-		// this.store.dispatch(this.store.actions.updateIntegration(updatedIntegration, this.integration.data[0].id));
-		// this.onCancel();
+		this.server.updateIntegration(data).then(() => this.onCancel());
 	}
 }
