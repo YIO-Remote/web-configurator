@@ -55,10 +55,27 @@ export interface ISettings {
 	autobrightness: boolean;
 	proximity: number;
 	shutdowntime: number;
-	softwareupdate: boolean;
+	softwareupdate: {
+		appUpdateScript: string;
+		autoUpdate: boolean;
+		channel: string;
+		checkInterval: number;
+		downloadDir: string;
+		systemUpdateScript: string;
+		updateUrl: string;
+		updateUrlAppPath: string;
+	};
 	wifitime: number;
 	bluetootharea: boolean;
 	paired_dock: string;
+	logging: {
+		console: boolean;
+		level: string;
+		path: string;
+		purgeHours: number;
+		queueSize: number;
+		showSource: number;
+	};
 }
 
 export interface IProfile {
@@ -87,20 +104,26 @@ export interface IEntity {
 	supported_features: string[];
 }
 
-export interface IIntegrationData {
-	friendly_name: string;
+export interface IIntegrationInstance {
 	id: string;
+	type: string;
+	friendly_name: string;
 	data: IKeyValuePair<string>;
 }
 
 export interface IIntegration {
 	mdns?: string;
-	data: IIntegrationData[];
+	data: IIntegrationInstance[];
+}
+
+export interface IEntityByIntegration {
+	integration: IIntegration;
+	entity: IEntity[];
 }
 
 export interface IUiConfig {
 	darkmode: boolean;
-	selected_profile: number;
+	selected_profile: string;
 	profiles: IKeyValuePair<IProfile>;
 	pages: IKeyValuePair<IPage>;
 	groups: IKeyValuePair<IPage>;
@@ -157,4 +180,19 @@ export interface ICardListComponent extends Vue {
 export interface ITabComponent extends Vue {
 	setIsActive(isActive: boolean): void;
 	selectCard(cardToSelect: ICardComponent): void;
+}
+
+export interface IYioTableComponent extends Vue {
+	deselect(): void;
+}
+
+export interface IToastOptions {
+	message: string;
+	type: 'success' | 'info' | 'warning' | 'error';
+	position: 'top' | 'bottom' | 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
+	duration?: number;
+	dismissible?: boolean;
+	onClick?: () => void;
+	onClose?: () => void;
+	queue?: boolean;
 }

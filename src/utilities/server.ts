@@ -1,7 +1,8 @@
+import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
+import { Singleton, Inject } from './dependency-injection';
 import { YioStore } from '../store';
-import { IConfigState } from '../types';
-import { Inject, Singleton } from './dependency-injection';
+import { IConfigState, IKeyValuePair, IIntegrationInstance } from '../types';
 
 @Singleton
 export class ServerConnection {
@@ -11,81 +12,142 @@ export class ServerConnection {
 	private store: YioStore;
 	private host: string;
 	private port: number;
-	private socket: WebSocket | null;
+	private wsp: WebSocketAsPromised;
+	private pollingRequestId: number;
+	private requestId: number;
 
 	constructor() {
-		this.host = '192.168.12.108';
+		// TODO: Make this use window.location when in PROD build
+		this.host = '192.168.12.123';
 		this.port = 946;
+		this.requestId = 0;
+		this.pollingRequestId = 1316134911;
 		this.isConnected$ = new BehaviorSubject<boolean>(false);
+		this.wsp = new WebSocketAsPromised(`ws://${this.host}:${this.port}`, {
+			packMessage: (data) => JSON.stringify(data),
+			unpackMessage: (data) => JSON.parse(data as string),
+			attachRequestId: (data, requestId) => Object.assign({id: requestId}, data),
+			extractRequestId: (data) => data && data.id
+		});
+		this.wsp.onClose.addListener(() => {
+			this.isConnected$.next(false);
+			this.connect();
+		});
+		this.wsp.onError.addListener(() => this.isConnected$.next(false));
+		this.wsp.onResponse.addListener((response) => {
+			this.isConnected$.next(true);
+
+			if (response.success && response.id === this.pollingRequestId) {
+				this.store.dispatch(this.store.actions.updateConfig(response.config));
+				this.pollForData();
+			}
+		});
 	}
 
 	public connect() {
-		this.socket = new WebSocket(`ws://${this.host}:${this.port}`);
-		this.socket.onopen = () => this.onOpen('0');
-		this.socket.onmessage = (event) => this.onMessage(event);
-		this.socket.onclose = (event) => this.onClose(event);
-		this.socket.onerror = (event) => this.onError(event);
+		if (this.isConnected$.value) {
+			return Promise.resolve();
+		}
+
+		return this.wsp.open()
+			.then(() => this.isConnected$.next(true))
+			.then(() => this.authenticate('0'))
+			.then(() => this.getConfig())
+			.then(() => this.getSupportedIntegrations())
+			.then(() => {
+				this.getIntegrationSetupData('spotify');
+			});
+	}
+
+	public authenticate(token: string) {
+		return this.wsp.send(`{"type": "auth", "token": "${token}"}`);
+	}
+
+	public getConfig() {
+		return this.wsp.sendRequest({type: 'get_config'}, { requestId: this.pollingRequestId });
 	}
 
 	public setConfig(config: IConfigState) {
-		if (!this.socket) {
-			console.log(`[error] Tried to get config on a closed socket`);
-			return;
-		}
-
-		this.socket.send(`{"type":"setconfig", "config":${JSON.stringify(config)}}`);
+		return this.sendMessage({type: 'set_config', config});
 	}
 
-	private getConfig() {
-		if (!this.socket) {
-			console.log(`[error] Tried to get config on a closed socket`);
-			return;
-		}
-
-		this.socket.send(`{"type":"getconfig"}`);
+	public getEntities() {
+		return this.sendMessage({type: 'get_loaded_entities'});
 	}
 
-	private onOpen(token: string) {
-		if (!this.socket) {
-			console.log(`[error] Tried to open a closed socket without reconnecting`);
-			return;
-		}
-
-		this.socket.send(`{"type":"auth","token": "${token}"}`);
+	public getSupportedIntegrations(): Promise<string[]> {
+		return this.sendMessage({type: 'get_supported_integrations'})
+			.then((response) => response.supported_integrations);
 	}
 
-	private onMessage(event: MessageEvent) {
-		const message = JSON.parse(event.data);
-
-		if (message.type && message.type === 'auth_ok') {
-			this.getConfig();
-		}
-
-		if (message.type && message.type === 'config') {
-			this.isConnected$.next(true);
-			this.store.dispatch(this.store.actions.updateConfig(message.config));
-			this.pollForData();
-		}
+	public getIntegrationSetupData(integration: string): Promise<IKeyValuePair<string>> {
+		return this.sendMessage({type: 'get_integration_setup_data', integration})
+			.then((response) => response.data);
 	}
 
-	private onClose(event: CloseEvent) {
-		if (event.wasClean) {
-			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-		} else {
-			window.setTimeout(() => this.connect(), 5000);
-			console.log('[close] Connection died');
-		}
+	public getLoadedIntegrations() {
+		return this.sendMessage({type: 'get_loaded_integrations'});
+	}
 
-		this.socket!.close();
-		this.socket = null;
-		this.isConnected$.next(false);
+	public addIntegration(config: IIntegrationInstance) {
+		return this.sendMessage({type: 'add_integration', config});
+		// "config": {
+		// 	"type": "homeassistant",
+		// 	"id": "homeassistant_pro",
+		// 	"friendly_name": "My Home Assistant Server",
+		// 	"data": {
+		// 		"ip": "192.168.0.2",
+		// 		"token": "832748hfjkdfu21ytr79218ohfi2"
+		// 	}
+		// }
+	}
+
+	public updateIntegration(config: IIntegrationInstance) {
+		return this.sendMessage({type: 'update_integration', config});
+		// "config": {
+		// 	"type": "homeassistant",
+		// 	"id": "homeassistant_pro",
+		// 	"friendly_name": "My Home Assistant Server",
+		// 	"data": {
+		// 		"ip": "192.168.0.2",
+		// 		"token": "832748hfjkdfu21ytr79218ohfi2"
+		// 	}
+		// }
+	}
+
+	public removeIntegration(id: string) {
+		return this.sendMessage({type: 'remove_integration', integration_id: id });
+	}
+
+	public setDarkMode(value: boolean) {
+		return this.sendMessage({ type: 'set_dark_mode', value });
+	}
+
+	public setAutoBrightness(value: boolean) {
+		return this.sendMessage({ type: 'set_auto_brightness', value });
+	}
+
+	public getLanguages(value: boolean) {
+		return this.sendMessage({ type: 'get_languages', value });
+	}
+
+	public setLanguage(value: boolean) {
+		return this.sendMessage({ type: 'set_language', value });
+	}
+
+	private sendMessage(message: object) {
+		this.requestId++;
+
+		return this.wsp.sendRequest(message, {requestId: this.requestId}).then((response) => {
+			if (!response.success) {
+				return Promise.reject(new Error('API Request Failed'));
+			}
+
+			return response;
+		});
 	}
 
 	private pollForData() {
-		window.setTimeout(() => this.getConfig(), 5000);
-	}
-
-	private onError(event: Event) {
-		console.log(`[error] %o`, event);
+		window.setTimeout(() => this.getConfig(), 2000);
 	}
 }

@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import ActionButton from '../../action-button/index.vue';
-import { IIntegration, IKeyValuePair } from '../../../types';
 import { YioStore } from '../../../store';
 import { Inject } from '../../../utilities/dependency-injection';
+import { ServerConnection } from '../../../utilities/server';
+import { IIntegrationInstance, IKeyValuePair } from '../../../types';
+import ActionButton from '../../action-button/index.vue';
 
 @Component({
 	name: 'IntegrationSettings',
@@ -12,15 +13,17 @@ import { Inject } from '../../../utilities/dependency-injection';
 	}
 })
 export default class IntegrationSettings extends Vue {
-	@Inject(() => YioStore)
-	public store: YioStore;
-	public updatedSettings: IKeyValuePair<string> = {};
+	@Prop({
+		type: Object,
+		required: false
+	})
+	public integration: IIntegrationInstance;
 
 	@Prop({
 		type: Object,
 		required: false
 	})
-	public integration: IIntegration;
+	public schema: IKeyValuePair<string>;
 
 	@Prop({
 		type: Function,
@@ -28,30 +31,38 @@ export default class IntegrationSettings extends Vue {
 	})
 	public onCancel: () => void;
 
-	public get name() {
-		return this.integration.data[0].friendly_name;
-	}
+	@Inject(() => YioStore)
+	public store: YioStore;
 
-	public get settings() {
-		return { ...this.integration.data[0].data };
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
+
+	public updatedSettings: IKeyValuePair<string> = {};
+
+	public get name() {
+		return this.integration.friendly_name;
 	}
 
 	public mounted() {
-		this.updatedSettings = { ...this.integration.data[0].data };
+		this.updatedSettings = { ...this.integration.data };
 	}
 
 	public onSave() {
-		const updatedIntegration: IIntegration = {
+		this.server.updateIntegration({
 			...this.integration,
-			...{
-				data: [{
-					...this.integration.data[0],
-					data: this.updatedSettings,
-				}]
-			}
-		};
+			data: this.updatedSettings
+		});
+		// const updatedIntegration: IIntegration = {
+		// 	...this.integration,
+		// 	...{
+		// 		data: [{
+		// 			...this.integration.data[0],
+		// 			data: this.updatedSettings,
+		// 		}]
+		// 	}
+		// };
 
-		this.store.dispatch(this.store.actions.updateIntegration(updatedIntegration, this.integration.data[0].id));
-		this.onCancel();
+		// this.store.dispatch(this.store.actions.updateIntegration(updatedIntegration, this.integration.data[0].id));
+		// this.onCancel();
 	}
 }

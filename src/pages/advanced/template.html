@@ -1,0 +1,10 @@
+<div class="container">
+    <h1 class="title">Advanced Configuration</h1>
+    <div class="message">
+        Manually set the remote config by hand:
+        <action-button text="Save" :primary="true" @onClick="save()"></action-button>
+    </div>
+    <div class="editor-container">
+        <AceEditor ref="ace" v-model="code" :config="config" />
+    </div>
+</div>

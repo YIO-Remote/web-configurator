@@ -9,55 +9,6 @@ export default function reducer(state: IConfigState = initialState, action: Conf
 	let newState: IConfigState = state;
 
 	switch (action.type) {
-		case getType(actions.updateDarkMode):
-			newState = {
-				...state,
-				ui_config: {
-					...state.ui_config,
-					darkmode: action.payload
-				}
-			};
-			break;
-		case getType(actions.updateAutoBrightness):
-			newState = {
-				...state,
-				settings: {
-					...state.settings,
-					autobrightness: action.payload
-				}
-			};
-			break;
-		case getType(actions.updateAutoSoftwareUpdate):
-			newState = {
-				...state,
-				settings: {
-					...state.settings,
-					softwareupdate: action.payload
-				}
-			};
-			break;
-		case getType(actions.addIntegration):
-		case getType(actions.updateIntegration):
-			newState = {
-				...state,
-				integrations: {
-					...state.integrations,
-					[`${action.meta}`]: action.payload
-				}
-			};
-			break;
-		case getType(actions.removeIntegration):
-			const integrationsCopy = Object.assign({}, state.integrations);
-			const matchingKey = Object.keys(integrationsCopy).find((key) => integrationsCopy[key] === action.payload);
-
-			if (matchingKey) {
-				delete integrationsCopy[matchingKey];
-				newState = {
-					...state,
-					integrations: integrationsCopy
-				};
-			}
-			break;
 		case getType(actions.updateConfig):
 			newState = {
 				...state,
@@ -69,13 +20,13 @@ export default function reducer(state: IConfigState = initialState, action: Conf
 			break;
 	}
 
+	const initialHash = JSON.stringify(initialState);
 	const origHash = JSON.stringify(state);
 	const newHash = JSON.stringify(newState);
 
-	if (origHash !== newHash) {
+	if (origHash !== newHash && origHash !== initialHash) {
 		DIContainer.resolve(ServerConnection).setConfig(newState);
-		return newState;
 	}
 
-	return state;
+	return newState;
 }

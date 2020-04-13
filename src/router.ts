@@ -5,6 +5,9 @@ import ProfilesPage from './pages/profiles/index.vue';
 import SettingsPage from './pages/settings/index.vue';
 import IRLearningPage from './pages/ir-learning/index.vue';
 import SoftwareUpdatePage from './pages/update/index.vue';
+import AdvancedPage from './pages/advanced/index.vue';
+import { Inject } from './utilities/dependency-injection';
+import { ServerConnection } from './utilities/server';
 
 export class Router extends VueRouter {
 	public static routes = [
@@ -41,12 +44,26 @@ export class Router extends VueRouter {
 			name: 'Software Update',
 			path: '/update',
 			component: SoftwareUpdatePage
+		},
+		{
+			name: 'Advanced',
+			path: '/advanced',
+			component: AdvancedPage
 		}
 	];
+
+	@Inject(() => ServerConnection)
+	private server: ServerConnection;
 
 	constructor() {
 		super({
 			routes: Router.routes
+		});
+
+		this.beforeEach((to, __, next) => {
+			this.server.connect()
+				.then(() => next())
+				.catch((e) => next(e));
 		});
 	}
 }

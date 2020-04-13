@@ -23,6 +23,13 @@
         }
     }
 
+    &.remove {
+        line-height: 1.6;
+        &:after {
+            content: '-';
+        }
+    }
+
     &:hover {
         background-color: #686868;
     }

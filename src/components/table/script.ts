@@ -39,4 +39,12 @@ export default class YioTable extends Vue {
 		this.selectedIndex = index;
 		this.$emit('onItemSelected', index);
 	}
+
+	public deselect() {
+		if (this.disableSelection) {
+			return;
+		}
+
+		this.selectedIndex = -1;
+	}
 }

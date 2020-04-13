@@ -1,5 +1,5 @@
 import { YioStore } from '..';
-import { map, share } from 'rxjs/operators';
+import { map, share, withLatestFrom } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IEntity, IKeyValuePair } from '../../types';
 
@@ -29,8 +29,9 @@ export class EntitiesAggregate {
 					], [] as IEntity[]
 				))
 			)
+			.pipe(withLatestFrom(this.store.select('config', 'integrations')))
 			.pipe(
-				map((entities) => entities.reduce((groups, entity) => {
+				map(([entities, integrations]) => entities.reduce((groups, entity) => {
 					groups[entity.integration] = groups[entity.integration] || [];
 					groups[entity.integration].push(entity);
 					return groups;

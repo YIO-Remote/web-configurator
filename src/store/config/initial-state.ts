@@ -10,7 +10,24 @@ const initialState: IConfigState = {
 		paired_dock: '',
 		proximity: 0,
 		shutdowntime: 0,
-		softwareupdate: false,
+		softwareupdate: {
+			appUpdateScript: '',
+			autoUpdate: false,
+			channel: '',
+			checkInterval: 0,
+			downloadDir: '',
+			systemUpdateScript: '',
+			updateUrl: '',
+			updateUrlAppPath: ''
+		},
+		logging: {
+			console: false,
+			level: '',
+			path: '',
+			purgeHours: 0,
+			queueSize: 0,
+			showSource: 0
+		},
 		wifitime: 0
 	},
 	ui_config: {
@@ -18,7 +35,7 @@ const initialState: IConfigState = {
 		groups: {},
 		pages: {},
 		profiles: {},
-		selected_profile: 0
+		selected_profile: '0'
 	}
 };
 

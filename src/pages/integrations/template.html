@@ -1,6 +1,6 @@
 <div>
     <h1 class="title">Configured Integrations</h1>
-    <yio-table :items="configuredIntegrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
+    <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
         <template v-slot:header>
             <th>
                 Name
@@ -12,10 +12,10 @@
         </template>
         <template v-slot:item="{ item }">
             <td>
-                {{item.data[0].friendly_name}}
+                {{item.friendly_name}}
             </td>
             <td>
-                {{item.data[0].id}}
+                {{item.type}}
             </td>
             <td :style="{ width: '80px' }">
                 <action-icon-button @onClick="onItemDeleted(item)" type="delete"></action-icon-button>

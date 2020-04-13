@@ -1,10 +1,11 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import ActionButton from '../../action-button/index.vue';
 import ActionIconButton from '../../action-icon-button/index.vue';
 import { IKeyValuePair } from '../../../types';
+import { ServerConnection } from '../../../utilities/server';
 
 @Component({
 	name: 'AddIntegration',
@@ -14,8 +15,17 @@ import { IKeyValuePair } from '../../../types';
 	}
 })
 export default class AddIntegration extends Vue {
+	@Prop({
+		type: Object,
+		required: false
+	})
+	public setupData: object;
+
 	@Inject(() => YioStore)
 	public store: YioStore;
+
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
 
 	public isAddingNewIntegration: boolean = false;
 	public name: string = '';
@@ -54,17 +64,28 @@ export default class AddIntegration extends Vue {
 		}
 
 		this.isAddingNewIntegration = false;
-		this.store.dispatch(this.store.actions.addIntegration({
-			data: [{
-				friendly_name: this.name,
-				id: this.type,
-				data: this.data.reduce((dataObj, item) => ({
-					...dataObj,
-					...{
-						[`${item.key}`]: item.value
-					}
-				}), {} as IKeyValuePair<string>)
-			}]
-		}, this.name.toLowerCase().trim().replace(/\s/g, '')));
+		this.server.addIntegration({
+			type: this.type,
+			friendly_name: this.name,
+			id: this.type,
+			data: this.data.reduce((dataObj, item) => ({
+				...dataObj,
+				...{
+					[`${item.key}`]: item.value
+				}
+			}), {} as IKeyValuePair<string>)
+		});
+		// this.store.dispatch(this.store.actions.addIntegration({
+		// 	data: [{
+		// 		friendly_name: this.name,
+		// 		id: this.type,
+		// 		data: this.data.reduce((dataObj, item) => ({
+		// 			...dataObj,
+		// 			...{
+		// 				[`${item.key}`]: item.value
+		// 			}
+		// 		}), {} as IKeyValuePair<string>)
+		// 	}]
+		// }, this.name.toLowerCase().trim().replace(/\s/g, '')));
 	}
 }

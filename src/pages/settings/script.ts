@@ -4,6 +4,7 @@ import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import SwitchToggle from '../../components/switch-toggle/index.vue';
 import Card from '../../components/card/index.vue';
+import { ServerConnection } from '../../utilities/server';
 
 @Component({
 	name: 'SettingsPage',
@@ -15,7 +16,7 @@ import Card from '../../components/card/index.vue';
 		return {
 			darkMode: this.store.select('config', 'ui_config', 'darkmode'),
 			autoBrightness: this.store.select('config', 'settings', 'autobrightness'),
-			autoSoftwareUpdate: this.store.select('config', 'settings', 'softwareupdate'),
+			autoSoftwareUpdate: this.store.select('config', 'settings', 'softwareupdate', 'autoUpdate'),
 			entities: this.store.select('config', 'entities')
 		};
 	}
@@ -23,6 +24,9 @@ import Card from '../../components/card/index.vue';
 export default class SettingsPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
+
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
 
 	public get languageButtonText() {
 		return `Language: ${this.$i18n.locale}`;
@@ -34,14 +38,14 @@ export default class SettingsPage extends Vue {
 	}
 
 	public updateDarkMode(value: boolean) {
-		this.store.dispatch(this.store.actions.updateDarkMode(value));
+		this.server.setDarkMode(value);
 	}
 
 	public updateAutoBrightness(value: boolean) {
-		this.store.dispatch(this.store.actions.updateAutoBrightness(value));
+		this.server.setAutoBrightness(value);
 	}
 
 	public updateAutoSoftwareUpdate(value: boolean) {
-		this.store.dispatch(this.store.actions.updateAutoSoftwareUpdate(value));
+		alert('TODO: API ENDPOINT NEEDED');
 	}
 }
