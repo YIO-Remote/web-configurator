@@ -1,8 +1,8 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
-import { Singleton, Inject } from './dependency-injection';
-import { YioStore } from '../store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData } from '../types';
+import { Singleton, Inject } from './utilities/dependency-injection';
+import { YioStore } from './store';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -56,9 +56,8 @@ export class ServerConnection {
 			.then(() => this.isConnected$.next(true))
 			.then(() => this.authenticate('0'))
 			.then(() => this.getSupportedIntegrations())
-			.then((supportedIntegrations) => this.store.dispatch(this.store.actions.updateSupportedIntegrations(supportedIntegrations)))
+			.then(() => this.getSupportedEntityTypes())
 			.then(() => this.getAvailableEntities())
-			.then((availableEntities) => this.store.dispatch(this.store.actions.updateAvailableEntities(availableEntities)))
 			.then(() => this.getConfig());
 	}
 
@@ -85,6 +84,18 @@ export class ServerConnection {
 		return this.sendMessage({type: 'add_entity', config})
 			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
+	}
+
+	public removeEntity(id: string) {
+		return this.sendMessage({type: 'remove_entity', entity_id: id})
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public getSupportedEntityTypes() {
+		return this.sendMessage<string[]>({type: 'get_supported_entities'})
+		.then((response) => response.supported_entities)
+		.then((supported) => this.store.dispatch(this.store.actions.setSupportedEntityTypes(supported)));
 	}
 
 	public getAvailableEntities() {
@@ -135,10 +146,11 @@ export class ServerConnection {
 					]
 				} as IKeyValuePair<IEntity[]>
 			})
-			.then((response) => response.available_entities);
+			.then((response) => response.available_entities)
+			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)));
 	}
 
-	public getSupportedIntegrations(): Promise<IKeyValuePair<object>> {
+	public getSupportedIntegrations(): Promise<void> {
 		return this.sendMessage<string[]>({type: 'get_supported_integrations'})
 			.then((response) => response.supported_integrations)
 			.then((integrations: string[]) => {
@@ -150,7 +162,8 @@ export class ServerConnection {
 						});
 					});
 				}, Promise.resolve({} as IKeyValuePair<object>));
-			});
+			})
+			.then((integrations) => this.store.dispatch(this.store.actions.setSupportedIntegrations(integrations)));
 	}
 
 	public getIntegrationSchema(integration: string): Promise<IKeyValuePair<string>> {

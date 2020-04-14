@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 import { IEntity, IKeyValuePair } from '../../types';
 
 export class EntitiesAggregate {
-	public configured: Observable<IEntity[]>;
+	public loaded: Observable<IEntity[]>;
 	public available: Observable<IKeyValuePair<IEntity[]>>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
 		this.store = store;
 
-		this.configured = this.store.select('config', 'entities')
+		this.loaded = this.store.select('entities', 'loaded')
 			.pipe(
 				map((entities) => Object.keys(entities).reduce((array: IEntity[], key: string) => [
 					...array,
@@ -20,7 +20,7 @@ export class EntitiesAggregate {
 				))
 			);
 
-		this.available = this.store.select('availableEntities', 'entities')
+		this.available = this.store.select('entities', 'available')
 			.pipe(
 				map((entities) => Object.keys(entities).reduce((array: IEntity[], key: string) => [
 					...array,
@@ -28,7 +28,7 @@ export class EntitiesAggregate {
 					], [] as IEntity[]
 				))
 			)
-			.pipe(combineLatest(this.store.select('config', 'entities')))
+			.pipe(combineLatest(this.store.select('entities', 'loaded')))
 			.pipe(
 				map(([available, configured]) => {
 					const configuredIds = Object.keys(configured).reduce((array, key) => ([...array, ...configured[key].map((item) => item.entity_id)]), [] as string[]);

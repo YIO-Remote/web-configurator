@@ -7,7 +7,7 @@ import IRLearningPage from './pages/ir-learning/index.vue';
 import SoftwareUpdatePage from './pages/update/index.vue';
 import AdvancedPage from './pages/advanced/index.vue';
 import { Inject } from './utilities/dependency-injection';
-import { ServerConnection } from './utilities/server';
+import { ServerConnection } from './server';
 
 export class Router extends VueRouter {
 	public static routes = [

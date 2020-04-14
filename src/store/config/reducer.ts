@@ -1,9 +1,9 @@
 import { getType } from 'typesafe-actions';
 import initialState from './initial-state';
-import actions, { ConfigActionType } from './actions';
+import actions, { YioStoreActionTypes } from '../actions';
 import { IConfigState } from '../../types';
 
-export default function reducer(state: IConfigState = initialState, action: ConfigActionType): IConfigState {
+export default function reducer(state: IConfigState = initialState, action: YioStoreActionTypes): IConfigState {
 	switch (action.type) {
 		case getType(actions.updateConfig):
 			return {

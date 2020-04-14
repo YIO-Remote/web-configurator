@@ -4,7 +4,7 @@ import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import SwitchToggle from '../../components/switch-toggle/index.vue';
 import Card from '../../components/card/index.vue';
-import { ServerConnection } from '../../utilities/server';
+import { ServerConnection } from '../../server';
 
 @Component({
 	name: 'SettingsPage',

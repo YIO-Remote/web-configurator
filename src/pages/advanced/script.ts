@@ -3,7 +3,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
-import { ServerConnection } from '../../utilities/server';
+import { ServerConnection } from '../../server';
 import ActionButton from '../../components/action-button/index.vue';
 
 @Component({

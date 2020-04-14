@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { YioStore } from '../../../store';
 import { Inject } from '../../../utilities/dependency-injection';
-import { ServerConnection } from '../../../utilities/server';
+import { ServerConnection } from '../../../server';
 import { IIntegrationInstance, IKeyValuePair } from '../../../types';
 import ActionButton from '../../action-button/index.vue';
 

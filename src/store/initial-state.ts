@@ -1,12 +1,12 @@
 import { IState } from '../types';
 import config from './config/initial-state';
-import supportedIntegrations from './supported-integrations/initial-state';
-import availableEntities from './available-entities/initial-state';
+import integrations from './integrations/initial-state';
+import entities from './entities/initial-state';
 
 const initialState: IState = {
 	config,
-	supportedIntegrations,
-	availableEntities
+	integrations,
+	entities
 };
 
 export default initialState;

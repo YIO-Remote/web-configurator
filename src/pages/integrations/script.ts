@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import { IIntegrationInstance, IKeyValuePair, IYioTableComponent } from '../../types';
-import { ServerConnection } from '../../utilities/server';
+import { ServerConnection } from '../../server';
 import YioTable from '../../components/table/index.vue';
 import ActionIconButton from '../../components/action-icon-button/index.vue';
 import IntegrationSettings from '../../components/sub-menus/integration-settings/index.vue';

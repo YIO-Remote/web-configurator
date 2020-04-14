@@ -4,29 +4,29 @@
       <h1 class="title">New Integration</h1>
       <div class="setting">
          <div class="setting-name">
-            ID
-         </div>
-         <div class="setting-value">
-            <input class="setting-input" type="input" v-model="id" />
-         </div>
-      </div>
-      <div class="setting">
-         <div class="setting-name">
-            Friendly Name
-         </div>
-         <div class="setting-value">
-            <input class="setting-input" type="input" v-model="name" />
-         </div>
-      </div>
-      <div class="setting">
-         <div class="setting-name">
-            Type
+            type
          </div>
          <div class="setting-value">
             <drop-down :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
          </div>
       </div>
       <div v-if="integrationTypeSelected">
+         <div class="setting">
+            <div class="setting-name">
+               id
+            </div>
+            <div class="setting-value">
+               <input class="setting-input" type="input" v-model="id" />
+            </div>
+         </div>
+         <div class="setting">
+            <div class="setting-name">
+               friendly name
+            </div>
+            <div class="setting-value">
+               <input class="setting-input" type="input" v-model="name" />
+            </div>
+         </div>
          <div v-for="(setting, key) in fields" class="setting">
             <div class="setting-name">
                {{key}}

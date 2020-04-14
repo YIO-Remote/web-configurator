@@ -133,18 +133,21 @@ export interface IConfigState {
 	integrations: IKeyValuePair<IIntegration>;
 }
 
-export interface ISupportedIntegrationsState {
-	integrations: IKeyValuePair<object>;
+export interface IIntegrationsState {
+	configured: IKeyValuePair<IIntegration>;
+	supported: IKeyValuePair<object>;
 }
 
-export interface IAvailableEntitiesState {
-	entities: IKeyValuePair<IEntity[]>;
+export interface IEntitiesState {
+	loaded: IKeyValuePair<IEntity[]>;
+	available: IKeyValuePair<IEntity[]>;
+	supported: string[];
 }
 
 export interface IState {
 	config: IConfigState;
-	supportedIntegrations: ISupportedIntegrationsState;
-	availableEntities: IAvailableEntitiesState;
+	integrations: IIntegrationsState;
+	entities: IEntitiesState;
 }
 
 // Locale
@@ -169,6 +172,7 @@ export interface IServerResponse {
 }
 
 export interface IServerResponseWithData<T> extends IServerResponse {
+	supported_entities: T;
 	supported_integrations: T;
 	data: T;
 }

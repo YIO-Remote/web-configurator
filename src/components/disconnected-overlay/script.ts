@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
-import { ServerConnection } from '../../utilities/server';
+import { ServerConnection } from '../../server';
 import { map } from 'rxjs/operators';
 
 @Component({

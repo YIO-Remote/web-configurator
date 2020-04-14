@@ -11,7 +11,7 @@ export class IntegrationsAggregate {
 	constructor(store: YioStore) {
 		this.store = store;
 
-		this.configured = this.store.select('config', 'integrations')
+		this.configured = this.store.select('integrations', 'configured')
 			.pipe(map((integrations) => {
 				const types = Object.keys(integrations);
 
@@ -24,6 +24,6 @@ export class IntegrationsAggregate {
 			}))
 			.pipe(share());
 
-		this.supported = this.store.select('supportedIntegrations', 'integrations');
+		this.supported = this.store.select('integrations', 'supported');
 	}
 }

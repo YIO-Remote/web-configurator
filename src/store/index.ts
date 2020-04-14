@@ -3,9 +3,11 @@ import { Singleton } from '../utilities/dependency-injection';
 import { Store } from '../utilities/store';
 import { EntitiesAggregate } from './aggregates/entities';
 import { IntegrationsAggregate } from './aggregates/integrations';
-import actions, { YioStoreActions } from './actions';
+import actions from './actions';
 import initialState from './initial-state';
 import reducers from './reducers';
+
+type YioStoreActions = typeof actions;
 
 @Singleton
 export class YioStore extends Store<IState, YioStoreActions> {

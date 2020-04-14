@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { IEntity, IKeyValuePair } from '../../../types';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
-import { ServerConnection } from '../../../utilities/server';
+import { ServerConnection } from '../../../server';
 import ActionIconButton from '../../action-icon-button/index.vue';
 
 @Component({
