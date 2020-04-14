@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './dependency-injection';
 import { YioStore } from '../store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity } from '../types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData } from '../types';
 import Vue from 'vue';
 
 @Singleton
@@ -73,8 +73,8 @@ export class ServerConnection {
 
 	public setConfig(config: IConfigState) {
 		return this.sendMessage({type: 'set_config', config})
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public getEntities() {
@@ -83,8 +83,8 @@ export class ServerConnection {
 
 	public addEntity(config: IEntity) {
 		return this.sendMessage({type: 'add_entity', config})
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public getAvailableEntities() {
@@ -97,6 +97,7 @@ export class ServerConnection {
 				available_entities: {
 					blind: [
 						{
+							type: 'blind',
 							area: 'Living room',
 							entity_id: 'cover.living_room_blinds_level2',
 							friendly_name: 'Living room blinds',
@@ -111,7 +112,8 @@ export class ServerConnection {
 					],
 					light: [
 						{
-						area: 'Entrance',
+							area: 'Entrance',
+							type: 'light',
 							entity_id: 'light.livingroom_light_level',
 							friendly_name: 'Entrance lamp',
 							integration: 'homeassistant',
@@ -121,6 +123,7 @@ export class ServerConnection {
 						},
 						{
 							area: 'Kitchen',
+							type: 'light',
 							entity_id: 'light.kitchen_dimmer_level',
 							friendly_name: 'Kitchen lamp',
 							integration: 'homeassistant',
@@ -130,13 +133,13 @@ export class ServerConnection {
 							]
 						}
 					]
-				}
+				} as IKeyValuePair<IEntity[]>
 			})
 			.then((response) => response.available_entities);
 	}
 
 	public getSupportedIntegrations(): Promise<IKeyValuePair<object>> {
-		return this.sendMessage({type: 'get_supported_integrations'})
+		return this.sendMessage<string[]>({type: 'get_supported_integrations'})
 			.then((response) => response.supported_integrations)
 			.then((integrations: string[]) => {
 				return integrations.reduce((chain, integration) => {
@@ -151,7 +154,7 @@ export class ServerConnection {
 	}
 
 	public getIntegrationSchema(integration: string): Promise<IKeyValuePair<string>> {
-		return this.sendMessage({type: 'get_integration_setup_data', integration})
+		return this.sendMessage<IKeyValuePair<string>>({type: 'get_integration_setup_data', integration})
 			.then((response) => response.data);
 	}
 
@@ -161,32 +164,32 @@ export class ServerConnection {
 
 	public addIntegration(config: IIntegrationInstance) {
 		return this.sendMessage({type: 'add_integration', config})
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public updateIntegration(config: IIntegrationInstance) {
 		return this.sendMessage({type: 'update_integration', config})
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public removeIntegration(id: string) {
 		return this.sendMessage({type: 'remove_integration', integration_id: id })
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public setDarkMode(value: boolean) {
 		return this.sendMessage({ type: 'set_dark_mode', value })
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public setAutoBrightness(value: boolean) {
 		return this.sendMessage({ type: 'set_auto_brightness', value })
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
 	public getLanguages(value: boolean) {
@@ -195,16 +198,16 @@ export class ServerConnection {
 
 	public setLanguage(value: boolean) {
 		return this.sendMessage({ type: 'set_language', value })
-			.then(() => this.showToast(true))
-			.catch(() => this.showToast(false));
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
 	}
 
-	private sendMessage(message: object) {
+	private sendMessage<T>(message: object) {
 		this.requestId++;
 
-		return this.wsp.sendRequest(message, {requestId: this.requestId}).then((response) => {
+		return this.wsp.sendRequest(message, {requestId: this.requestId}).then((response: IServerResponseWithData<T>) => {
 			if (!response.success) {
-				return Promise.reject();
+				return Promise.reject(response);
 			}
 
 			return response;
@@ -216,12 +219,12 @@ export class ServerConnection {
 		window.setTimeout(() => this.getAvailableEntities(), 5000);
 	}
 
-	private showToast(success: boolean) {
-		if (success) {
-			Vue.$toast.success('Successfully Updated Config');
+	private showToast(response: IServerResponse) {
+		if (response.success) {
+			Vue.$toast.success(`Success - ${response.message || 'Config Updated'}`);
 			return;
 		}
 
-		Vue.$toast.error(`Failed To Update Config - 'API Request Failed'`);
+		Vue.$toast.error(`Failed To Update Config - ${response.message || 'API Request Failed'}`);
 	}
 }

@@ -56,11 +56,11 @@ export default class IntegrationSettings extends Vue {
 	}
 
 	public onSave() {
-		const data = {
+		const config = {
 			...this.integration,
 			data: this.updatedSettings
 		};
 
-		this.server.updateIntegration(data).then(() => this.onCancel());
+		this.server.updateIntegration(config).then(() => this.onCancel());
 	}
 }

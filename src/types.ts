@@ -160,6 +160,19 @@ export interface ILocale extends LocaleMessageObject {
 	};
 }
 
+// Server
+export interface IServerResponse {
+	type: string;
+	success: boolean;
+	id: number;
+	message?: string;
+}
+
+export interface IServerResponseWithData<T> extends IServerResponse {
+	supported_integrations: T;
+	data: T;
+}
+
 // Plugins
 export interface IMenuPlugin {
 	component?: VueConstructor<Vue>;
