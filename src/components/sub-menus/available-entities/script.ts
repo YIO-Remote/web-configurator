@@ -13,7 +13,7 @@ import ActionIconButton from '../../action-icon-button/index.vue';
 	},
 	subscriptions(this: AvailableEntities) {
 		return {
-			available: this.store.entities.available
+			available: this.store.entities.availableGroupedByIntegration
 		};
 	}
 })
@@ -27,7 +27,6 @@ export default class AvailableEntities extends Vue {
 	public available: IKeyValuePair<IEntity[]>;
 
 	public addEntity(entity: IEntity) {
-		console.log(entity);
 		this.server.addEntity(entity);
 	}
 }

@@ -1,9 +1,8 @@
 import Vue from 'vue';
-import { map, withLatestFrom } from 'rxjs/operators';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
-import { IKeyValuePair, IEntity } from '../../types';
+import { IProfileAggregate } from '../../types';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import ProfileOptions from '../../components/sub-menus/profile-options/index.vue';
@@ -21,44 +20,7 @@ import ActionButton from '../../components/action-button/index.vue';
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
-			profiles: this.store.select('config', 'ui_config', 'profiles'),
-			// profiles: this.store.select('config', 'ui_config', 'profiles').pipe(map((profiles) => {
-			// 	return Object.keys(profiles).map((id) => ({
-			// 		id,
-			// 		name: profiles[id].name,
-			// 		favorites: profiles[id].favorites,
-			// 		pages: profiles[id].pages,
-			// 	}));
-			// })),
-			pages: this.store.select('config', 'ui_config', 'pages')
-				.pipe(withLatestFrom(this.store.select('config', 'ui_config', 'groups')))
-				.pipe(map(([pages, groups]) => {
-					return Object.keys(pages).reduce((array: any[], key: string) => {
-						return [
-							...array,
-							...[{
-								id: key,
-								name: pages[key].name,
-								groups
-							}]
-						];
-					}, [] as any[]);
-				})),
-			groups: this.store.select('config', 'ui_config', 'groups')
-				.pipe(withLatestFrom(this.store.select('config', 'entities')))
-				.pipe(map(([groups, entities]) => {
-					return Object.keys(groups).reduce((array: any[], key: string) => {
-						return [
-							...array,
-							...[{
-								id: key,
-								name: groups[key].name,
-								entities
-							}]
-						];
-					}, [] as any[]);
-				})),
-			entities: this.store.select('config', 'entities')
+			profiles: this.store.profiles.profiles$
 		};
 	}
 })
@@ -66,22 +28,20 @@ export default class ProfilesPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
 	public selectedIndex: number = -1;
-	public profiles: any[];
-	public entities: IKeyValuePair<IEntity[]>;
-	public groups: any[];
-	public pages: any[];
+	public profiles: IProfileAggregate[];
 	public newProfileName: string = '';
 
-	public get profileEntities() {
+	public get selectedProfile() {
 		if (this.selectedIndex === -1) {
-			return [];
+			return void 0;
 		}
 
-		const selectedProfile = this.profiles[this.selectedIndex];
-		const allEntities = Object.values(this.entities).flat();
+		return this.profiles[this.selectedIndex];
+	}
 
-		return allEntities.filter((entity) => selectedProfile.favorites.includes(entity.entity_id));
-}
+	public get selectedProfileFavorites() {
+		return this.selectedProfile ? this.selectedProfile.favorites : [];
+	}
 
 	public getBadgeClasses(isSelected: boolean) {
 		return {
@@ -99,11 +59,7 @@ export default class ProfilesPage extends Vue {
 
 		this.selectedIndex = index;
 
-		this.$menu.show(ProfileOptions, {
-			entities: this.entities,
-			groups: this.groups,
-			pages: this.pages
-		});
+		this.$menu.show(ProfileOptions, {});
 	}
 
 	public buttonPress(side: string, direction: string) {

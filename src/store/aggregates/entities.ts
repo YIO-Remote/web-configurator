@@ -5,7 +5,8 @@ import { IEntity, IKeyValuePair } from '../../types';
 
 export class EntitiesAggregate {
 	public loaded: Observable<IEntity[]>;
-	public available: Observable<IKeyValuePair<IEntity[]>>;
+	public available: Observable<IEntity[]>;
+	public availableGroupedByIntegration: Observable<IKeyValuePair<IEntity[]>>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
@@ -21,13 +22,15 @@ export class EntitiesAggregate {
 			);
 
 		this.available = this.store.select('entities', 'available')
+			.pipe(combineLatest(this.store.select('entities', 'loaded')))
 			.pipe(
-				map((entities) => Object.keys(entities).reduce((array: IEntity[], key: string) => [
-					...array,
-					...entities[key].map((entity) => ({ type: key, ...entity }))
-					], [] as IEntity[]
-				))
-			)
+				map(([available, configured]) => {
+					const configuredIds = Object.keys(configured).reduce((array, key) => ([...array, ...configured[key].map((item) => item.entity_id)]), [] as string[]);
+					return available.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
+				})
+			);
+
+		this.availableGroupedByIntegration = this.store.select('entities', 'available')
 			.pipe(combineLatest(this.store.select('entities', 'loaded')))
 			.pipe(
 				map(([available, configured]) => {

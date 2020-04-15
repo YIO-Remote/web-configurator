@@ -11,6 +11,11 @@
                     </template>
                     <template v-slot:body>
                         Pages
+                        <ul>
+                            <li v-for="page in profile.pages">
+                                {{page.name}}
+                            </li>
+                        </ul>
                     </template>
                 </card>
             </card-list>
@@ -27,21 +32,7 @@
                     </div>
                 </template>
             </card>
-            
-            <!-- <card :title="'Add New Profile'">
-                <template v-slot:leftIcon="{ isSelected }">
-                    
-                </template>
-                <template v-slot:body>
-                    Name: <input type="text" />
-                </template>
-                <template v-slot:rightIcon>
-                    <div :class="getBadgeClasses(isSelected)">
-                        +
-                     </div>
-                </template>
-            </card> -->
         </div>
-        <remote-control :entities="profileEntities"></remote-control>
+        <remote-control :entities="selectedProfileFavorites"></remote-control>
     </div>
 </div>

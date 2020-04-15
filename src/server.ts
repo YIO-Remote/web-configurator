@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -58,14 +58,21 @@ export class ServerConnection {
 			.then(() => this.getSupportedIntegrations())
 			.then(() => this.getSupportedEntityTypes())
 			.then(() => this.getAvailableEntities())
-			.then(() => this.getConfig());
+			.then(() => this.getProfiles())
+			.then(() => this.getConfig(true));
 	}
 
 	public authenticate(token: string) {
 		return this.wsp.send(`{"type": "auth", "token": "${token}"}`);
 	}
 
-	public getConfig() {
+	public getConfig(isInitialRequest: boolean = false) {
+		if (isInitialRequest) {
+			return this.sendMessage<IConfigState>({type: 'get_config'})
+				.then((response) => response.config)
+				.then((config) => this.store.dispatch(this.store.actions.updateConfig(config)));
+		}
+
 		return this.wsp.sendRequest({type: 'get_config'}, { requestId: this.configPollingRequestId })
 			.then((response) => response.config);
 	}
@@ -94,57 +101,34 @@ export class ServerConnection {
 
 	public getSupportedEntityTypes() {
 		return this.sendMessage<string[]>({type: 'get_supported_entities'})
-		.then((response) => response.supported_entities)
-		.then((supported) => this.store.dispatch(this.store.actions.setSupportedEntityTypes(supported)));
+			.then((response) => response.supported_entities)
+			.then((supported) => this.store.dispatch(this.store.actions.setSupportedEntityTypes(supported)));
 	}
 
 	public getAvailableEntities() {
-		// return this.sendMessage({type: 'get_available_entities'})
-		// 	.then((response) => response.config)
+		// return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
 			return Promise.resolve({
 				id: 22,
 				success: true,
 				type: 'result',
-				available_entities: {
-					blind: [
-						{
-							type: 'blind',
-							area: 'Living room',
-							entity_id: 'cover.living_room_blinds_level2',
-							friendly_name: 'Living room blinds',
-							integration: 'homeassistant',
-							supported_features: [
-								'OPEN',
-								'CLOSE',
-								'STOP',
-								'POSITION'
-							]
-						}
-					],
-					light: [
-						{
-							area: 'Entrance',
-							type: 'light',
-							entity_id: 'light.livingroom_light_level',
-							friendly_name: 'Entrance lamp',
-							integration: 'homeassistant',
-							supported_features: [
-								'BRIGHTNESS'
-							]
-						},
-						{
-							area: 'Kitchen',
-							type: 'light',
-							entity_id: 'light.kitchen_dimmer_level',
-							friendly_name: 'Kitchen lamp',
-							integration: 'homeassistant',
-							supported_features: [
-								'BRIGHTNESS',
-								'COLOR'
-							]
-						}
-					]
-				} as IKeyValuePair<IEntity[]>
+				available_entities: [
+					{
+						entity_id: 'light.kitchen_dimmer_level',
+						type: 'light',
+						integration: 'homeassistant',
+						area: 'Kitchen',
+						friendly_name: 'Kitchen Light',
+						supported_features: []
+					},
+					{
+						entity_id: 'cover.living_room_blinds_level',
+						type: 'blind',
+						integration: 'homeassistant',
+						area: 'Living Room',
+						friendly_name: 'Living Room Blinds',
+						supported_features: []
+					}
+				] as IEntity[]
 			})
 			.then((response) => response.available_entities)
 			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)));
@@ -203,6 +187,24 @@ export class ServerConnection {
 		return this.sendMessage({ type: 'set_auto_brightness', value })
 			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
+	}
+
+	public getProfiles() {
+		return this.sendMessage<IKeyValuePair<IProfile>>({ type: 'get_all_profiles'})
+			.then((response) => response.profiles)
+			.then((profiles) => this.store.dispatch(this.store.actions.setProfiles(profiles)));
+	}
+
+	public getPages() {
+		return this.sendMessage<IKeyValuePair<IPage>>({ type: 'get_all_pages'})
+			.then((response) => response.pages)
+			.then((pages) => this.store.dispatch(this.store.actions.setPages(pages)));
+	}
+
+	public getGroups() {
+		return this.sendMessage<IKeyValuePair<IGroup>>({ type: 'get_all_groups'})
+			.then((response) => response.groups)
+			.then((groups) => this.store.dispatch(this.store.actions.setGroups(groups)));
 	}
 
 	public getLanguages(value: boolean) {

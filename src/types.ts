@@ -86,8 +86,8 @@ export interface IProfile {
 
 export interface IPage {
 	name: string;
-	groups: string[];
 	image?: string;
+	groups: string[];
 	bluetooth?: string;
 }
 
@@ -98,11 +98,11 @@ export interface IGroup {
 }
 
 export interface IEntity {
-	area: string;
 	type: string;
 	entity_id: string;
-	friendly_name: string;
 	integration: string;
+	area: string;
+	friendly_name: string;
 	supported_features: string[];
 }
 
@@ -123,7 +123,7 @@ export interface IUiConfig {
 	selected_profile: string;
 	profiles: IKeyValuePair<IProfile>;
 	pages: IKeyValuePair<IPage>;
-	groups: IKeyValuePair<IPage>;
+	groups: IKeyValuePair<IGroup>;
 }
 
 export interface IConfigState {
@@ -140,14 +140,48 @@ export interface IIntegrationsState {
 
 export interface IEntitiesState {
 	loaded: IKeyValuePair<IEntity[]>;
-	available: IKeyValuePair<IEntity[]>;
+	available: IEntity[];
 	supported: string[];
+}
+
+export interface IProfilesState {
+	all: IKeyValuePair<IProfile>;
+}
+
+export interface IPagesState {
+	all: IKeyValuePair<IPage>;
+}
+
+export interface IGroupsState {
+	all: IKeyValuePair<IGroup>;
 }
 
 export interface IState {
 	config: IConfigState;
 	integrations: IIntegrationsState;
 	entities: IEntitiesState;
+	profiles: IProfilesState;
+	pages: IPagesState;
+	groups: IGroupsState;
+}
+
+export interface IGroupAggregate {
+	name: string;
+	switch: boolean;
+	entities: IEntity[];
+}
+
+export interface IPageAggregate {
+	name: string;
+	image?: string;
+	groups: IGroupAggregate[];
+}
+
+export interface IProfileAggregate {
+	id: string;
+	name: string;
+	pages: IPageAggregate[];
+	favorites: IEntity[];
 }
 
 // Locale
@@ -172,6 +206,11 @@ export interface IServerResponse {
 }
 
 export interface IServerResponseWithData<T> extends IServerResponse {
+	config: T;
+	groups: T;
+	pages: T;
+	profiles: T;
+	available_entities: T;
 	supported_entities: T;
 	supported_integrations: T;
 	data: T;

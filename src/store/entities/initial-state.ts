@@ -2,7 +2,7 @@ import { IEntitiesState } from '../../types';
 
 const initialState: IEntitiesState = {
 	loaded: {},
-	available: {},
+	available: [],
 	supported: []
 };
 
