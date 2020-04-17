@@ -13,9 +13,9 @@ import { YioStore } from '../../../store';
 	},
 	subscriptions(this: ProfileOptions) {
 		return {
-			entities: this.store.select('entities', 'loaded'),
-			groups: this.store.select('groups', 'all'),
-			pages: this.store.select('pages', 'all')
+			entities: this.store.entities.loaded,
+			groups: this.store.groups.all,
+			pages: this.store.pages.all
 		};
 	}
 })

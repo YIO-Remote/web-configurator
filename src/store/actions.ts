@@ -1,5 +1,5 @@
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import { IKeyValuePair, IEntity, IConfigState, IIntegration, IProfile, IPage, IGroup } from '../types';
+import { IKeyValuePair, IEntity, IConfigState, IIntegration, IIntegrationSchema, IProfile, IPage, IGroup } from '../types';
 
 const actions = {
 	// Config
@@ -12,7 +12,7 @@ const actions = {
 
 	// Integrations
 	setConfiguredIntegrations: createStandardAction('store/integrations/set-configured')<IKeyValuePair<IIntegration>>(),
-	setSupportedIntegrations: createStandardAction('store/integrations/set-supported')<IKeyValuePair<object>>(),
+	setSupportedIntegrations: createStandardAction('store/integrations/set-supported')<IKeyValuePair<IIntegrationSchema>>(),
 
 	// Profiles
 	setProfiles: createStandardAction('store/profiles/set-all')<IKeyValuePair<IProfile>>(),

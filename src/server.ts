@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -59,7 +59,8 @@ export class ServerConnection {
 			.then(() => this.getSupportedEntityTypes())
 			.then(() => this.getAvailableEntities())
 			.then(() => this.getProfiles())
-			.then(() => this.getConfig(true));
+			.then(() => this.getConfig(true))
+			.then(() => this.pollForData());
 	}
 
 	public authenticate(token: string) {
@@ -141,17 +142,17 @@ export class ServerConnection {
 				return integrations.reduce((chain, integration) => {
 					return chain.then((previous) => {
 						return this.getIntegrationSchema(integration).then((setupData) => {
-							previous[integration] = { id: '', friendly_name: '', ...setupData };
+							previous[integration] = setupData;
 							return previous;
 						});
 					});
-				}, Promise.resolve({} as IKeyValuePair<object>));
+				}, Promise.resolve({} as IKeyValuePair<IIntegrationSchema>));
 			})
 			.then((integrations) => this.store.dispatch(this.store.actions.setSupportedIntegrations(integrations)));
 	}
 
-	public getIntegrationSchema(integration: string): Promise<IKeyValuePair<string>> {
-		return this.sendMessage<IKeyValuePair<string>>({type: 'get_integration_setup_data', integration})
+	public getIntegrationSchema(integration: string): Promise<IIntegrationSchema> {
+		return this.sendMessage<IIntegrationSchema>({type: 'get_integration_setup_data', integration})
 			.then((response) => response.data);
 	}
 

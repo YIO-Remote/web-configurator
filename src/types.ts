@@ -133,9 +133,21 @@ export interface IConfigState {
 	integrations: IKeyValuePair<IIntegration>;
 }
 
+export interface IIntegrationSchema {
+	default: any;
+	description: string;
+	examples: any[];
+	friendly_name: string;
+	id: string;
+	properties: IKeyValuePair<IIntegrationSchema>;
+	required: IKeyValuePair<string>;
+	title: string;
+	type: string;
+}
+
 export interface IIntegrationsState {
 	configured: IKeyValuePair<IIntegration>;
-	supported: IKeyValuePair<object>;
+	supported: IKeyValuePair<IIntegrationSchema>;
 }
 
 export interface IEntitiesState {
@@ -166,6 +178,7 @@ export interface IState {
 }
 
 export interface IGroupAggregate {
+	id: string;
 	name: string;
 	switch: boolean;
 	entities: IEntity[];

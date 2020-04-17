@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../server';
-import { IKeyValuePair, IDropDownItem } from '../../../types';
+import { IKeyValuePair, IDropDownItem, IIntegrationSchema } from '../../../types';
 import ActionButton from '../../action-button/index.vue';
 import ActionIconButton from '../../action-icon-button/index.vue';
 import DropDown from '../../drop-down/index.vue';
@@ -29,13 +29,14 @@ export default class AddIntegration extends Vue {
 	public server: ServerConnection;
 
 	public isAddingNewIntegration: boolean = false;
-	public supportedIntegrations: IKeyValuePair<object>;
+	public supportedIntegrations: IKeyValuePair<IIntegrationSchema>;
 	public integrationTypeSelected: boolean = false;
 	public typeOptions: IDropDownItem[] = [];
 	public id: string = '';
 	public name: string = '';
 	public type: string = '';
-	public fields: any = {};
+	public properties: IKeyValuePair<IIntegrationSchema> = {};
+	public propertyValues: IKeyValuePair<string> = {};
 	public newDataKey: string = '';
 	public newDataValue: string = '';
 
@@ -47,12 +48,17 @@ export default class AddIntegration extends Vue {
 	}
 
 	public onIntegrationTypeChanged(item: IDropDownItem) {
+		const selectedIntegration = this.supportedIntegrations[item.value];
+		const properties = selectedIntegration.properties || {};
 		this.integrationTypeSelected = true;
 		this.type = item.value;
-		this.fields = { ...this.supportedIntegrations[item.value] };
-		delete this.fields.id;
-		delete this.fields.entity_id;
-		delete this.fields.friendly_name;
+		this.properties = { ...properties };
+		this.propertyValues = { ...Object.keys(properties).reduce((values, propName) => {
+			return {
+				...values,
+				[`${propName}`]: ''
+			};
+		}, {} as IKeyValuePair<string>) };
 	}
 
 	public onAddNewIntegration() {
@@ -64,7 +70,8 @@ export default class AddIntegration extends Vue {
 		this.id = '';
 		this.name = '';
 		this.type = '';
-		this.fields = {};
+		this.properties = {};
+		this.propertyValues = {};
 	}
 
 	public onSave() {
@@ -84,7 +91,7 @@ export default class AddIntegration extends Vue {
 			id: this.id,
 			type: this.type,
 			friendly_name: this.name,
-			data: this.fields
+			data: this.propertyValues
 		}).then(() => this.onCancel());
 	}
 }

@@ -3,13 +3,18 @@ import { Component, Prop } from 'vue-property-decorator';
 import { YioStore } from '../../../store';
 import { Inject } from '../../../utilities/dependency-injection';
 import { ServerConnection } from '../../../server';
-import { IIntegrationInstance, IKeyValuePair } from '../../../types';
+import { IIntegrationInstance, IKeyValuePair, IIntegrationSchema } from '../../../types';
 import ActionButton from '../../action-button/index.vue';
 
 @Component({
 	name: 'IntegrationSettings',
 	components: {
 		ActionButton
+	},
+	subscriptions(this: IntegrationSettings) {
+		return {
+			supportedIntegrations: this.store.integrations.supported
+		};
 	}
 })
 export default class IntegrationSettings extends Vue {
@@ -37,28 +42,31 @@ export default class IntegrationSettings extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	public updatedSettings: IKeyValuePair<string> = {};
+	public supportedIntegrations: IKeyValuePair<IIntegrationSchema>;
+	public properties: IKeyValuePair<IIntegrationSchema> = {};
+	public propertyValues: IKeyValuePair<string> = {};
 
 	public get name() {
 		return this.integration.friendly_name;
 	}
 
 	public mounted() {
-		this.updatedSettings = { ...this.integration.data };
-	}
-
-	public get fields() {
-		const clone = { ...this.schema };
-		delete clone.id;
-		delete clone.entity_id;
-		delete clone.friendly_name;
-		return clone;
+		console.log(this.supportedIntegrations, this.integration);
+		const selectedIntegration = this.supportedIntegrations[this.integration.type];
+		const properties = selectedIntegration.properties || {};
+		this.properties = { ...properties };
+		this.propertyValues = { ...Object.keys(this.properties).reduce((values, propName) => {
+			return {
+				...values,
+				[`${propName}`]: this.integration.data[propName]
+			};
+		}, {} as IKeyValuePair<string>) };
 	}
 
 	public onSave() {
 		const config = {
 			...this.integration,
-			data: this.updatedSettings
+			data: this.propertyValues
 		};
 
 		this.server.updateIntegration(config).then(() => this.onCancel());

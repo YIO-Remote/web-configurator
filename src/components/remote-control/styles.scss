@@ -102,6 +102,10 @@
 						.delete-button-container {
 							position: relative;
 							width: 15%;
+
+							.action-icon-button {
+								transform: translateY(50%);
+							}
 						}
 					}
 				}

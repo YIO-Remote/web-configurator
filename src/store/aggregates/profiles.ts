@@ -43,6 +43,8 @@ export class ProfilesAggregate {
 		};
 
 		const createPages = (pageIds: string[], pages: IKeyValuePair<IPage>, groups: IKeyValuePair<IGroup>, entities: IEntity[]): IPageAggregate[] => {
+			console.log(pageIds, pages);
+
 			return pageIds.filter((pageId) => !isNaN(+pageId)).map<IPageAggregate>((pageId) => {
 				const page = pages[pageId];
 
@@ -53,6 +55,7 @@ export class ProfilesAggregate {
 						const group = groups[groupId];
 
 						return {
+							id: groupId,
 							name: group.name,
 							entities: entities.filter((entity) => group.entities.includes(entity.entity_id)),
 							switch: group.switch

@@ -5,14 +5,14 @@
                Drag entities to the remote view to add them to favorites or a group.
             </div>
             <ul>
-               <li v-for="(entity, index) in entities" :key="index">
+               <li v-for="entity in entities" :key="index">
                   {{entity}}
                </li>
             </ul>
         </Tab>
         <Tab name="Groups">
             <ul>
-               <li v-for="(group, index) in groups" :key="index">
+               <li v-for="group in groups" :key="index">
                   ------ {{group.name}} ------
                   <ul>
                      <li v-for="(entity, key) in entities" :key="key">
@@ -24,7 +24,7 @@
         </Tab>
         <Tab name="Pages">
             <ul>
-               <li v-for="(page, index) in pages" :key="index">
+               <li v-for="page in pages" :key="index">
                   {{page.name}}
                </li>
             </ul>

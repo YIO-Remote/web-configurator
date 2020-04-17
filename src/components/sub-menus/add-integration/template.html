@@ -27,12 +27,12 @@
                <input class="setting-input" type="input" v-model="name" />
             </div>
          </div>
-         <div v-for="(setting, key) in fields" class="setting">
+         <div v-for="(property, key) in properties" class="setting">
             <div class="setting-name">
                {{key}}
             </div>
             <div class="setting-value">
-               <input class="setting-input" type="text" v-model="fields[key]" />
+               <input class="setting-input" :placeholder="`example: ${property.examples[0]}`" type="text" v-model="propertyValues[key]" />
             </div>
          </div>
       </div>
