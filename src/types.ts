@@ -177,11 +177,20 @@ export interface IState {
 	groups: IGroupsState;
 }
 
+export interface IEntityAggregate {
+	type: string;
+	entity_id: string;
+	integration: IIntegrationInstance;
+	area: string;
+	friendly_name: string;
+	supported_features: string[];
+}
+
 export interface IGroupAggregate {
 	id: string;
 	name: string;
 	switch: boolean;
-	entities: IEntity[];
+	entities: IEntityAggregate[];
 }
 
 export interface IPageAggregate {
@@ -196,7 +205,7 @@ export interface IProfileAggregate {
 	name: string;
 	initial: string;
 	pages: IPageAggregate[];
-	favorites: IEntity[];
+	favorites: IEntityAggregate[];
 }
 
 // Locale

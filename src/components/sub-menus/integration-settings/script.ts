@@ -13,7 +13,7 @@ import ActionButton from '../../action-button/index.vue';
 	},
 	subscriptions(this: IntegrationSettings) {
 		return {
-			supportedIntegrations: this.store.integrations.supported
+			supportedIntegrations: this.store.integrations.supported$
 		};
 	}
 })

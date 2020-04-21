@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { YioStore } from '..';
 import { IPageAggregate } from '../../types';
@@ -21,7 +21,8 @@ export class PagesAggregate {
 						groups: groups.filter((group) => pages[pageId].groups.includes(group.id))
 					},
 					], [] as IPageAggregate[]
-				))
+				)),
+				shareReplay()
 			);
 	}
 }

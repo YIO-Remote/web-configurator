@@ -1,25 +1,33 @@
 import { YioStore } from '..';
-import { map, combineLatest } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { IEntity, IKeyValuePair } from '../../types';
+import { map, shareReplay } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { IEntityAggregate, IKeyValuePair, IIntegrationInstance } from '../../types';
 
 export class EntitiesAggregate {
-	public loaded$: Observable<IEntity[]>;
-	public loadedGroupedByIntegration$: Observable<IKeyValuePair<IEntity[]>>;
-	public available$: Observable<IEntity[]>;
-	public availableGroupedByIntegration$: Observable<IKeyValuePair<IEntity[]>>;
+	public loaded$: Observable<IEntityAggregate[]>;
+	public loadedGroupedByIntegration$: Observable<IKeyValuePair<IEntityAggregate[]>>;
+	public available$: Observable<IEntityAggregate[]>;
+	public availableGroupedByIntegration$: Observable<IKeyValuePair<IEntityAggregate[]>>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
 		this.store = store;
 
-		this.loaded$ = this.store.select('entities', 'loaded')
+		this.loaded$ = combineLatest(this.store.select('entities', 'loaded'), this.store.integrations.configured$)
 			.pipe(
-				map((entities) => Object.keys(entities).reduce((array: IEntity[], key: string) => [
+				map(([entities, integrations]) => Object.keys(entities).reduce((array: IEntityAggregate[], entityType: string) => [
 					...array,
-					...entities[key].map((entity) => ({ type: key, ...entity }))
-					], [] as IEntity[]
-				))
+					...entities[entityType].map<IEntityAggregate>((entity) => ({
+						type: entityType,
+						area: entity.area,
+						entity_id: entity.entity_id,
+						friendly_name: entity.friendly_name,
+						supported_features: entity.supported_features,
+						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
+					}))
+					], [] as IEntityAggregate[]
+				)),
+				shareReplay()
 			);
 
 		this.loadedGroupedByIntegration$ = this.loaded$
@@ -29,32 +37,42 @@ export class EntitiesAggregate {
 						groups[entity.type] = groups[entity.type] || [];
 						groups[entity.type].push(entity);
 						return groups;
-					}, {} as IKeyValuePair<IEntity[]>);
-				})
+					}, {} as IKeyValuePair<IEntityAggregate[]>);
+				}),
+				shareReplay()
 			);
 
-		this.available$ = this.store.select('entities', 'available')
-			.pipe(
-				combineLatest(this.store.select('entities', 'loaded')),
-				map(([available, configured]) => {
-					const configuredIds = Object.keys(configured).reduce((array, key) => ([...array, ...configured[key].map((item) => item.entity_id)]), [] as string[]);
-					return available.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
-				})
+		this.available$ = combineLatest(
+				this.store.select('entities', 'available'),
+				this.loaded$,
+				this.store.integrations.configured$
+			).pipe(
+				map(([available, configured, integrations]) => {
+					const configuredIds = configured.map((entity) => entity.entity_id);
+					const availableEntities = available.map<IEntityAggregate>((entity) => ({
+						area: entity.area,
+						entity_id: entity.entity_id,
+						friendly_name: entity.friendly_name,
+						supported_features: entity.supported_features,
+						type: entity.type,
+						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
+					}));
+
+					return availableEntities.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
+				}),
+				shareReplay()
 			);
 
-		this.availableGroupedByIntegration$ = this.store.select('entities', 'available')
+		this.availableGroupedByIntegration$ = this.available$
 			.pipe(
-				combineLatest(this.store.select('entities', 'loaded')),
-				map(([available, configured]) => {
-					const configuredIds = Object.keys(configured).reduce((array, key) => ([...array, ...configured[key].map((item) => item.entity_id)]), [] as string[]);
-					const filtered = available.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
-
-					return filtered.reduce((groups, entity) => {
-						groups[entity.integration] = groups[entity.integration] || [];
-						groups[entity.integration].push(entity);
+				map((available) => {
+					return available.reduce((groups, entity) => {
+						groups[entity.integration.friendly_name] = groups[entity.integration.friendly_name] || [];
+						groups[entity.integration.friendly_name].push(entity);
 						return groups;
-					}, {} as IKeyValuePair<IEntity[]>);
-				})
+					}, {} as IKeyValuePair<IEntityAggregate[]>);
+				}),
+				shareReplay()
 			);
 	}
 }

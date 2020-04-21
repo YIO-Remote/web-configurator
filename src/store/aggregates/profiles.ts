@@ -1,7 +1,7 @@
 import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { YioStore } from '..';
-import { IProfile, IKeyValuePair, IEntity, IProfileAggregate, IPageAggregate } from '../../types';
+import { IProfile, IKeyValuePair, IProfileAggregate, IPageAggregate, IEntityAggregate } from '../../types';
 
 export class ProfilesAggregate {
 	public profiles$: Observable<IProfileAggregate[]>;
@@ -10,7 +10,7 @@ export class ProfilesAggregate {
 	constructor(store: YioStore) {
 		this.store = store;
 
-		const mapProfiles = (profiles: IKeyValuePair<IProfile>, entities: IEntity[], pages: IPageAggregate[]) => {
+		const mapProfiles = (profiles: IKeyValuePair<IProfile>, entities: IEntityAggregate[], pages: IPageAggregate[]) => {
 			return Object.keys(profiles).reduce((array, profileId) => {
 				return [
 					...array,
@@ -29,9 +29,12 @@ export class ProfilesAggregate {
 				this.store.select('profiles', 'all'),
 				this.store.pages.all$,
 				this.store.entities.loaded$
-			).pipe(map<[IKeyValuePair<IProfile>, IPageAggregate[], IEntity[]], IProfileAggregate[]>(([profile, pages, entities]) => {
-				return mapProfiles(profile, entities, pages);
-			}));
+			).pipe(
+				map<[IKeyValuePair<IProfile>, IPageAggregate[], IEntityAggregate[]], IProfileAggregate[]>(([profile, pages, entities]) => {
+					return mapProfiles(profile, entities, pages);
+				}),
+				shareReplay()
+			);
 	}
 
 	public profile$(id: string) {

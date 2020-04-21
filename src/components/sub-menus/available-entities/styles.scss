@@ -5,7 +5,12 @@
     padding: 30px;
     font-family: OpenSans-Light;
 
-    .integration-title {
+    .list-container {
+        overflow: scroll;
+        height: calc(100% - 16px);
+    }
+
+    .entity-title {
         font-size: 14px;
         padding: 25px 0 12px;
         border-bottom: 1px solid #0b0b0b;
@@ -13,18 +18,24 @@
         text-align: left;
     }
 
-    .integration-list {
+    .entity-list {
         padding: 20px 0;
     }
 
-    .integration {
+    .entity {
         font-size: 12px;
         overflow: hidden;
         margin-bottom: 15px;
 
         .details {
+            display: flex;
+            flex-direction: row;
             width: 90%;
             float: left;
+            
+            .icon {
+                font-size: 36px;
+            }
         }
 
         .action {

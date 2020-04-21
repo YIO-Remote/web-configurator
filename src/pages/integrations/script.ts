@@ -9,7 +9,6 @@ import ActionIconButton from '../../components/action-icon-button/index.vue';
 import IntegrationSettings from '../../components/sub-menus/integration-settings/index.vue';
 import AddIntegration from '../../components/sub-menus/add-integration/index.vue';
 
-// tslint:disable:no-any
 @Component({
 	name: 'IntegrationsPage',
 	components: {
@@ -18,8 +17,8 @@ import AddIntegration from '../../components/sub-menus/add-integration/index.vue
 	},
 	subscriptions(this: IntegrationsPage) {
 		return {
-			integrations: this.store.integrations.configured,
-			supportedIntegrations: this.store.integrations.supported
+			integrations: this.store.integrations.configured$,
+			supportedIntegrations: this.store.integrations.supported$
 		};
 	}
 })

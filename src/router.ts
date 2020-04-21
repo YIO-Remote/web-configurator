@@ -62,7 +62,10 @@ export class Router extends VueRouter {
 
 		this.beforeEach((to, __, next) => {
 			this.server.connect()
-				.then(() => next())
+				.then(() => {
+					console.log('NAVING');
+					next();
+				})
 				.catch((e) => next(e));
 		});
 	}

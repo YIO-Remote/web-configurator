@@ -1,5 +1,5 @@
 import { YioStore } from '..';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { IGroupAggregate } from '../../types';
 
@@ -21,7 +21,8 @@ export class GroupsAggregate {
 						entities: entities.filter((entity) => groups[groupId].entities.includes(entity.entity_id))
 					}
 					], [] as IGroupAggregate[]
-				))
+				)),
+				shareReplay()
 			);
 	}
 }

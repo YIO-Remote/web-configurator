@@ -57,9 +57,9 @@ export class ServerConnection {
 			.then(() => this.authenticate('0'))
 			.then(() => this.getSupportedIntegrations())
 			.then(() => this.getSupportedEntityTypes())
-			.then(() => this.getAvailableEntities())
 			.then(() => this.getProfiles())
 			.then(() => this.getConfig(true))
+			.then(() => this.getAvailableEntities())
 			.then(() => this.pollForData());
 	}
 
@@ -108,11 +108,36 @@ export class ServerConnection {
 
 	public getAvailableEntities() {
 		return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
+		// return Promise.resolve({
+		// 	id: 22,
+		// 	success: true,
+		// 	type: 'result',
+		// 	available_entities: [
+		// 			{
+		// 				entity_id: 'light.kitchen_dimmer_level',
+		// 				type: 'light',
+		// 				friendly_name: 'Kitchen lamp',
+		// 				integration: 'homeassistant',
+		// 				supported_features: [
+		// 					'BRIGHTNESS',
+		// 					'COLOR'
+		// 				]
+		// 			},
+		// 			{
+		// 				entity_id: 'cover.living_room_blinds_level',
+		// 				type: 'blind',
+		// 				friendly_name: '',
+		// 				integration: 'homeassistant',
+		// 				supported_features: []
+		// 			}
+		// 		] as IEntity[]
+		// 	})
 			.then((response) => response.available_entities)
-			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)));
+			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)))
+			.catch(() => {});
 	}
 
-	public getSupportedIntegrations(): Promise<void> {
+	public getSupportedIntegrations(): Promise < void > {
 		return this.sendMessage<string[]>({type: 'get_supported_integrations'})
 			.then((response) => response.supported_integrations)
 			.then((integrations: string[]) => {
@@ -128,7 +153,7 @@ export class ServerConnection {
 			.then((integrations) => this.store.dispatch(this.store.actions.setSupportedIntegrations(integrations)));
 	}
 
-	public getIntegrationSchema(integration: string): Promise<IIntegrationSchema> {
+	public getIntegrationSchema(integration: string): Promise < IIntegrationSchema > {
 		return this.sendMessage<IIntegrationSchema>({type: 'get_integration_setup_data', integration})
 			.then((response) => response.data);
 	}
@@ -213,7 +238,7 @@ export class ServerConnection {
 	}
 
 	private showToast(response: IServerResponse) {
-		if (response.success) {
+		if (response.success) { } { } {
 			Vue.$toast.success(`Success - ${response.message || 'Config Updated'}`);
 			return;
 		}

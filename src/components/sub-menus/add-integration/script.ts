@@ -12,7 +12,7 @@ import DropDown from '../../drop-down/index.vue';
 	name: 'AddIntegration',
 	subscriptions(this: AddIntegration) {
 		return {
-			supportedIntegrations: this.store.integrations.supported
+			supportedIntegrations: this.store.integrations.supported$
 		};
 	},
 	components: {

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { IEntity, IKeyValuePair } from '../../../types';
+import { IEntityAggregate } from '../../../types';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../server';
@@ -24,9 +24,14 @@ export default class AvailableEntities extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	public available: IKeyValuePair<IEntity[]>;
-
-	public addEntity(entity: IEntity) {
-		this.server.addEntity(entity);
+	public addEntity(entity: IEntityAggregate) {
+		this.server.addEntity({
+			area: entity.area,
+			entity_id: entity.entity_id,
+			friendly_name: entity.friendly_name,
+			integration: entity.integration.id,
+			supported_features: entity.supported_features,
+			type: entity.type
+		});
 	}
 }

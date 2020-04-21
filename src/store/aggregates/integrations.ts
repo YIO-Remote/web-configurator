@@ -1,29 +1,31 @@
 import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { YioStore } from '..';
 import { IIntegrationInstance, IKeyValuePair } from '../../types';
 
 export class IntegrationsAggregate {
-	public configured: Observable<IIntegrationInstance[]>;
-	public supported: Observable<IKeyValuePair<object>>;
+	public configured$: Observable<IIntegrationInstance[]>;
+	public supported$: Observable<IKeyValuePair<object>>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
 		this.store = store;
 
-		this.configured = this.store.select('integrations', 'configured')
-			.pipe(map((integrations) => {
-				const types = Object.keys(integrations);
+		this.configured$ = this.store.select('integrations', 'configured')
+			.pipe(
+				map((integrations) => {
+					const types = Object.keys(integrations);
 
-				return types.reduce((array: IIntegrationInstance[], type: string) => {
-					return [
-						...array,
-						...integrations[type].data.map((integrationInstance) => ({  ...integrationInstance, type }))
-					];
-				}, [] as IIntegrationInstance[]);
-			}))
-			.pipe(share());
+					return types.reduce((array: IIntegrationInstance[], type: string) => {
+						return [
+							...array,
+							...integrations[type].data.map((integrationInstance) => ({  ...integrationInstance, type }))
+						];
+					}, [] as IIntegrationInstance[]);
+				}),
+				shareReplay()
+			);
 
-		this.supported = this.store.select('integrations', 'supported');
+		this.supported$ = this.store.select('integrations', 'supported').pipe(shareReplay());
 	}
 }

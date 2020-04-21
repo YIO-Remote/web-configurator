@@ -2,6 +2,8 @@
     <h1 class="title">Entities controlled by YIO remote</h1>
     <yio-table :items="loaded" max-height="580px" :disable-selection="true">
         <template v-slot:header>
+            <th style="width: 50px;">
+            </th>
             <th>
                 Name
             </th>
@@ -14,11 +16,14 @@
             <th :style="{ width: '80px' }"></th>
         </template>
         <template v-slot:item="{ item }">
-            <td>
-                {{item.friendly_name}}
+            <td style="width: 50px;">
+                <span class="icon" :class="item.type"></span>
             </td>
             <td>
-                {{item.integration}}
+                 {{item.friendly_name}}
+            </td>
+            <td>
+                {{item.integration ? item.integration.friendly_name : ''}}
             </td>
             <td>
                 {{item.type}}
