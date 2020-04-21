@@ -22,4 +22,8 @@
 
 .items-list {
 	margin: 10px 0 20px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }

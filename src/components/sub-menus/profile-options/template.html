@@ -11,21 +11,37 @@
             <small-card :title="'Favorites'">
             </small-card>
             <small-card v-for="(page, index) in pages" :key="index" :title="page.name" :iconType="'delete'">
+               <template v-slot:body>
+                  <ul>
+                     <li v-for="(group, index) in page.groups" :key="index">
+                        {{group.name}}
+                     </li>
+                  </ul>
+              </template>
             </small-card>
          </div>
       </div>
    </Tab>
    <Tab name="Groups">
-      <ul>
-         <li v-for="(group, index) in groups" :key="index">
-            ------ {{group.name}} ------
-            <ul>
-               <li v-for="(entity, index) in group.entities" :key="index">
-                  {{entity.friendly_name}}
-               </li>
-            </ul>
-         </li>
-      </ul>
+      <div class="items-container">
+         <div class="items-description">
+            You can add entities to a group after dragging it under a page in the remote view to the left.
+         </div>
+         <div class="items-list-title">
+            Available Groups
+         </div>
+         <div class="items-list">
+            <small-card v-for="(group, index) in groups" :key="index" :title="group.name" :iconType="'delete'">
+               <template v-slot:body>
+                  <ul>
+                     <li v-for="(entity, index) in group.entities" :key="index">
+                        {{entity.friendly_name}}
+                     </li>
+                  </ul>
+              </template>
+            </small-card>
+         </div>
+      </div>
    </Tab>
    <Tab name="Entities">
       <div class="items-container">

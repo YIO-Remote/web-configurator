@@ -46,7 +46,8 @@ export default class SmallCard extends Vue {
 
 	public get bodyContainerClasses() {
 		return {
-			'body-container': true
+			'body-container': true,
+			'is-visible': this.hasBodyContent
 		};
 	}
 

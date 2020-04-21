@@ -33,4 +33,8 @@ export default class ProfileOptions extends Vue {
 		const tabs = this.$refs.tabs as ITabContainer;
 		tabs.selectTab(index);
 	}
+
+	public mounted() {
+		console.log((this as any).groups);
+	}
 }
