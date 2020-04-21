@@ -1,21 +1,26 @@
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { YioStore } from '..';
-import { IPage } from '../../types';
+import { IPageAggregate } from '../../types';
 
 export class PagesAggregate {
-	public all: Observable<IPage[]>;
+	public all$: Observable<IPageAggregate[]>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
 		this.store = store;
 
-		this.all = this.store.select('pages', 'all')
+		this.all$ = combineLatest(this.store.select('pages', 'all'), this.store.groups.all$)
 			.pipe(
-				map((pages) => Object.keys(pages).reduce((array: IPage[], id: string) => [
+				map(([pages, groups]) => Object.keys(pages).reduce((array: IPageAggregate[], pageId: string) => [
 					...array,
-					{ ...pages[id], id }
-					], [] as IPage[]
+					{
+						id: pageId,
+						name: pages[pageId].name,
+						image: pages[pageId].image,
+						groups: groups.filter((group) => pages[pageId].groups.includes(group.id))
+					},
+					], [] as IPageAggregate[]
 				))
 			);
 	}

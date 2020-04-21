@@ -16,7 +16,7 @@ import AvailableEntities from '../../components/sub-menus/available-entities/ind
 	},
 	subscriptions(this: EntitiesPage) {
 		return {
-			loaded: this.store.entities.loaded
+			loaded: this.store.entities.loaded$
 		};
 	}
 })

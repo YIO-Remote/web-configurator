@@ -2,20 +2,21 @@
     <h1 class="title">Profiles</h1>
     <div class="profiles">
         <div class="profiles-container">
-            <card-list @onSelected="onSelected">
+            <card-list @onSelected="onProfileSelected">
                 <card v-for="(profile, index) in profiles" :title="profile.name" :key="index">
                     <template v-slot:leftIcon="{ isSelected }">
                         <div :class="getBadgeClasses(isSelected)">
-                            {{profile.name.substr(0, 1).toUpperCase()}}
+                            {{profile.initial}}
                         </div>
                     </template>
                     <template v-slot:body>
-                        Pages
-                        <ul>
-                            <li v-for="page in profile.pages">
-                                {{page.name}}
-                            </li>
-                        </ul>
+                        <div class="pages-list">
+                            <div class="title">Pages</div>
+                            <card-list @onSelected="onPageSelected">
+                                <small-card :title="'Favorites'" :iconType="'delete'"></small-card>
+                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :iconType="'delete'"></small-card>
+                            </card-list>
+                        </div>
                     </template>
                 </card>
             </card-list>

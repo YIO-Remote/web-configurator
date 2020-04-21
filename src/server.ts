@@ -107,30 +107,7 @@ export class ServerConnection {
 	}
 
 	public getAvailableEntities() {
-		// return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
-			return Promise.resolve({
-				id: 22,
-				success: true,
-				type: 'result',
-				available_entities: [
-					{
-						entity_id: 'light.kitchen_dimmer_level',
-						type: 'light',
-						integration: 'homeassistant',
-						area: 'Kitchen',
-						friendly_name: 'Kitchen Light',
-						supported_features: []
-					},
-					{
-						entity_id: 'cover.living_room_blinds_level',
-						type: 'blind',
-						integration: 'homeassistant',
-						area: 'Living Room',
-						friendly_name: 'Living Room Blinds',
-						supported_features: []
-					}
-				] as IEntity[]
-			})
+		return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
 			.then((response) => response.available_entities)
 			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)));
 	}

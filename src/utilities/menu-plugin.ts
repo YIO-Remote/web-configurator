@@ -5,25 +5,37 @@ export default class MenuPlugin {
 	// tslint:disable-next-line: no-shadowed-variable
 	public static install(Vue: VueConstructor) {
 		Vue.prototype.$menu = Vue.observable({
-			component: void 0,
-			props: void 0,
+			instance: void 0,
 
-			show<T extends object>(component: VueConstructor<Vue>, propsObject?: T) {
-				this.component = component;
-				this.props = propsObject || {};
+			isVisible: false,
+
+			show<T extends object>(component: VueConstructor<Vue>, propsData?: T) {
+				const element = document.getElementById('sub-menu');
+
+				if (this.instance && element) {
+					this.instance.$destroy();
+					this.instance.$el.remove();
+				}
+
+				const Component = Vue.extend(component);
+				this.instance = new Component({ propsData });
+				this.instance.$mount();
+				this.isVisible = true;
+
+				if (!element) {
+					this.instance.$destroy();
+					return;
+				}
+
+				element.appendChild(this.instance.$el);
 			},
 
 			hide() {
-				this.component = void 0;
-				this.props = void 0;
+				this.isVisible = false;
 			},
 
-			updateProps<T extends object>(propsObject?: T) {
-				this.props = propsObject || {};
-			},
-
-			get key() {
-				return Date.now();
+			getComponent<T extends Vue>(): T {
+				return this.instance;
 			}
 		} as IMenuPlugin);
 	}

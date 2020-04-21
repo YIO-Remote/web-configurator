@@ -25,9 +25,10 @@ export default class TabContainer extends Vue {
 		this.tabs[this.initialIndex].setIsActive(true);
 	}
 
-	public selectTab(selectedTab: Vue) {
-		this.tabs.forEach((tab) => {
-			tab.setIsActive(selectedTab === tab);
+	public selectTab(selectedTab: Vue | number) {
+		this.tabs.forEach((tab, index) => {
+			const isSelected = (typeof selectedTab === 'number') ? index === selectedTab : selectedTab === tab;
+			tab.setIsActive(isSelected);
 		});
 	}
 }

@@ -53,3 +53,14 @@
 		flex: 2;
 	}
 }
+
+.pages-list {
+	padding: 10px;
+	border-radius: 8px;
+	background-color: #313247;
+	font-family: OpenSans-Light;
+
+	.title {
+    	font-size: 0.9em;
+	}
+}

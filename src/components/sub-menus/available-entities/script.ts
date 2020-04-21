@@ -13,7 +13,7 @@ import ActionIconButton from '../../action-icon-button/index.vue';
 	},
 	subscriptions(this: AvailableEntities) {
 		return {
-			available: this.store.entities.availableGroupedByIntegration
+			available: this.store.entities.availableGroupedByIntegration$
 		};
 	}
 })

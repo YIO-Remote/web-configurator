@@ -1,4 +1,4 @@
-import Vue, { VueConstructor, PropOptions } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { LocaleMessageObject } from 'vue-i18n';
 
 // Store Types
@@ -185,6 +185,7 @@ export interface IGroupAggregate {
 }
 
 export interface IPageAggregate {
+	id: string;
 	name: string;
 	image?: string;
 	groups: IGroupAggregate[];
@@ -193,6 +194,7 @@ export interface IPageAggregate {
 export interface IProfileAggregate {
 	id: string;
 	name: string;
+	initial: string;
 	pages: IPageAggregate[];
 	favorites: IEntity[];
 }
@@ -231,15 +233,14 @@ export interface IServerResponseWithData<T> extends IServerResponse {
 
 // Plugins
 export interface IMenuPlugin {
-	component?: VueConstructor<Vue>;
-	props?: PropOptions;
+	isVisible: boolean;
+	instance?: any;
 }
 
 export interface IContextMenu {
+	getComponent<T extends Vue>(): T;
 	hide(): void;
-	// tslint:disable-next-line:no-any
 	show<T extends object>(component: VueConstructor<Vue>, props: T): void;
-	updateProps<T extends object>(props: T): void;
 }
 
 export interface IToastOptions {

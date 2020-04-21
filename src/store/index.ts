@@ -24,8 +24,8 @@ export class YioStore extends Store<IState, YioStoreActions> {
 		super(reducers, actions, initialState);
 		this.entities = new EntitiesAggregate(this);
 		this.integrations = new IntegrationsAggregate(this);
-		this.profiles = new ProfilesAggregate(this);
-		this.pages = new PagesAggregate(this);
 		this.groups = new GroupsAggregate(this);
+		this.pages = new PagesAggregate(this);
+		this.profiles = new ProfilesAggregate(this);
 	}
 }

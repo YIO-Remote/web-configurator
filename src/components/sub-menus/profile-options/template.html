@@ -1,33 +1,48 @@
-<ul>
-    <TabContainer>
-        <Tab name="Entities">
-            <div class="description">
-               Drag entities to the remote view to add them to favorites or a group.
-            </div>
+<TabContainer ref="tabs">
+   <Tab name="Pages">
+      <div class="items-container">
+         <div class="items-description">
+            You can add groups to a page after dragging it under a profile and selecting it.
+         </div>
+         <div class="items-list-title">
+            Available Pages
+         </div>
+         <div class="items-list">
+            <small-card :title="'Favorites'">
+            </small-card>
+            <small-card v-for="(page, index) in pages" :key="index" :title="page.name" :iconType="'delete'">
+            </small-card>
+         </div>
+      </div>
+   </Tab>
+   <Tab name="Groups">
+      <ul>
+         <li v-for="(group, index) in groups" :key="index">
+            ------ {{group.name}} ------
             <ul>
-               <li v-for="entity in entities" :key="index">
-                  {{entity}}
+               <li v-for="(entity, index) in group.entities" :key="index">
+                  {{entity.friendly_name}}
                </li>
             </ul>
-        </Tab>
-        <Tab name="Groups">
-            <ul>
-               <li v-for="group in groups" :key="index">
-                  ------ {{group.name}} ------
-                  <ul>
-                     <li v-for="(entity, key) in entities" :key="key">
-                        {{entity.name}}
-                     </li>
-                  </ul>
-               </li>
-            </ul>
-        </Tab>
-        <Tab name="Pages">
-            <ul>
-               <li v-for="page in pages" :key="index">
-                  {{page.name}}
-               </li>
-            </ul>
-        </Tab>
-    </TabContainer>
-</ul>
+         </li>
+      </ul>
+   </Tab>
+   <Tab name="Entities">
+      <div class="items-container">
+         <div class="items-description">
+            Drag entities to the remote view to add them to favorites or a group.
+         </div>
+         <ul>
+            <li v-for="(entities, entityType) in groupedEntities" :key="entityType">
+               <div class="items-list-title">
+                  {{entityType}}
+               </div>
+               <div class="items-list">
+                  <small-card v-for="(entity, index) in entities" :key="index" :title="entity.friendly_name">
+                  </small-card>
+               </div>
+            </li>
+         </ul>
+      </div>
+   </Tab>
+</TabContainer>
