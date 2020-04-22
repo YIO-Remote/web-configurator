@@ -12,9 +12,12 @@
                     <template v-slot:body>
                         <div class="pages-list">
                             <div class="title">Pages</div>
-                            <card-list @onSelected="onPageSelected">
+                            <card-list @onSelected="onPageSelected" ref="pageCardList">
                                 <small-card :title="'Favorites'" :iconType="'delete'"></small-card>
                                 <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :iconType="'delete'"></small-card>
+                                <div>
+                                    Drag a page here
+                                </div>
                             </card-list>
                         </div>
                     </template>
@@ -34,6 +37,8 @@
                 </template>
             </card>
         </div>
-        <remote-control :entities="selectedProfileFavorites"></remote-control>
+        <remote-control message="Select a page in a profile to start editing">
+            <component :is="remoteScreenComponent" v-bind="remoteScreenComponentProps"></component>
+        </remote-control>
     </div>
 </div>

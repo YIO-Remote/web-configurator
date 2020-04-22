@@ -38,4 +38,10 @@ export default class CardList extends Vue {
 			}
 		});
 	}
+
+	public deselect() {
+		this.cards.forEach((card) => {
+			card.setSelected(false);
+		});
+	}
 }

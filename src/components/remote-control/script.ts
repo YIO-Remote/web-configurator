@@ -2,8 +2,6 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IEntity } from '../../types';
-import ActionIconButton from '../action-icon-button/index.vue';
 
 function padZero(num: number): string {
 	return (num < 10) ? `0${num}` : `${num}`;
@@ -11,9 +9,6 @@ function padZero(num: number): string {
 
 @Component({
 	name: 'RemoteControl',
-	components: {
-		ActionIconButton
-	},
 	subscriptions(this: RemoteControl) {
 		return {
 			time: timer(0, 1000).pipe(map(() => {
@@ -25,12 +20,9 @@ function padZero(num: number): string {
 })
 export default class RemoteControl extends Vue {
 	@Prop({
-		type: Array,
-		default: []
+		type: String,
+		required: false,
+		default: ''
 	})
-	public entities: IEntity[];
-
-	public onDeleteEntity(entity: IEntity) {
-		alert(`TODO: Remove ${entity.friendly_name}`);
-	}
+	public readonly message: string;
 }

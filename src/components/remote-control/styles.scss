@@ -43,71 +43,18 @@
 			}
 
 			.contents {
+				position: relative;
 				height: calc(100% - 26px);
 				overflow: scroll;
 
-				.title {
-					font-family: OpenSans;
-					width: 100%;
-					margin: 50px 0;
-					font-size: 2rem;
+				.default-message {
+					position: absolute;
+					top: 50%;
+					transform: translateY(-50%);
+					font-family: OpenSans-Light;
+					font-size: 14px;
 					text-align: center;
-				}
-
-				.item-list {
-					.item {
-						display: flex;
-						font-family: OpenSans-Light;
-						border-radius: 10px;
-						font-size: 0.9rem;
-						margin-bottom: 5px;
-
-						&.added {
-							cursor: grab;
-							background: #1C1C1C;
-							padding: 10px;
-
-							.name-container {
-								position: relative;
-								width: 65%;
-		
-								.name {
-									transform: translateY(-50%);
-									position: absolute;
-									top: 50%;
-								}
-							}
-						}
-
-						&.drop-zone {
-							width: 100%;
-							padding: 24px 0;
-							text-align: center;
-							border: 1px dashed rgba(255, 255, 255, 0.2);
-							color: rgba(255, 255, 255, 0.2);
-
-							.name-container {
-								width: 100%;
-							}
-						}
-
-						.icon-container {
-							width: 20%;
-
-							.icon {
-								font-size: 40px;
-							}
-						}
-
-						.delete-button-container {
-							position: relative;
-							width: 15%;
-
-							.action-icon-button {
-								transform: translateY(50%);
-							}
-						}
-					}
+					color: #666666;
 				}
 			}
 		}

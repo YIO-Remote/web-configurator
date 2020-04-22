@@ -6,27 +6,11 @@
                 <div class="battery">98%</div>
             </div>
             <div class="contents">
-                <div class="title">
-                    Favorites
-                </div>
-                <ul class="item-list">
-                    <li class="item added" v-for="entity in entities" :key="entity.id">
-                        <div class="icon-container">
-                            <span class="icon" :class="entity.type"></span>
-                        </div>
-                        <div class="name-container">
-                            <div class="name">{{entity.friendly_name}}</div>
-                        </div>
-                        <div class="delete-button-container">
-                            <action-icon-button @onClick="onDeleteEntity(entity)"></action-icon-button>
-                        </div>
-                    </li>
-                    <li class="item drop-zone">
-                        <div class="name-container">
-                            <div class="name">Drag an entry here</div>
-                        </div>
-                    </li>
-                </ul>
+                <slot>
+                    <div class="default-message">
+                        {{message}}
+                    </div>
+                </slot>
             </div>
         </div>
         <div class="button-container">
