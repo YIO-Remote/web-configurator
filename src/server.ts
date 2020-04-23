@@ -20,7 +20,7 @@ export class ServerConnection {
 
 	constructor() {
 		// TODO: Make this use window.location when in PROD build
-		this.host = '192.168.12.123';
+		this.host = '127.0.0.1';
 		this.port = 946;
 		this.requestId = 0;
 		this.configPollingRequestId = 1316134911;

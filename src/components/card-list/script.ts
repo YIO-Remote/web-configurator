@@ -22,6 +22,12 @@ export default class CardList extends Vue {
 		}
 	}
 
+	public removeCard(cardToRemove: ICardComponent) {
+		const indexToRemove = this.cards.findIndex((card) => card === cardToRemove);
+		this.selectCard(cardToRemove);
+		this.cards.splice(indexToRemove, 1);
+	}
+
 	public selectCard(cardToSelect: ICardComponent) {
 		this.cards.forEach((card, index) => {
 			let isSelected = (cardToSelect === card);

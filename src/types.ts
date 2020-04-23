@@ -280,6 +280,7 @@ export interface ICardComponent extends Vue {
 
 export interface ICardListComponent extends Vue {
 	addCard(card: ICardComponent): void;
+	removeCard(card: ICardComponent): void;
 	selectCard(cardToSelect: ICardComponent): void;
 	deselect(): void;
 }

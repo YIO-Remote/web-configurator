@@ -70,4 +70,10 @@ export default class Card extends Vue {
 			this.$parent.addCard(this);
 		}
 	}
+
+	public beforeDestroy() {
+		if (this.isInCardList) {
+			this.$parent.removeCard(this);
+		}
+	}
 }

@@ -76,4 +76,10 @@ export default class SmallCard extends Vue {
 			this.$parent.addCard(this);
 		}
 	}
+
+	public beforeDestroy() {
+		if (this.isInCardList) {
+			this.$parent.removeCard(this);
+		}
+	}
 }
