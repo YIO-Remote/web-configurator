@@ -2,13 +2,12 @@
     <div class="title">
         {{page.name}}
     </div>
-    <ul>
+    <ul class="groups-container">
         <li v-for="group in page.groups" :key="group.id">
-            <div class="name-container">
-                <div>{{group.name}}</div>
-
-                <ul class="item-list">
-                    <li class="item added" v-for="entity in group.entities" :key="entity.entity_id">
+            <div class="group-list-container">
+                <div class="group-title">{{group.name}}</div>
+                <ul>
+                    <li class="group-item added" v-for="entity in group.entities" :key="entity.entity_id">
                         <div class="icon-container">
                             <span class="icon" :class="entity.type"></span>
                         </div>
@@ -19,7 +18,7 @@
                             <action-icon-button @onClick="onDeleteEntity(entity)"></action-icon-button>
                         </div>
                     </li>
-                    <li class="item drop-zone">
+                    <li class="group-item drop-zone">
                         <div class="name-container">
                             <div class="name">Drag an entity here</div>
                         </div>
@@ -27,7 +26,7 @@
                 </ul>
             </div>
         </li>
-        <li class="item drop-zone">
+        <li class="group-item drop-zone">
             <div class="name-container">
                 <div class="name">Drag a group here</div>
             </div>

@@ -66,6 +66,11 @@ export default class SmallCard extends Vue {
 		this.setSelected(!this.isSelected);
 	}
 
+	public onIconClick($event: Event) {
+		$event.stopPropagation();
+		this.$emit('onIconClick');
+	}
+
 	public mounted() {
 		if (this.isInCardList) {
 			this.$parent.addCard(this);

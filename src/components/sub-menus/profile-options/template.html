@@ -8,17 +8,27 @@
             Available Pages
          </div>
          <div class="items-list">
-            <small-card :title="'Favorites'">
-            </small-card>
-            <small-card v-for="(page, index) in pages" :key="index" :title="page.name" :iconType="'delete'">
-               <template v-slot:body>
-                  <ul>
-                     <li v-for="(group, index) in page.groups" :key="index">
-                        {{group.name}}
-                     </li>
-                  </ul>
-              </template>
-            </small-card>
+            <drag
+               v-for="(page, index) in pages"
+               :transfer-data="page"
+               :key="index"
+               :effect-allowed="['copy']"
+               drop-effect="copy"
+               :image-x-offset="50"
+               :image-y-offset="50">
+               <template slot="image">
+                  <small-card :title="page.name" style="min-width: 200px;"></small-card>
+               </template>
+               <small-card :title="page.name" :iconType="getIconType(page)"></small-card>
+                  <template v-slot:body v-if="page.groups.length > 0">
+                     <ul>
+                        <li v-for="(group, index) in page.groups" :key="index">
+                           {{group.name}}
+                        </li>
+                     </ul>
+                 </template>
+               </small-card>
+            </drag>
          </div>
       </div>
    </Tab>

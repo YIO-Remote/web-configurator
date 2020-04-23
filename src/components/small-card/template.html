@@ -4,7 +4,7 @@
             <span class="title">{{title}}</span>
         </div>
         <div class="right-icon-container">
-            <action-icon-button v-if="hasRightIconContent" :type="iconType"></action-icon-button>
+            <action-icon-button v-if="hasRightIconContent" :type="iconType" @onClick="onIconClick($event)"></action-icon-button>
             <div class="hidden-icon" v-if="!hasRightIconContent"></div>
         </div>
     </div>

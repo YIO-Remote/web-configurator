@@ -65,3 +65,21 @@
     	font-size: 0.9em;
 	}
 }
+
+.page-drop-zone {
+	width: 100%;
+	border-radius: 6px;
+	border: 1px dashed #666666;
+    margin: 10px 0 0 0;
+    padding: 10px;
+	user-select: none;
+	font-family: OpenSans-Light;
+	font-size: 0.75rem;
+	color: #666666;
+
+	&.over {
+		background-color: #120b1d;
+		border: 1px dashed #A1A1A1;
+		color: #A1A1A1;
+	}
+}

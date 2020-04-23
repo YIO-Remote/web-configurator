@@ -8,6 +8,7 @@ import VueRouter from 'vue-router';
 import VueRx from 'vue-rx';
 import VueI18n from 'vue-i18n';
 import VueToast from 'vue-toast-notification';
+import VueDragDrop from 'vue-drag-drop';
 import AceEditor from 'vue-editor-ace';
 import i18n from './i18n';
 import MenuPlugin from './utilities/menu-plugin';
@@ -15,6 +16,7 @@ import YioApp from './yio-app/index.vue';
 import { Router } from './router';
 
 Vue.use(VueToast, { position: 'bottom' });
+Vue.use(VueDragDrop);
 Vue.use(AceEditor);
 Vue.use(VueRx);
 Vue.use(VueRouter);

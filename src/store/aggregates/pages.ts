@@ -4,11 +4,27 @@ import { YioStore } from '..';
 import { IPageAggregate } from '../../types';
 
 export class PagesAggregate {
+	public favoritePage: IPageAggregate;
+	public settingsPage: IPageAggregate;
 	public all$: Observable<IPageAggregate[]>;
 	private store: YioStore;
 
 	constructor(store: YioStore) {
 		this.store = store;
+
+		this.favoritePage = {
+			id: 'favorites',
+			name: 'Favorites',
+			image: '',
+			groups: []
+		};
+
+		this.settingsPage = {
+			id: 'settings',
+			name: 'Settings',
+			image: '',
+			groups: []
+		};
 
 		this.all$ = combineLatest(this.store.select('pages', 'all'), this.store.groups.all$)
 			.pipe(
@@ -20,7 +36,7 @@ export class PagesAggregate {
 						image: pages[pageId].image,
 						groups: groups.filter((group) => pages[pageId].groups.includes(group.id))
 					},
-					], [] as IPageAggregate[]
+					], [this.favoritePage, this.settingsPage] as IPageAggregate[]
 				)),
 				shareReplay()
 			);

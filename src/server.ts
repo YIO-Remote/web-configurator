@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -108,30 +108,6 @@ export class ServerConnection {
 
 	public getAvailableEntities() {
 		return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
-		// return Promise.resolve({
-		// 	id: 22,
-		// 	success: true,
-		// 	type: 'result',
-		// 	available_entities: [
-		// 			{
-		// 				entity_id: 'light.kitchen_dimmer_level',
-		// 				type: 'light',
-		// 				friendly_name: 'Kitchen lamp',
-		// 				integration: 'homeassistant',
-		// 				supported_features: [
-		// 					'BRIGHTNESS',
-		// 					'COLOR'
-		// 				]
-		// 			},
-		// 			{
-		// 				entity_id: 'cover.living_room_blinds_level',
-		// 				type: 'blind',
-		// 				friendly_name: '',
-		// 				integration: 'homeassistant',
-		// 				supported_features: []
-		// 			}
-		// 		] as IEntity[]
-		// 	})
 			.then((response) => response.available_entities)
 			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)))
 			.catch(() => {});
@@ -198,6 +174,64 @@ export class ServerConnection {
 			.then((profiles) => this.store.dispatch(this.store.actions.setProfiles(profiles)));
 	}
 
+	public addPageToProfile(profile: IProfileAggregate, pageToAdd: IPageAggregate) {
+		const match = profile.pages.find((page) => page.id === pageToAdd.id);
+
+		if (match) {
+			Vue.$toast.warning(`Page "${pageToAdd.name}" Already Exists In Profile`);
+			return;
+		}
+
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages: [
+				...(pageToAdd.id === 'favorites' ? [pageToAdd.id] : []),
+				...profile.pages.map((page) => page.id),
+				...(pageToAdd.id !== 'favorites' && pageToAdd.id !== 'settings' ? [pageToAdd.id] : []),
+				...(pageToAdd.id === 'settings' ? [pageToAdd.id] : []),
+			]
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public removePageFromProfile(profile: IProfileAggregate, pageIdToRemove: string) {
+		const indexToRemove = profile.pages.findIndex((page) => page.id === pageIdToRemove);
+
+		if (indexToRemove === -1) {
+			Vue.$toast.warning(`Could Not Remove Page - It Does Not Exist In Profile`);
+			return;
+		}
+
+		const pages = profile.pages.map((page) => page.id);
+		pages.splice(indexToRemove, 1);
+
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public updateProfile(profile: IProfileAggregate) {
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages: profile.pages.map((page) => page.id)
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public getPages() {
 		return this.sendMessage<IKeyValuePair<IPage>>({ type: 'get_all_pages'})
 			.then((response) => response.pages)
@@ -220,25 +254,30 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
-	private sendMessage<T>(message: object) {
+	// tslint:disable-next-line:no-any
+	private sendMessage<T>(message: any) {
 		this.requestId++;
 
-		return this.wsp.sendRequest(message, {requestId: this.requestId}).then((response: IServerResponseWithData<T>) => {
+		return this.wsp.sendRequest(message, {requestId: this.requestId})
+		.then((response: IServerResponseWithData<T>) => {
 			if (!response.success) {
 				return Promise.reject(response);
 			}
 
+			if (message.type !== 'get_config') {
+				this.getConfig(true);
+			}
 			return response;
 		});
 	}
 
 	private pollForData() {
-		window.setTimeout(() => this.getConfig(), 2000);
-		window.setTimeout(() => this.getAvailableEntities(), 5000);
+		window.setTimeout(() => this.getConfig(), 10000);
+		window.setTimeout(() => this.getAvailableEntities(), 10000);
 	}
 
 	private showToast(response: IServerResponse) {
-		if (response.success) { } { } {
+		if (response.success) {
 			Vue.$toast.success(`Success - ${response.message || 'Config Updated'}`);
 			return;
 		}

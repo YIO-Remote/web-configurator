@@ -13,11 +13,10 @@
                         <div class="pages-list">
                             <div class="title">Pages</div>
                             <card-list @onSelected="onPageSelected" ref="pageCardList">
-                                <small-card :title="'Favorites'" :iconType="'delete'"></small-card>
-                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :iconType="'delete'"></small-card>
-                                <div>
+                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
+                                <drop class="page-drop-zone" :class="{ over: isDraggedOver }"  @drop="onPageDropped" @dragover="onDragOver()" @dragleave="onDragLeave()">
                                     Drag a page here
-                                </div>
+                                </drop>
                             </card-list>
                         </div>
                     </template>

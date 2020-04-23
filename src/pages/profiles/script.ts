@@ -3,6 +3,8 @@ import { Component, Ref } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import { IProfileAggregate, ICardListComponent, IPageAggregate } from '../../types';
+import { Drop } from 'vue-drag-drop';
+import { ServerConnection } from '../../server';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import SmallCard from '../../components/small-card/index.vue';
@@ -22,7 +24,8 @@ import TabContainer from '../../components/tabs/tab-container/script';
 		RemoteControl,
 		ActionButton,
 		EditFavorites,
-		EditPage
+		EditPage,
+		Drop
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
@@ -33,18 +36,27 @@ import TabContainer from '../../components/tabs/tab-container/script';
 export default class ProfilesPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
 	public profiles: IProfileAggregate[];
-	public selectedProfile: IProfileAggregate = {} as IProfileAggregate;
+	public selectedProfileIndex: number = -1;
+	public selectedPageIndex: number = -1;
 	public remoteScreenComponent: string = '';
 	public remoteScreenComponentProps: object = {};
 	public newProfileName: string = '';
+	public isDraggedOver: boolean = false;
 	public tabs: TabContainer;
+	public pages: IPageAggregate[];
 
 	@Ref('pageCardList')
 	public readonly pageCardList!: ICardListComponent | ICardListComponent[];
 
-	public get selectedProfileFavorites() {
-		return this.selectedProfile ? this.selectedProfile.favorites : [];
+	public get selectedProfile() {
+		return this.profiles[this.selectedProfileIndex];
+	}
+
+	public get selectedPage() {
+		return this.selectedProfile.pages[this.selectedPageIndex];
 	}
 
 	public getBadgeClasses(isSelected: boolean) {
@@ -56,7 +68,8 @@ export default class ProfilesPage extends Vue {
 
 	public onProfileSelected(index: number) {
 		if (index === -1) {
-			this.selectedProfile = {} as IProfileAggregate;
+			this.selectedProfileIndex = -1;
+			this.selectedPageIndex = -1;
 			this.$menu.hide();
 			this.deselectRemoteComponent();
 			return;
@@ -64,7 +77,7 @@ export default class ProfilesPage extends Vue {
 
 		this.$menu.show(ProfileOptions, {});
 		this.tabs = this.$menu.getComponent<TabContainer>();
-		this.selectedProfile = this.profiles[index];
+		this.selectedProfileIndex = index;
 		this.deselectRemoteComponent();
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());
 	}
@@ -75,26 +88,19 @@ export default class ProfilesPage extends Vue {
 			return;
 		}
 
-		// Favorites - is not a standard page
-		if (index === 0) {
-			this.onEditFavorites();
+		this.selectedPageIndex = index;
+
+		if (this.selectedPage.id === 'favorites') {
+			this.tabs.selectTab(2);
+			this.setRemoteComponent('EditFavorites', {
+				favorites: this.selectedProfile.favorites
+			});
 			return;
 		}
 
-		this.onEditPage(this.selectedProfile.pages[index--]);
-	}
-
-	public onEditFavorites() {
-		this.tabs.selectTab(2);
-		this.setRemoteComponent('EditFavorites', {
-			favorites: this.selectedProfile.favorites
-		});
-	}
-
-	public onEditPage(page: IPageAggregate) {
 		this.tabs.selectTab(1);
 		this.setRemoteComponent('EditPage', {
-			page
+			page: this.selectedPage
 		});
 	}
 
@@ -108,15 +114,28 @@ export default class ProfilesPage extends Vue {
 		this.remoteScreenComponentProps = {};
 	}
 
-	public buttonPress(side: string, direction: string) {
-		alert(`You pressed the ${side} hand side button, ${direction}`);
-	}
-
 	public createNewProfile() {
 		alert(1);
 	}
 
 	public beforeDestroy() {
 		this.$menu.hide();
+	}
+
+	public onDragOver() {
+		this.isDraggedOver = true;
+	}
+
+	public onDragLeave() {
+		this.isDraggedOver = false;
+	}
+
+	public onPageDropped(droppedPage: IPageAggregate) {
+		this.server.addPageToProfile(this.selectedProfile, droppedPage);
+		this.isDraggedOver = false;
+	}
+
+	public onRemovePage(pageToRemove: IPageAggregate) {
+		this.server.removePageFromProfile(this.selectedProfile, pageToRemove.id);
 	}
 }
