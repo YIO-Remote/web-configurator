@@ -53,10 +53,9 @@ export default class ProfilesPage extends Vue {
 	public pages: IPageAggregate[];
 	public dropZoneList: IPageAggregate[] = [];
 	public pagesDragOptions = {
-		disabled: true,
-		sort: false,
+		disabled: false,
+		sort: true,
 		animation: 200,
-		ghostClass: 'ghost',
 		group: 'pages'
 	};
 	public dropZoneOptions = {
@@ -110,7 +109,6 @@ export default class ProfilesPage extends Vue {
 		} else {
 			this.tabs.selectTab(1);
 		}
-
 	}
 
 	public createNewProfile() {
@@ -142,6 +140,10 @@ export default class ProfilesPage extends Vue {
 		this.server.removePageFromProfile(this.selectedProfile, pageToRemove.id);
 	}
 
+	public onPageSortOrderChanged(event: IDragEndEvent) {
+		this.server.updatePageSortOrder(this.selectedProfile, event.oldDraggableIndex, event.newDraggableIndex);
+	}
+
 	public updated() {
 		if (!this.selectedProfile.id) {
 			return;
@@ -150,7 +152,7 @@ export default class ProfilesPage extends Vue {
 		if (this.selectedProfile.id) {
 			this.selectedProfile = this.profiles.find((profile) => profile.id === this.selectedProfile.id) as IProfileAggregate;
 
-			if (!this.selectedPage.id) {
+			if (!this.isPageSelected) {
 				return;
 			}
 

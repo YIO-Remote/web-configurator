@@ -236,6 +236,21 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	public updatePageSortOrder(profile: IProfileAggregate, fromIndex: number, toIndex: number) {
+		const pageToMove = profile.pages.splice(fromIndex, 1)[0];
+		profile.pages.splice(toIndex, 0, pageToMove);
+
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages: profile.pages.map((page) => page.id)
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public addFavorite(profile: IProfileAggregate, entityToAdd: IEntityAggregate) {
 		const match = profile.favorites.find((entity) => entity.entity_id === entityToAdd.entity_id);
 
@@ -280,6 +295,21 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	public updateFavoritesSortOrder(profile: IProfileAggregate, fromIndex: number, toIndex: number) {
+		const entityToMove = profile.favorites.splice(fromIndex, 1)[0];
+		profile.favorites.splice(toIndex, 0, entityToMove);
+
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages: profile.pages.map((page) => page.id)
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public addEntityToGroup(group: IGroupAggregate, entityToAdd: IEntityAggregate) {
 		const match = group.entities.find((entity) => entity.entity_id === entityToAdd.entity_id);
 
@@ -315,6 +345,20 @@ export class ServerConnection {
 		const data = {
 			name: group.name,
 			entities
+		};
+
+		return this.sendMessage({type: 'update_group', uuid: group.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public updateEntitySortOrder(group: IGroupAggregate, fromIndex: number, toIndex: number) {
+		const entityToMove = group.entities.splice(fromIndex, 1)[0];
+		group.entities.splice(toIndex, 0, entityToMove);
+
+		const data = {
+			name: group.name,
+			entities: group.entities.map((entity) => entity.entity_id)
 		};
 
 		return this.sendMessage({type: 'update_group', uuid: group.id, data })

@@ -2,5 +2,10 @@
     <div class="title">
         Favorites
     </div>
-   <edit-entities :entities="profile.favorites" @onEntityAdded="onEntityAdded" @onEntityRemoved="onEntityRemoved"></edit-entities>
+    <edit-entities
+        :entities="profile.favorites"
+        @onEntityAdded="onEntityAdded"
+        @onEntityRemoved="onEntityRemoved"
+        @onEntitySortOrderChanged="onEntitySortOrderChanged">
+    </edit-entities>
 </div>

@@ -31,16 +31,22 @@ export default class EditEntities extends Vue {
 	public dropZoneList = [];
 	public isDraggedOver: boolean = false;
 	public dragOptions = {
-		disabled: true,
-		sort: false,
+		disabled: false,
+		sort: true,
 		animation: 200,
-		group: 'entities'
+		group: {
+			name: 'entities',
+			pull: false,
+			put: false
+		}
 	};
 	public dropZoneOptions = {
 		disabled: false,
 		sort: false,
 		group: 'entities'
 	};
+
+	public entitiesListData = this.entities.slice(0);
 
 	public onDragOver() {
 		this.isDraggedOver = true;
@@ -64,5 +70,9 @@ export default class EditEntities extends Vue {
 
 	public onEntityRemoved(entity: IEntityAggregate) {
 		this.$emit('onEntityRemoved', entity);
+	}
+
+	public onEntitySortOrderChanged(event: IDragEndEvent) {
+		this.$emit('onEntitySortOrderChanged', event);
 	}
 }

@@ -18,7 +18,7 @@ export class ProfilesAggregate {
 						id: profileId,
 						name: profiles[profileId].name,
 						initial: profiles[profileId].name.substr(0, 1).toUpperCase(),
-						favorites: entities.filter((entity) => profiles[profileId].favorites.includes(entity.entity_id)),
+						favorites: profiles[profileId].favorites.map((entityId) => entities.find((entity) => entity.entity_id === entityId) as IEntityAggregate),
 						pages: profiles[profileId].pages.map((pageId) => pages.find((page) => page.id === pageId) as IPageAggregate)
 					}
 				];

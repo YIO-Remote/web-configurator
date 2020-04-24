@@ -75,4 +75,8 @@ export default class EditPage extends Vue {
 	public onGroupRemoved(group: IGroupAggregate) {
 		this.server.removeGroupFromPage(this.page, group);
 	}
+
+	public onEntitySortOrderChanged(group: IGroupAggregate, event: IDragEndEvent) {
+		this.server.updateEntitySortOrder(group, event.oldDraggableIndex, event.newDraggableIndex);
+	}
 }

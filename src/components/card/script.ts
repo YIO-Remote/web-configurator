@@ -21,8 +21,12 @@ export default class Card extends Vue {
 	public isSelected: boolean = false;
 	public $parent: ICardListComponent;
 
+	public get cardList() {
+		return this.$parent.$parent;
+	}
+
 	public get isInCardList() {
-		return (typeof this.$parent.addCard === 'function');
+		return (typeof this.$parent.$parent.addCard === 'function');
 	}
 
 	public get hasLeftIconContent() {
@@ -67,7 +71,7 @@ export default class Card extends Vue {
 		this.$emit('onClick');
 
 		if (this.isInCardList) {
-			return this.$parent.selectCard(this);
+			return this.cardList.selectCard(this);
 		}
 
 		this.setSelected(!this.isSelected);
@@ -75,13 +79,7 @@ export default class Card extends Vue {
 
 	public mounted() {
 		if (this.isInCardList) {
-			this.$parent.addCard(this);
-		}
-	}
-
-	public beforeDestroy() {
-		if (this.isInCardList) {
-			this.$parent.removeCard(this);
+			this.cardList.addCard(this);
 		}
 	}
 }

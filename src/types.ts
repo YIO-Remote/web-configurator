@@ -281,6 +281,7 @@ export interface ICardComponent extends Vue {
 }
 
 export interface ICardListComponent extends Vue {
+	$parent: ICardListComponent;
 	addCard(card: ICardComponent): void;
 	removeCard(card: ICardComponent): void;
 	selectCard(cardToSelect: ICardComponent): void;

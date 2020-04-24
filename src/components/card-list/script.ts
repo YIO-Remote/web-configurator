@@ -1,16 +1,37 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import Draggable, { IDragEndEvent } from 'vuedraggable';
 import { ICardComponent } from '../../types';
 
 @Component({
-	name: 'CardList'
+	name: 'CardList',
+	components: {
+		Draggable
+	}
 })
 export default class CardList extends Vue {
 	@Prop({
 		type: Number,
-		default: -1
+		default: -1,
 	})
 	public initialIndex: number;
+
+	@Prop({
+		type: Object,
+		required: false,
+		default: () => ({
+			disabled: true,
+			sort: false
+		})
+	})
+	public dragOptions: object;
+
+	@Prop({
+		type: Array,
+		required: false,
+		default: () => []
+	})
+	public dragItems: [];
 
 	public cards: ICardComponent[] = [];
 
@@ -49,5 +70,9 @@ export default class CardList extends Vue {
 		this.cards.forEach((card) => {
 			card.setSelected(false);
 		});
+	}
+
+	public onSortUpdate(event: IDragEndEvent) {
+		this.$emit('onSortUpdate', event);
 	}
 }

@@ -1,7 +1,7 @@
 import { YioStore } from '..';
 import { map, shareReplay } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
-import { IGroupAggregate } from '../../types';
+import { IGroupAggregate, IEntityAggregate } from '../../types';
 
 export class GroupsAggregate {
 	public all$: Observable<IGroupAggregate[]>;
@@ -18,7 +18,7 @@ export class GroupsAggregate {
 						id: groupId,
 						name: groups[groupId].name,
 						switch: groups[groupId].switch,
-						entities: entities.filter((entity) => groups[groupId].entities.includes(entity.entity_id))
+						entities: groups[groupId].entities.map((entityId) => entities.find((entity) => entity.entity_id === entityId) as IEntityAggregate)
 					}
 					], [] as IGroupAggregate[]
 				)),

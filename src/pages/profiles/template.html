@@ -12,11 +12,9 @@
                     <template v-slot:body>
                         <div class="pages-list">
                             <div class="title">Pages</div>
-                            <draggable class="list-group" v-bind="pagesDragOptions" :list="profile.pages">
-                                <card-list @onSelected="onPageSelected" ref="pageCardList">
-                                    <small-card v-for="page in profile.pages" :key="'page-' + page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
-                                </card-list>
-                            </draggable>
+                            <card-list @onSelected="onPageSelected" @onSortUpdate="onPageSortOrderChanged" ref="pageCardList" :dragOptions="pagesDragOptions" :dragList="profile.pages">
+                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
+                            </card-list>
                             <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
                                     Drag a page here
                             </draggable>

@@ -8,7 +8,12 @@
                 <action-icon-button class="remove-group-button" @onClick="onGroupRemoved(group)" type="delete"></action-icon-button>
                 <div class="group-title">{{group.name}}</div>
                 <ul>
-                    <edit-entities :entities="group.entities" @onEntityAdded="(entity) => onEntityAdded(group, entity)" @onEntityRemoved="(entity) => onEntityRemoved(group, entity)"></edit-entities>
+                    <edit-entities
+                        :entities="group.entities"
+                        @onEntityAdded="(entity) => onEntityAdded(group, entity)"
+                        @onEntityRemoved="(entity) => onEntityRemoved(group, entity)"
+                        @onEntitySortOrderChanged="($event) => onEntitySortOrderChanged(group, $event)">
+                    </edit-entities>
                 </ul>
             </div>
         </li>
