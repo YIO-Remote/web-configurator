@@ -38,9 +38,9 @@
                 </card>
             </perfect-scrollbar>
         </div>
-        <remote-control message="Select a page in a profile to start editing">
+        <remote-control :message="remoteMessage">
             <edit-favorites v-if="isFavoritesPageSelected" :profile="selectedProfile"></edit-favorites>
-            <edit-page v-if="!isFavoritesPageSelected && isPageSelected" :page="selectedPage"></edit-page>
+            <edit-page v-else-if="!isSettingsPageSelected && !isFavoritesPageSelected && isPageSelected" :page="selectedPage"></edit-page>
         </remote-control>
     </div>
 </div>

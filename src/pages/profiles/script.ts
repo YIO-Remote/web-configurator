@@ -79,6 +79,16 @@ export default class ProfilesPage extends Vue {
 		return this.isPageSelected ? this.selectedPage.id === 'favorites' : false;
 	}
 
+	public get isSettingsPageSelected() {
+		return this.isPageSelected ? this.selectedPage.id === 'settings' : false;
+	}
+
+	public get remoteMessage() {
+		return !this.isPageSelected ?
+			'Select a page in a profile to start editing' :
+			this.isSettingsPageSelected ? 'Settings content cannot be edited' : '';
+	}
+
 	public getBadgeClasses(isSelected: boolean) {
 		return {
 			badge: true,
