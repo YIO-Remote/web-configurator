@@ -204,10 +204,8 @@ export class ServerConnection {
 			name: profile.name,
 			favorites: profile.favorites.map((entity) => entity.entity_id),
 			pages: [
-				...(pageToAdd.id === 'favorites' ? [pageToAdd.id] : []),
 				...profile.pages.map((page) => page.id),
-				...(pageToAdd.id !== 'favorites' && pageToAdd.id !== 'settings' ? [pageToAdd.id] : []),
-				...(pageToAdd.id === 'settings' ? [pageToAdd.id] : []),
+				pageToAdd.id
 			]
 		};
 

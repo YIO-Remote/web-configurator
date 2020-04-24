@@ -12,12 +12,6 @@ export class ProfilesAggregate {
 
 		const mapProfiles = (profiles: IKeyValuePair<IProfile>, entities: IEntityAggregate[], pages: IPageAggregate[]) => {
 			return Object.keys(profiles).reduce((array, profileId) => {
-				const sortedPages = [
-					pages.find((page) => page.id === 'favorites') as IPageAggregate,
-					...pages.filter((page) => page.id !== 'favorites' && page.id !== 'settings'),
-					pages.find((page) => page.id === 'settings') as IPageAggregate,
-				];
-
 				return [
 					...array,
 					{
@@ -25,7 +19,7 @@ export class ProfilesAggregate {
 						name: profiles[profileId].name,
 						initial: profiles[profileId].name.substr(0, 1).toUpperCase(),
 						favorites: entities.filter((entity) => profiles[profileId].favorites.includes(entity.entity_id)),
-						pages: sortedPages.filter((page) => profiles[profileId].pages.includes(page.id))
+						pages: profiles[profileId].pages.map((pageId) => pages.find((page) => page.id === pageId) as IPageAggregate)
 					}
 				];
 			}, [] as IProfileAggregate[]);
