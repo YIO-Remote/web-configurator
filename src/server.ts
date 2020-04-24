@@ -174,6 +174,12 @@ export class ServerConnection {
 			.then((profiles) => this.store.dispatch(this.store.actions.setProfiles(profiles)));
 	}
 
+	public setActiveProfile(profile: IProfileAggregate) {
+		return this.sendMessage({ type: 'set_profile', profile: profile.id })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public updateProfile(profile: IProfileAggregate) {
 		const data = {
 			name: profile.name,

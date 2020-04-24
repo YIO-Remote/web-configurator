@@ -98,6 +98,7 @@ export default class ProfilesPage extends Vue {
 		this.tabs = this.$menu.getComponent<TabContainer>();
 		this.selectedProfile = profile;
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());
+		this.server.setActiveProfile(profile);
 	}
 
 	public onPageSelected(page: IPageAggregate, index: number) {
