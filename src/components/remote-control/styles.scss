@@ -18,6 +18,8 @@
 		border-radius: 5px;
 
 		.screen {
+			display: flex;
+    		flex-direction: column;
 			width: 100%;
 			background: #000000;
 			height: 70%;
@@ -44,8 +46,6 @@
 
 			.contents {
 				position: relative;
-				height: calc(100% - 26px);
-				overflow: scroll;
 
 				.default-message {
 					position: absolute;

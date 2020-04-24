@@ -9,7 +9,10 @@
 
 .profiles-container {
 	width: 40%;
-	overflow: scroll;
+
+	.ps {
+		height: 100%;
+	}
 }
 
 .badge {

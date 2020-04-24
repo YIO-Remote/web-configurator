@@ -2,39 +2,41 @@
     <h1 class="title">Profiles</h1>
     <div class="profiles">
         <div class="profiles-container">
-            <card-list @onSelected="onProfileSelected">
-                <card v-for="profile in profiles" :title="profile.name" :key="profile.id" :data="profile">
-                    <template v-slot:leftIcon="{ isSelected }">
-                        <div :class="getBadgeClasses(isSelected)">
-                            {{profile.initial}}
+            <perfect-scrollbar>
+                <card-list @onSelected="onProfileSelected">
+                    <card v-for="profile in profiles" :title="profile.name" :key="profile.id" :data="profile">
+                        <template v-slot:leftIcon="{ isSelected }">
+                            <div :class="getBadgeClasses(isSelected)">
+                                {{profile.initial}}
+                            </div>
+                        </template>
+                        <template v-slot:body>
+                            <div class="pages-list">
+                                <div class="title">Pages</div>
+                                <card-list @onSelected="onPageSelected" @onSortUpdate="onPageSortOrderChanged" ref="pageCardList" :dragOptions="pagesDragOptions" :dragList="profile.pages">
+                                    <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
+                                </card-list>
+                                <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
+                                        Drag a page here
+                                </draggable>
+                            </div>
+                        </template>
+                    </card>
+                </card-list>
+                <card title="New Profile">
+                    <template v-slot:leftIcon>
+                        <div class="badge">
+                            +
                         </div>
                     </template>
                     <template v-slot:body>
-                        <div class="pages-list">
-                            <div class="title">Pages</div>
-                            <card-list @onSelected="onPageSelected" @onSortUpdate="onPageSortOrderChanged" ref="pageCardList" :dragOptions="pagesDragOptions" :dragList="profile.pages">
-                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
-                            </card-list>
-                            <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
-                                    Drag a page here
-                            </draggable>
+                        <div class="new-profile-container">
+                            <input class="name-input" type="text" v-model="newProfileName" />
+                            <action-button class="create-button" text="Create" @onClick="createNewProfile()"></action-button>
                         </div>
                     </template>
                 </card>
-            </card-list>
-            <card title="New Profile">
-                <template v-slot:leftIcon>
-                    <div class="badge">
-                        +
-                    </div>
-                </template>
-                <template v-slot:body>
-                    <div class="new-profile-container">
-                        <input class="name-input" type="text" v-model="newProfileName" />
-                        <action-button class="create-button" text="Create" @onClick="createNewProfile()"></action-button>
-                    </div>
-                </template>
-            </card>
+            </perfect-scrollbar>
         </div>
         <remote-control message="Select a page in a profile to start editing">
             <edit-favorites v-if="isFavoritesPageSelected" :profile="selectedProfile"></edit-favorites>

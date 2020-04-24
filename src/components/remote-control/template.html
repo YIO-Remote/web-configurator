@@ -5,13 +5,13 @@
                 <div class="time">{{time}}</div>
                 <div class="battery">98%</div>
             </div>
-            <div class="contents">
-                <slot>
-                    <div class="default-message">
-                        {{message}}
-                    </div>
-                </slot>
-            </div>
+            <perfect-scrollbar>
+                    <slot>
+                        <div class="default-message">
+                            {{message}}
+                        </div>
+                    </slot>
+            </perfect-scrollbar>
         </div>
         <div class="button-container">
             <div class="up-down-button">
