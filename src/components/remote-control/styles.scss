@@ -25,6 +25,20 @@
 			height: 70%;
 			padding: 6px 15px;
 
+			.ps {
+				height: 100%;
+			}
+
+			.default-message {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				font-family: OpenSans-Light;
+				font-size: 14px;
+				text-align: center;
+				color: #666666;
+			}
+
 			.notification-bar {
 				position: relative;
 				width: 100%;
@@ -46,16 +60,6 @@
 
 			.contents {
 				position: relative;
-
-				.default-message {
-					position: absolute;
-					top: 50%;
-					transform: translateY(-50%);
-					font-family: OpenSans-Light;
-					font-size: 14px;
-					text-align: center;
-					color: #666666;
-				}
 			}
 		}
 
