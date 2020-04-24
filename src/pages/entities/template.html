@@ -2,7 +2,7 @@
     <h1 class="title">Entities controlled by YIO remote</h1>
     <yio-table :items="loaded" max-height="580px" :disable-selection="true">
         <template v-slot:header>
-            <th style="width: 50px;">
+            <th>
             </th>
             <th>
                 Name
@@ -13,10 +13,10 @@
             <th>
                 Type
             </th>
-            <th :style="{ width: '80px' }"></th>
+            <th></th>
         </template>
         <template v-slot:item="{ item }">
-            <td style="width: 50px;">
+            <td>
                 <span class="icon" :class="item.type"></span>
             </td>
             <td>
@@ -28,7 +28,7 @@
             <td>
                 {{item.type}}
             </td>
-            <td :style="{ width: '80px' }">
+            <td>
                 <action-icon-button @onClick="onItemDeleted(item)" type="delete"></action-icon-button>
             </td>
         </template>

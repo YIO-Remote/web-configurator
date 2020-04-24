@@ -56,7 +56,11 @@ export default class ProfilesPage extends Vue {
 		disabled: false,
 		sort: true,
 		animation: 200,
-		group: 'pages'
+		group: {
+			name: 'pages',
+			pull: 'clone',
+			put: false
+		}
 	};
 	public dropZoneOptions = {
 		disabled: false,
