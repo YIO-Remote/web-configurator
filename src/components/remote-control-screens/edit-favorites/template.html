@@ -2,22 +2,5 @@
     <div class="title">
         Favorites
     </div>
-    <ul class="item-list">
-        <li class="item added" v-for="entity in favorites" :key="entity.id">
-            <div class="icon-container">
-                <span class="icon" :class="entity.type"></span>
-            </div>
-            <div class="name-container">
-                <div class="name">{{entity.friendly_name}}</div>
-            </div>
-            <div class="delete-button-container">
-                <action-icon-button @onClick="onDeleteEntity(entity)"></action-icon-button>
-            </div>
-        </li>
-        <li class="item drop-zone">
-            <div class="name-container">
-                <div class="name">Drag an entry here</div>
-            </div>
-        </li>
-    </ul>
+   <edit-entities :entities="profile.favorites" @onEntityAdded="onEntityAdded" @onEntityRemoved="onEntityRemoved"></edit-entities>
 </div>

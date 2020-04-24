@@ -17,6 +17,13 @@ export default class SmallCard extends Vue {
 	public title: string;
 
 	@Prop({
+		type: Object,
+		required: false,
+		default: () => ({})
+	})
+	public data: object;
+
+	@Prop({
 		type: String,
 		required: false,
 		default: ''
@@ -55,8 +62,7 @@ export default class SmallCard extends Vue {
 		this.isSelected = isSelected;
 	}
 
-	public onClick($event: Event) {
-		$event.stopPropagation();
+	public onClick() {
 		this.$emit('onClick');
 
 		if (this.isInCardList) {
@@ -66,20 +72,13 @@ export default class SmallCard extends Vue {
 		this.setSelected(!this.isSelected);
 	}
 
-	public onIconClick($event: Event) {
-		$event.stopPropagation();
+	public onIconClick() {
 		this.$emit('onIconClick');
 	}
 
 	public mounted() {
 		if (this.isInCardList) {
 			this.$parent.addCard(this);
-		}
-	}
-
-	public beforeDestroy() {
-		if (this.isInCardList) {
-			this.$parent.removeCard(this);
 		}
 	}
 }

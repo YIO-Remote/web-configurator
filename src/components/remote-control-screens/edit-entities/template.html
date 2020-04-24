@@ -1,0 +1,18 @@
+<div class="item-list">
+    <draggable v-bind="dragOptions" :list="entities">
+        <div class="item added" v-for="entity in entities" :key="entity.id">
+            <div class="icon-container">
+                <span class="icon" :class="entity.type"></span>
+            </div>
+            <div class="name-container">
+                <div class="name">{{entity.friendly_name}}</div>
+            </div>
+            <div class="delete-button-container">
+                <action-icon-button @onClick="onEntityRemoved(entity)"></action-icon-button>
+            </div>
+        </div>
+    </draggable>
+    <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="item drop-zone" @add="onEntityDropped">
+        Drag an entry here
+    </draggable>
+</div>

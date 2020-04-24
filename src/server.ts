@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -174,6 +174,24 @@ export class ServerConnection {
 			.then((profiles) => this.store.dispatch(this.store.actions.setProfiles(profiles)));
 	}
 
+	public updateProfile(profile: IProfileAggregate) {
+		const data = {
+			name: profile.name,
+			favorites: profile.favorites.map((entity) => entity.entity_id),
+			pages: profile.pages.map((page) => page.id)
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public deleteProfile(profile: IProfileAggregate) {
+		return this.sendMessage({ type: 'remove_page', profile_id: profile.id })
+			.then((response) => response)
+			.catch((response) => this.showToast(response));
+	}
+
 	public addPageToProfile(profile: IProfileAggregate, pageToAdd: IPageAggregate) {
 		const match = profile.pages.find((page) => page.id === pageToAdd.id);
 
@@ -220,10 +238,20 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
-	public updateProfile(profile: IProfileAggregate) {
+	public addFavorite(profile: IProfileAggregate, entityToAdd: IEntityAggregate) {
+		const match = profile.favorites.find((entity) => entity.entity_id === entityToAdd.entity_id);
+
+		if (match) {
+			Vue.$toast.warning(`Entity "${entityToAdd.friendly_name}" Already Exists In Favorites`);
+			return;
+		}
+
 		const data = {
 			name: profile.name,
-			favorites: profile.favorites.map((entity) => entity.entity_id),
+			favorites: [
+				...profile.favorites.map((entity) => entity.entity_id),
+				entityToAdd.entity_id
+			],
 			pages: profile.pages.map((page) => page.id)
 		};
 
@@ -232,16 +260,136 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	public removeFavorite(profile: IProfileAggregate, entityToRemove: IEntityAggregate) {
+		const indexToRemove = profile.favorites.findIndex((entity) => entity.entity_id === entityToRemove.entity_id);
+
+		if (indexToRemove === -1) {
+			Vue.$toast.warning(`Could Not Remove Entity - It Does Not Exist In Favorites`);
+			return;
+		}
+
+		const favorites = profile.favorites.map((entity) => entity.entity_id);
+		favorites.splice(indexToRemove, 1);
+
+		const data = {
+			name: profile.name,
+			favorites,
+			pages: profile.pages.map((page) => page.id)
+		};
+
+		return this.sendMessage({type: 'update_profile', uuid: profile.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public addEntityToGroup(group: IGroupAggregate, entityToAdd: IEntityAggregate) {
+		const match = group.entities.find((entity) => entity.entity_id === entityToAdd.entity_id);
+
+		if (match) {
+			Vue.$toast.warning(`Entity "${entityToAdd.friendly_name}" Already Exists In "${group.name}"`);
+			return;
+		}
+
+		const data = {
+			name: group.name,
+			entities: [
+				...group.entities.map((entity) => entity.entity_id),
+				entityToAdd.entity_id
+			]
+		};
+
+		return this.sendMessage({type: 'update_group', uuid: group.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public removeEntityFromGroup(group: IGroupAggregate, entityToRemove: IEntityAggregate) {
+		const indexToRemove = group.entities.findIndex((entity) => entity.entity_id === entityToRemove.entity_id);
+
+		if (indexToRemove === -1) {
+			Vue.$toast.warning(`Could Not Remove Entity - It Does Not Exist In Group`);
+			return;
+		}
+
+		const entities = group.entities.map((entity) => entity.entity_id);
+		entities.splice(indexToRemove, 1);
+
+		const data = {
+			name: group.name,
+			entities
+		};
+
+		return this.sendMessage({type: 'update_group', uuid: group.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public addGroupToPage(page: IPageAggregate, groupToAdd: IGroupAggregate) {
+		const match = page.groups.find((group) => group.id === groupToAdd.id);
+
+		if (match) {
+			Vue.$toast.warning(`Entity "${groupToAdd.name}" Already Exists In "${page.name}"`);
+			return;
+		}
+
+		const data = {
+			name: page.name,
+			image: page.image,
+			groups: [
+				...page.groups.map((group) => group.id),
+				groupToAdd.id
+			]
+		};
+
+		return this.sendMessage({type: 'update_page', uuid: page.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
+	public removeGroupFromPage(page: IPageAggregate, groupToRemove: IGroupAggregate) {
+		const indexToRemove = page.groups.findIndex((group) => group.id === groupToRemove.id);
+
+		if (indexToRemove === -1) {
+			Vue.$toast.warning(`Could Not Remove Group - It Does Not Exist In Page`);
+			return;
+		}
+
+		const groups = page.groups.map((group) => group.id);
+		groups.splice(indexToRemove, 1);
+
+		const data = {
+			name: page.name,
+			image: page.image,
+			groups
+		};
+
+		return this.sendMessage({type: 'update_page', uuid: page.id, data })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public getPages() {
 		return this.sendMessage<IKeyValuePair<IPage>>({ type: 'get_all_pages'})
 			.then((response) => response.pages)
-			.then((pages) => this.store.dispatch(this.store.actions.setPages(pages)));
+			.catch((response) => this.showToast(response));
+	}
+
+	public deletePage(page: IPageAggregate) {
+		return this.sendMessage({ type: 'remove_page', page_id: page.id })
+			.then((response) => response)
+			.catch((response) => this.showToast(response));
 	}
 
 	public getGroups() {
 		return this.sendMessage<IKeyValuePair<IGroup>>({ type: 'get_all_groups'})
 			.then((response) => response.groups)
-			.then((groups) => this.store.dispatch(this.store.actions.setGroups(groups)));
+			.catch((response) => this.showToast(response));
+	}
+
+	public deleteGroup(group: IGroupAggregate) {
+		return this.sendMessage({ type: 'remove_group', group_id: group.id })
+			.then((response) => response)
+			.catch((response) => this.showToast(response));
 	}
 
 	public getLanguages(value: boolean) {

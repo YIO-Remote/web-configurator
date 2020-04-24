@@ -1,5 +1,5 @@
-<div :class="cardClasses" @click="onClick()">
-    <div class="card-face">
+<div :class="cardClasses">
+    <div class="card-face" @click="onClick()">
         <div class="left-icon-container" v-if="hasLeftIconContent">
             <slot name="leftIcon" :is-selected="isSelected"></slot>
         </div>

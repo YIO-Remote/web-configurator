@@ -40,7 +40,7 @@ export default class CardList extends Vue {
 			card.setSelected(isSelected);
 
 			if (isSelected || index === -1) {
-				this.$emit('onSelected', index);
+				this.$emit('onSelected', (index > -1) ? card.data : {}, index);
 			}
 		});
 	}

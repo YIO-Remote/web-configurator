@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Drag } from 'vue-drag-drop';
+import Draggable from 'vuedraggable';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import ITabContainer from '../../tabs/tab-container/script';
@@ -8,7 +9,8 @@ import TabContainer from '../../tabs/tab-container/index.vue';
 import Tab from '../../tabs/tab/index.vue';
 import CardList from '../../card-list/index.vue';
 import SmallCard from '../../small-card/index.vue';
-import { IPageAggregate } from '../../../types';
+import { IPageAggregate, IGroupAggregate } from '../../../types';
+import { ServerConnection } from '../../../server';
 
 @Component({
 	name: 'ProfileOptions',
@@ -17,7 +19,8 @@ import { IPageAggregate } from '../../../types';
 		Tab,
 		CardList,
 		SmallCard,
-		Drag
+		Drag,
+		Draggable
 	},
 	subscriptions(this: ProfileOptions) {
 		return {
@@ -32,6 +35,43 @@ export default class ProfileOptions extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
 
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
+
+	public pagesDragOptions = {
+		disabled: false,
+		sort: false,
+		animation: 200,
+		ghostClass: 'ghost',
+		group: {
+			name: 'pages',
+			pull: 'clone',
+			put: false
+		}
+	};
+	public entitiesDragOptions = {
+		disabled: false,
+		sort: false,
+		animation: 200,
+		ghostClass: 'ghost',
+		group: {
+			name: 'entities',
+			pull: 'clone',
+			put: false
+		}
+	};
+	public groupsDragOptions = {
+		disabled: false,
+		sort: false,
+		animation: 200,
+		ghostClass: 'ghost',
+		group: {
+			name: 'groups',
+			pull: 'clone',
+			put: false
+		}
+	};
+
 	public selectTab(index: number) {
 		const tabs = this.$refs.tabs as ITabContainer;
 		tabs.selectTab(index);
@@ -39,5 +79,13 @@ export default class ProfileOptions extends Vue {
 
 	public getIconType(page: IPageAggregate) {
 		return (page.id === 'favorites' || page.id === 'settings') ? '' : 'delete';
+	}
+
+	public onDeletePage(page: IPageAggregate) {
+		this.server.deletePage(page);
+	}
+
+	public onDeleteGroup(group: IGroupAggregate) {
+		this.server.deleteGroup(group);
 	}
 }

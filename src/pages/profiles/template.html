@@ -3,7 +3,7 @@
     <div class="profiles">
         <div class="profiles-container">
             <card-list @onSelected="onProfileSelected">
-                <card v-for="(profile, index) in profiles" :title="profile.name" :key="index">
+                <card v-for="profile in profiles" :title="profile.name" :key="profile.id" :data="profile">
                     <template v-slot:leftIcon="{ isSelected }">
                         <div :class="getBadgeClasses(isSelected)">
                             {{profile.initial}}
@@ -12,12 +12,14 @@
                     <template v-slot:body>
                         <div class="pages-list">
                             <div class="title">Pages</div>
-                            <card-list @onSelected="onPageSelected" ref="pageCardList">
-                                <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
-                                <drop class="page-drop-zone" :class="{ over: isDraggedOver }"  @drop="onPageDropped" @dragover="onDragOver()" @dragleave="onDragLeave()">
+                            <draggable class="list-group" v-bind="pagesDragOptions" :list="profile.pages">
+                                <card-list @onSelected="onPageSelected" ref="pageCardList">
+                                    <small-card v-for="page in profile.pages" :key="'page-' + page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
+                                </card-list>
+                            </draggable>
+                            <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
                                     Drag a page here
-                                </drop>
-                            </card-list>
+                            </draggable>
                         </div>
                     </template>
                 </card>
@@ -37,7 +39,8 @@
             </card>
         </div>
         <remote-control message="Select a page in a profile to start editing">
-            <component :is="remoteScreenComponent" v-bind="remoteScreenComponentProps"></component>
+            <edit-favorites v-if="isFavoritesPageSelected" :profile="selectedProfile"></edit-favorites>
+            <edit-page v-if="!isFavoritesPageSelected && isPageSelected" :page="selectedPage"></edit-page>
         </remote-control>
     </div>
 </div>

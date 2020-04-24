@@ -11,10 +11,15 @@
 }
 
 .group-list-container {
-	border: 1px dashed rgba(255, 255, 255, 0.2);
+	border: 1px dashed #666666;
 	padding: 8px;
 	border-radius: 6px;
 	margin-bottom: 10px;
+
+	.remove-group-button {
+		position: absolute;
+		right: 10px;
+	}
 }
 
 .group-item {
@@ -42,14 +47,21 @@
 	}
 
 	&.drop-zone {
+		display: block;
 		width: 100%;
-		padding: 24px 0;
-		text-align: center;
-		border: 1px dashed rgba(255, 255, 255, 0.2);
-		color: rgba(255, 255, 255, 0.2);
+		border-radius: 6px;
+		border: 1px dashed #666666;
+		margin: 10px 0 0 0;
+		padding: 10px;
+		user-select: none;
+		font-family: OpenSans-Light;
+		font-size: 0.75rem;
+		color: #666666;
 
-		.name-container {
-			width: 100%;
+		&.over {
+			background-color: #120b1d;
+			border: 1px dashed #A1A1A1;
+			color: #A1A1A1;
 		}
 	}
 

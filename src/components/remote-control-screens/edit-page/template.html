@@ -5,31 +5,17 @@
     <ul class="groups-container">
         <li v-for="group in page.groups" :key="group.id">
             <div class="group-list-container">
+                <action-icon-button class="remove-group-button" @onClick="onGroupRemoved(group)" type="delete"></action-icon-button>
                 <div class="group-title">{{group.name}}</div>
                 <ul>
-                    <li class="group-item added" v-for="entity in group.entities" :key="entity.entity_id">
-                        <div class="icon-container">
-                            <span class="icon" :class="entity.type"></span>
-                        </div>
-                        <div class="name-container">
-                            <div class="name">{{entity.friendly_name}}</div>
-                        </div>
-                        <div class="delete-button-container">
-                            <action-icon-button @onClick="onDeleteEntity(entity)"></action-icon-button>
-                        </div>
-                    </li>
-                    <li class="group-item drop-zone">
-                        <div class="name-container">
-                            <div class="name">Drag an entity here</div>
-                        </div>
-                    </li>
+                    <edit-entities :entities="group.entities" @onEntityAdded="(entity) => onEntityAdded(group, entity)" @onEntityRemoved="(entity) => onEntityRemoved(group, entity)"></edit-entities>
                 </ul>
             </div>
         </li>
-        <li class="group-item drop-zone">
-            <div class="name-container">
-                <div class="name">Drag a group here</div>
-            </div>
+        <li>
+            <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="group-item drop-zone" @add="onGroupDropped">
+                Drag a group here
+            </draggable>
         </li>
     </ul>
 </div>

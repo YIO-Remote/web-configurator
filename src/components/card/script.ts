@@ -11,6 +11,13 @@ export default class Card extends Vue {
 		required: true
 	})
 	public title?: string;
+
+	@Prop({
+		type: Object,
+		required: false,
+		default: () => ({})
+	})
+	public data: object;
 	public isSelected: boolean = false;
 	public $parent: ICardListComponent;
 
@@ -58,6 +65,7 @@ export default class Card extends Vue {
 
 	public onClick() {
 		this.$emit('onClick');
+
 		if (this.isInCardList) {
 			return this.$parent.selectCard(this);
 		}

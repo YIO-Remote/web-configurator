@@ -274,6 +274,8 @@ export interface IToast {
 
 // Components
 export interface ICardComponent extends Vue {
+	// tslint:disable-next-line:no-any
+	data: any;
 	isSelected: boolean;
 	setSelected(isSelected: boolean): void;
 }

@@ -3,8 +3,8 @@ import { Component, Ref } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import { IProfileAggregate, ICardListComponent, IPageAggregate } from '../../types';
-import { Drop } from 'vue-drag-drop';
 import { ServerConnection } from '../../server';
+import Draggable, { IDragEndEvent } from 'vuedraggable';
 import CardList from '../../components/card-list/index.vue';
 import Card from '../../components/card/index.vue';
 import SmallCard from '../../components/small-card/index.vue';
@@ -25,38 +25,55 @@ import TabContainer from '../../components/tabs/tab-container/script';
 		ActionButton,
 		EditFavorites,
 		EditPage,
-		Drop
+		Draggable
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
-			profiles: this.store.profiles.profiles$
+			profiles: this.store.profiles.profiles$,
+			allPages: this.store.pages.all$
 		};
 	}
 })
 export default class ProfilesPage extends Vue {
 	@Inject(() => YioStore)
 	public store: YioStore;
+
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
+
 	public profiles: IProfileAggregate[];
-	public selectedProfileIndex: number = -1;
-	public selectedPageIndex: number = -1;
+	public allPages: IPageAggregate[];
+	public selectedProfile: IProfileAggregate = {} as IProfileAggregate;
+	public selectedPage: IPageAggregate = {} as IPageAggregate;
 	public remoteScreenComponent: string = '';
 	public remoteScreenComponentProps: object = {};
 	public newProfileName: string = '';
 	public isDraggedOver: boolean = false;
 	public tabs: TabContainer;
 	public pages: IPageAggregate[];
+	public dropZoneList: IPageAggregate[] = [];
+	public pagesDragOptions = {
+		disabled: true,
+		sort: false,
+		animation: 200,
+		ghostClass: 'ghost',
+		group: 'pages'
+	};
+	public dropZoneOptions = {
+		disabled: false,
+		sort: false,
+		group: 'pages'
+	};
 
 	@Ref('pageCardList')
 	public readonly pageCardList!: ICardListComponent | ICardListComponent[];
 
-	public get selectedProfile() {
-		return this.profiles[this.selectedProfileIndex];
+	public get isPageSelected() {
+		return !!this.selectedPage.id;
 	}
 
-	public get selectedPage() {
-		return this.selectedProfile.pages[this.selectedPageIndex];
+	public get isFavoritesPageSelected() {
+		return this.isPageSelected ? this.selectedPage.id === 'favorites' : false;
 	}
 
 	public getBadgeClasses(isSelected: boolean) {
@@ -66,60 +83,38 @@ export default class ProfilesPage extends Vue {
 		};
 	}
 
-	public onProfileSelected(index: number) {
+	public onProfileSelected(profile: IProfileAggregate, index: number) {
 		if (index === -1) {
-			this.selectedProfileIndex = -1;
-			this.selectedPageIndex = -1;
+			this.selectedProfile = {} as IProfileAggregate;
+			this.selectedPage = {} as IPageAggregate;
 			this.$menu.hide();
-			this.deselectRemoteComponent();
 			return;
 		}
 
 		this.$menu.show(ProfileOptions, {});
 		this.tabs = this.$menu.getComponent<TabContainer>();
-		this.selectedProfileIndex = index;
-		this.deselectRemoteComponent();
+		this.selectedProfile = profile;
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());
 	}
 
-	public onPageSelected(index: number) {
+	public onPageSelected(page: IPageAggregate, index: number) {
 		if (index === -1) {
-			this.deselectRemoteComponent();
+			this.selectedPage = {} as IPageAggregate;
 			return;
 		}
 
-		this.selectedPageIndex = index;
+		this.selectedPage = page;
 
 		if (this.selectedPage.id === 'favorites') {
 			this.tabs.selectTab(2);
-			this.setRemoteComponent('EditFavorites', {
-				favorites: this.selectedProfile.favorites
-			});
-			return;
+		} else {
+			this.tabs.selectTab(1);
 		}
 
-		this.tabs.selectTab(1);
-		this.setRemoteComponent('EditPage', {
-			page: this.selectedPage
-		});
-	}
-
-	public setRemoteComponent(componentName: string, componentProps: object) {
-		this.remoteScreenComponent = componentName;
-		this.remoteScreenComponentProps = componentProps;
-	}
-
-	public deselectRemoteComponent() {
-		this.remoteScreenComponent = '';
-		this.remoteScreenComponentProps = {};
 	}
 
 	public createNewProfile() {
 		alert(1);
-	}
-
-	public beforeDestroy() {
-		this.$menu.hide();
 	}
 
 	public onDragOver() {
@@ -130,12 +125,44 @@ export default class ProfilesPage extends Vue {
 		this.isDraggedOver = false;
 	}
 
-	public onPageDropped(droppedPage: IPageAggregate) {
-		this.server.addPageToProfile(this.selectedProfile, droppedPage);
+	public onPageDropped(event: IDragEndEvent) {
+		this.dropZoneList = [];
+		const pageId = event.item.getAttribute('data-id');
+		const matchingPage = this.allPages.find((page) => page.id === pageId);
+
+		if (matchingPage) {
+			this.server.addPageToProfile(this.selectedProfile, matchingPage);
+		}
+
 		this.isDraggedOver = false;
 	}
 
 	public onRemovePage(pageToRemove: IPageAggregate) {
+		this.selectedPage = {} as IPageAggregate;
 		this.server.removePageFromProfile(this.selectedProfile, pageToRemove.id);
+	}
+
+	public updated() {
+		if (!this.selectedProfile.id) {
+			return;
+		}
+
+		if (this.selectedProfile.id) {
+			this.selectedProfile = this.profiles.find((profile) => profile.id === this.selectedProfile.id) as IProfileAggregate;
+
+			if (!this.selectedPage.id) {
+				return;
+			}
+
+			if (this.selectedPage.id !== 'favorites') {
+				this.selectedPage = this.selectedProfile.pages.find((page) => page.id === this.selectedPage.id) as IPageAggregate;
+			}
+		}
+	}
+
+	public beforeDestroy() {
+		this.selectedProfile = {} as IProfileAggregate;
+		this.selectedPage = {} as IPageAggregate;
+		this.$menu.hide();
 	}
 }

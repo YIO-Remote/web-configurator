@@ -8,27 +8,19 @@
             Available Pages
          </div>
          <div class="items-list">
-            <drag
-               v-for="(page, index) in pages"
-               :transfer-data="page"
-               :key="index"
-               :effect-allowed="['copy']"
-               drop-effect="move"
-               :image-x-offset="50"
-               :image-y-offset="50">
-               <template slot="image">
-                  <small-card :title="page.name" style="min-width: 200px;"></small-card>
-               </template>
-               <small-card :title="page.name" :iconType="getIconType(page)"></small-card>
-                  <template v-slot:body v-if="page.groups.length > 0">
-                     <ul>
-                        <li v-for="(group, index) in page.groups" :key="index">
-                           {{group.name}}
-                        </li>
-                     </ul>
-                 </template>
-               </small-card>
-            </drag>
+            <draggable class="list-group" v-bind="pagesDragOptions" :list="pages">
+               <transition-group type="transition">
+                  <small-card v-for="page in pages" :key="page.id" :data-id="page.id" :title="page.name" :iconType="getIconType(page)" @onIconClick="onDeletePage(page)">
+                     <template v-slot:body v-if="page.groups.length > 0">
+                        <ul>
+                           <li v-for="group in page.groups" :key="group.id">
+                              {{group.name}}
+                           </li>
+                        </ul>
+                     </template>
+                  </small-card>
+               </transition-group>
+             </draggable>
          </div>
       </div>
    </Tab>
@@ -41,15 +33,19 @@
             Available Groups
          </div>
          <div class="items-list">
-            <small-card v-for="(group, index) in groups" :key="index" :title="group.name" :iconType="'delete'">
-               <template v-slot:body>
-                  <ul>
-                     <li v-for="(entity, index) in group.entities" :key="index">
-                        {{entity.friendly_name}}
-                     </li>
-                  </ul>
-              </template>
-            </small-card>
+            <draggable class="list-group" v-bind="groupsDragOptions" :list="groups">
+               <transition-group type="transition">
+                  <small-card v-for="group in groups" :key="group.id" :data-id="group.id" :title="group.name" :iconType="'delete'" @onIconClick="onDeleteGroup(group)">
+                     <template v-slot:body>
+                        <ul>
+                           <li v-for="entity in group.entities" :key="entity.entity_id">
+                              {{entity.friendly_name}}
+                           </li>
+                        </ul>
+                    </template>
+                  </small-card>
+               </transition-group>
+             </draggable>
          </div>
       </div>
    </Tab>
@@ -64,8 +60,11 @@
                   {{entityType}}
                </div>
                <div class="items-list">
-                  <small-card v-for="(entity, index) in entities" :key="index" :title="entity.friendly_name">
-                  </small-card>
+                  <draggable class="list-group" v-bind="entitiesDragOptions" :list="entities">
+                     <transition-group type="transition">
+                        <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity" :title="entity.friendly_name"></small-card>
+                     </transition-group>
+                   </draggable>
                </div>
             </li>
          </ul>
