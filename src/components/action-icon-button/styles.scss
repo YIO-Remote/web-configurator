@@ -1,0 +1,36 @@
+.action-icon-button {
+    width: 20px;
+    height: 20px;
+    background-color: #282828;
+    border-radius: 50%;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding-left: 7px;
+    cursor: pointer;
+    font-family: OpenSans;
+
+    &.delete {
+        line-height: 1.5;
+        &:after {
+            content: 'x';
+        }
+    }
+
+    &.add {
+        line-height: 1.6;
+        &:after {
+            content: '+';
+        }
+    }
+
+    &.remove {
+        line-height: 1.6;
+        &:after {
+            content: '-';
+        }
+    }
+
+    &:hover {
+        background-color: #686868;
+    }
+}

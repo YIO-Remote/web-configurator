@@ -1,0 +1,57 @@
+.software-update-container {
+    width: 740px;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+}
+
+.item, .description {
+    width: 48%;
+    margin-right: 2%;
+}
+
+.description {
+    color: #ffffff;
+    opacity: 0.3;
+    font-size: 12px;
+
+    .text {
+        position: relative;
+        top: 50%;
+        transform: translateY(calc(-50% + 10px));
+    }
+}
+
+.version {
+	font-family: OpenSans-Light;
+	font-size: 12px;
+	line-height: 1.5;
+	letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+    
+    &.new {
+        font-family: OpenSans-Bold;
+        margin: 10px 0 0 0;
+    }
+
+    &.current {
+        opacity: 0.3;
+    }
+}
+
+.card /deep/ .body-container.is-visible {
+    border-top: 1px solid black;
+    margin-top: 0;
+}
+
+.update-btn-container {
+    margin-top: 10px;
+}
+
+.check-new-version-btn-container {
+    margin-top: 0;
+    padding: 20px 0 0;
+}

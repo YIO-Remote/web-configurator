@@ -1,0 +1,12 @@
+<div class="table">
+	<div class="header">
+		<div class="header-row">
+			<slot name="header"></slot>
+		</div>
+	</div>
+	<perfect-scrollbar class="body">
+		<div class="body-row" v-for="(item, index) in items" :class="{ selected: index === selectedIndex, enabled: !disableSelection }" @click="rowSelected(index)">
+			<slot name="item" :item="item"></slot>
+		</div>
+	</perfect-scrollbar>
+</div>

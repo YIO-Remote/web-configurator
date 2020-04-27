@@ -1,0 +1,58 @@
+.available-entities {
+    width: 100%;
+    min-height: 100%;
+    background-color: #313246;
+    padding: 30px;
+    font-family: OpenSans-Light;
+
+    .title {
+        margin: 0 0 10px;
+    }
+
+    .entity-title {
+        font-size: 14px;
+        padding: 10px 0;
+        border-bottom: 1px solid #0b0b0b;
+        color: #FFFFFF;
+        text-align: left;
+    }
+
+    .entity-list {
+        padding: 20px 0 0;
+    }
+
+    .entity {
+        font-size: 12px;
+        overflow: hidden;
+        margin-bottom: 15px;
+
+        .details {
+            display: flex;
+            flex-direction: row;
+            width: 90%;
+            float: left;
+            
+            .icon {
+                font-size: 36px;
+            }
+        }
+
+        .action {
+            width: 10%;
+            float: right;
+        }
+
+        .id {
+            padding: 10px 0;
+            color: #FFFFFF;
+            text-align: left;
+            opacity: 0.5;
+        }
+
+        .button {
+            position: relative;
+            top: -50%;
+            transform: translateY(50%);
+        }
+    }
+}

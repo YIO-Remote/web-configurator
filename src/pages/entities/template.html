@@ -1,2 +1,38 @@
 <div>
+    <h1 class="title">
+        {{$t('pages.entities.title')}}
+    </h1>
+    <yio-table :items="loaded" max-height="580px" :disable-selection="true">
+        <template v-slot:header>
+            <th>
+            </th>
+            <th>
+                {{$t('common.name')}}
+            </th>
+            <th>
+                {{$t('pages.entities.integration')}}
+            </th>
+            <th>
+                {{$t('common.type')}}
+            </th>
+            <th></th>
+        </template>
+        <template v-slot:item="{ item }">
+            <td>
+                <span class="icon" :class="item.type"></span>
+            </td>
+            <td>
+                 {{item.friendly_name}}
+            </td>
+            <td>
+                {{item.integration ? item.integration.friendly_name : ''}}
+            </td>
+            <td>
+                {{item.type}}
+            </td>
+            <td>
+                <action-icon-button @onClick="onItemDeleted(item)" type="delete"></action-icon-button>
+            </td>
+        </template>
+    </yio-table>
 </div>

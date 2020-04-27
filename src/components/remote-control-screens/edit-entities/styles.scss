@@ -1,0 +1,66 @@
+.item-list {
+	.item {
+		display: flex;
+		font-family: OpenSans-Light;
+		border-radius: 10px;
+		font-size: 0.9rem;
+		margin-bottom: 5px;
+
+		&.added {
+			cursor: grab;
+			background: #1C1C1C;
+			padding: 10px;
+
+			.name-container {
+				position: relative;
+				width: 65%;
+
+				.name {
+					transform: translateY(-50%);
+					position: absolute;
+					top: 50%;
+				}
+			}
+		}
+
+		&.drop-zone {
+			display: block;
+			width: 100%;
+			border-radius: 6px;
+			border: 1px dashed #666666;
+			margin: 10px 0 0 0;
+			padding: 10px;
+			user-select: none;
+			font-family: OpenSans-Light;
+			font-size: 0.75rem;
+			color: #666666;
+
+			&.over {
+				background-color: #120b1d;
+				border: 1px dashed #A1A1A1;
+				color: #A1A1A1;
+			}
+		}
+
+		.icon-container {
+			width: 20%;
+
+			.icon {
+				font-size: 40px;
+			}
+		}
+
+		.delete-button-container {
+			position: relative;
+			width: 15%;
+
+			.action-icon-button {
+				transform: translateY(50%);
+			}
+		}
+	}
+}
+
+.sortable-ghost {
+	opacity: 0.3;
+}

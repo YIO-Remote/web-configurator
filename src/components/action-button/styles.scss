@@ -1,0 +1,26 @@
+.action-button {
+    display: inline-block;
+    text-align: center;
+    padding: 8px 16px;
+    min-width: 80px;
+    font-size: 12px;
+    border-radius: 20px;
+    border: solid 1px #FFFFFF;
+    cursor: pointer;
+    font-family: OpenSans-Bold;
+
+    &.primary {
+        color: #FFFFFF;
+        background-color: #91bf4c;
+        border: solid 1px #91bf4c;
+
+        &:hover {
+            background-color: #70a322;
+            border: solid 1px #91bf4c;
+        }
+    }
+
+    &:hover {
+        background-color: #0A0A0A;
+    }
+}

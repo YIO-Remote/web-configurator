@@ -1,0 +1,116 @@
+.delete-button {
+	transform: translateY(-50%);
+	position: absolute;
+	top: 50%;
+	background-color: #000000;
+}
+
+.remote-control-container {
+	width: 60%;
+	height: calc(100% + 14px);
+	overflow: hidden;
+	
+	.remote-control {
+		max-width: 280px;
+		padding: 5px 5px 250% 5px;
+		margin: 0 auto;
+		background-color: #1C1C1C;
+		border-radius: 5px;
+
+		.screen {
+			display: flex;
+    		flex-direction: column;
+			width: 100%;
+			background: #000000;
+			height: 70%;
+			padding: 6px 15px;
+
+			.ps {
+				height: 100%;
+			}
+
+			.default-message {
+				width: 100%;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				font-family: OpenSans-Light;
+				font-size: 14px;
+				text-align: center;
+				color: #666666;
+			}
+
+			.notification-bar {
+				position: relative;
+				width: 100%;
+				height: 26px;
+				font-family: OpenSans-Light;
+
+				.time {
+					text-align: center;
+					font-size: 0.9rem;
+				}
+
+				.battery {
+					position: absolute;
+					right: 0;
+					top: 2px;
+					font-size: 0.7rem;
+				}
+			}
+
+			.contents {
+				position: relative;
+			}
+		}
+
+		.button-container {
+			display: flex;
+			width: 100%;
+			height: 30%;
+			border-left: solid 1px #292929;
+			border-right: solid 1px #292929;
+			padding-top: 25px;
+
+			.up-down-button {
+				width: 20.4%;
+				height: 100%;
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-image: url('../../../assets/images/up-down-button.svg');
+
+				.up-button {
+					width: calc(100% - 10px);
+					height: calc(50% - 10px);
+					margin: 5px;
+					border-radius: 3px;
+					cursor: pointer;
+
+					&:hover {
+						background: rgba(0, 0, 0, 0.2);
+					}
+				}
+
+				.down-button {
+					width: calc(100% - 10px);
+					height: calc(50% - 20px);
+					margin: 5px;
+					border-radius: 3px;
+					cursor: pointer;
+
+					&:hover {
+						background: rgba(0, 0, 0, 0.2);
+					}
+				}
+			}
+
+			.dpad-button {
+				width: calc(100% - (20.4% * 2));
+				height: 100%;
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-image: url('../../../assets/images/dpad-button.svg');
+			}
+		}
+	}
+}

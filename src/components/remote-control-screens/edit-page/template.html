@@ -1,0 +1,26 @@
+<div class="contents">
+    <div class="title">
+        {{page.name}}
+    </div>
+    <ul class="groups-container">
+        <li v-for="group in page.groups" :key="group.id">
+            <div class="group-list-container">
+                <action-icon-button class="remove-group-button" @onClick="onGroupRemoved(group)" type="delete"></action-icon-button>
+                <div class="group-title">{{group.name}}</div>
+                <ul>
+                    <edit-entities
+                        :entities="group.entities"
+                        @onEntityAdded="(entity) => onEntityAdded(group, entity)"
+                        @onEntityRemoved="(entity) => onEntityRemoved(group, entity)"
+                        @onEntitySortOrderChanged="($event) => onEntitySortOrderChanged(group, $event)">
+                    </edit-entities>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="group-item drop-zone group" @add="onGroupDropped">
+                {{$t('components.editPage.dropZone')}}
+            </draggable>
+        </li>
+    </ul>
+</div>

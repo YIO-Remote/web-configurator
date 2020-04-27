@@ -1,0 +1,28 @@
+<div class="remote-control-container">
+    <div class="remote-control">
+        <div class="screen">
+            <div class="notification-bar">
+                <div class="time">{{time}}</div>
+                <div class="battery">98%</div>
+            </div>
+            <perfect-scrollbar>
+                <slot>
+                    <div class="default-message">
+                        {{message}}
+                    </div>
+                </slot>
+            </perfect-scrollbar>
+        </div>
+        <div class="button-container">
+            <div class="up-down-button">
+                <div class="up-button" @click="buttonPress('left', 'up')"></div>
+                <div class="down-button" @click="buttonPress('left', 'down')"></div>
+            </div>
+            <div class="dpad-button"></div>
+            <div class="up-down-button">
+                <div class="up-button" @click="buttonPress('right', 'up')"></div>
+                <div class="down-button" @click="buttonPress('right', 'down')"></div>
+            </div>
+        </div>
+    </div>
+</div>

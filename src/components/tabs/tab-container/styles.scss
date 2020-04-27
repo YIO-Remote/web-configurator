@@ -2,6 +2,8 @@
     width: 100%;
     height: 100%;
     background-color: #313246;
+    display: flex;
+    flex-direction: column;
 }
 
 .tabs {
@@ -18,6 +20,7 @@
     border-right: 1px solid #07070A;
     text-align: center;
     padding: 30px 0;
+    height: 75px;
 }
   
 .tab:hover {
@@ -32,4 +35,5 @@
 
 .panels {
     padding: 20px;
+    height: calc(100% - 75px);
 }

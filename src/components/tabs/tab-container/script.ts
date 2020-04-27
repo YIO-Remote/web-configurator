@@ -1,30 +1,34 @@
 import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
+import { ITabComponent } from '../../../types';
 
 @Component({
-    name: 'TabContainer'
+	name: 'TabContainer'
 })
 export default class TabContainer extends Vue {
-    @Prop({
-        type: Number,
-        required: false,
-        default: 0
-    })
-    public initialIndex: number;
+	@Prop({
+		type: Number,
+		required: false,
+		default: 0
+	})
+	public initialIndex: number;
 
-    public tabs: Vue[] = [];
+	public $children: ITabComponent[];
 
-    public created() {
-        this.tabs = this.$children;
-    }
+	public tabs: ITabComponent[] = [];
 
-    public mounted() {
-        (this.tabs[this.initialIndex] as any).setIsActive(true);
-    }
+	public created() {
+		this.tabs = this.$children;
+	}
 
-    public selectTab(selectedTab: Vue) {
-        this.tabs.forEach((tab) => {
-            (tab as any).setIsActive(selectedTab === tab);
-        });
-    }
+	public mounted() {
+		this.tabs[this.initialIndex].setIsActive(true);
+	}
+
+	public selectTab(selectedTab: Vue | number) {
+		this.tabs.forEach((tab, index) => {
+			const isSelected = (typeof selectedTab === 'number') ? index === selectedTab : selectedTab === tab;
+			tab.setIsActive(isSelected);
+		});
+	}
 }

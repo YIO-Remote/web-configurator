@@ -1,3 +1,14 @@
+.integrations {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .title {
     font-family: OpenSans;
+}
+
+td {
+    padding: 5px;
+    vertical-align: middle;
 }

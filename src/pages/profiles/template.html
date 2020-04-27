@@ -1,9 +1,50 @@
-<div>
-    <profile-card
-        v-for="(profile, key) in profiles"
-        :profile="profile"
-        :key="key"
-        :is-selected="profile === selectedProfile"
-        @onClick="onProfileSelected(profile)">
-    </profile-card>
+<div class="profiles-page">
+    <h1 class="title">
+        {{$t('pages.profiles.title')}}
+    </h1>
+    <div class="profiles">
+        <div class="profiles-container">
+            <perfect-scrollbar>
+                <card-list @onSelected="onProfileSelected">
+                    <card v-for="profile in profiles" :title="profile.name" :key="profile.id" :data="profile">
+                        <template v-slot:leftIcon="{ isSelected }">
+                            <div :class="getBadgeClasses(isSelected)">
+                                {{profile.initial}}
+                            </div>
+                        </template>
+                        <template v-slot:body>
+                            <div class="pages-list">
+                                <div class="title">
+                                    {{$t('pages.profiles.profileList.title')}}
+                                </div>
+                                <card-list @onSelected="onPageSelected" @onSortUpdate="onPageSortOrderChanged" ref="pageCardList" :dragOptions="pagesDragOptions" :dragList="profile.pages">
+                                    <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
+                                </card-list>
+                                <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
+                                    {{$t('pages.profiles.profileList.dropZone')}}
+                                </draggable>
+                            </div>
+                        </template>
+                    </card>
+                </card-list>
+                <card :title="$t('pages.profiles.newProfile.title')">
+                    <template v-slot:leftIcon>
+                        <div class="badge">
+                            +
+                        </div>
+                    </template>
+                    <template v-slot:body>
+                        <div class="new-profile-container">
+                            <input class="name-input" type="text" v-model="newProfileName" />
+                            <action-button class="create-button" :text="$t('common.create')" @onClick="createNewProfile()"></action-button>
+                        </div>
+                    </template>
+                </card>
+            </perfect-scrollbar>
+        </div>
+        <remote-control :message="remoteMessage">
+            <edit-favorites v-if="isFavoritesPageSelected" :profile="selectedProfile"></edit-favorites>
+            <edit-page v-else-if="!isSettingsPageSelected && !isFavoritesPageSelected && isPageSelected" :page="selectedPage"></edit-page>
+        </remote-control>
+    </div>
 </div>

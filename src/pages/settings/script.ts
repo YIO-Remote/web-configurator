@@ -1,69 +1,57 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import SwitchToggle from '../../components/switch-toggle/index.vue';
+import { map } from 'rxjs/operators';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
-
+import { ServerConnection } from '../../server';
+import SwitchToggle from '../../components/switch-toggle/index.vue';
+import Card from '../../components/card/index.vue';
+import DropDown from '../../components/drop-down/index.vue';
+import { ILanguageSetting, IDropDownItem } from '../../types';
 
 @Component({
-    name: 'SettingsPage',
-    components: {
-        SwitchToggle
-    },
-    subscriptions(this: SettingsPage) {
-        return {
-            darkMode: this.store.select('config', 'ui_config', 'darkmode'),
-            autoBrightness: this.store.select('config', 'settings', 'autobrightness'),
-            autoSoftwareUpdate: this.store.select('config', 'settings', 'softwareupdate'),
-            entities: this.store.select('config', 'entities')
-        };
-    }
+	name: 'SettingsPage',
+	components: {
+		Card,
+		SwitchToggle,
+		DropDown
+	},
+	subscriptions(this: SettingsPage) {
+		return {
+			darkMode: this.store.select('config', 'ui_config', 'darkmode'),
+			autoBrightness: this.store.select('config', 'settings', 'autobrightness'),
+			autoSoftwareUpdate: this.store.select('config', 'settings', 'softwareupdate', 'autoUpdate'),
+			availableLanguages: this.store.select('settings', 'languages').pipe(
+				map((languages) => languages.map((language) => ({ text: language.name, value: language.id })))
+			),
+			selectedLanguage: this.store.select('config', 'settings', 'language').pipe(
+				map((selectedLanguageId) => this.store.value.settings.languages.find((language) => language.id === selectedLanguageId) as ILanguageSetting),
+				map((selectedLanguage) => ({ text: selectedLanguage.name, value: selectedLanguage.id }))
+			)
+		};
+	}
 })
 export default class SettingsPage extends Vue {
-    @Inject(() => YioStore)
-    public store: YioStore;
+	@Inject(() => YioStore)
+	public store: YioStore;
 
-    public toggleLanguage() {
-        if (this.$i18n.locale === 'en_US') {
-            this.$i18n.locale = 'nl_NL';
-        } else {
-            this.$i18n.locale = 'en_US';
-        }
-    }
+	@Inject(() => ServerConnection)
+	public server: ServerConnection;
 
-    public updateDarkMode(value: boolean) {
-        this.store.dispatch(this.store.actions.updateConfig({
-            ...this.store.value.config,
-            ...{
-                ui_config: {
-                    ...this.store.value.config.ui_config,
-                    darkmode: value
-                }
-            }
-        }, false));
-    }
+	public onLanguageSelected(language: IDropDownItem) {
+		this.server.setLanguage(language.value);
+		this.$i18n.locale = language.value;
+	}
 
-    public updateAutoBrightness(value: boolean) {
-        this.store.dispatch(this.store.actions.updateConfig({
-            ...this.store.value.config,
-            ...{
-                settings: {
-                    ...this.store.value.config.settings,
-                    autobrightness: value
-                }
-            }
-        }, false));
-    }
+	public updateDarkMode(value: boolean) {
+		this.server.setDarkMode(value);
+	}
 
-    public updateAutoSoftwareUpdate(value: boolean) {
-        this.store.dispatch(this.store.actions.updateConfig({
-            ...this.store.value.config,
-            ...{
-                settings: {
-                    ...this.store.value.config.settings,
-                    softwareupdate: value
-                }
-            }
-        }, false));
-    }
-};
+	public updateAutoBrightness(value: boolean) {
+		this.server.setAutoBrightness(value);
+	}
+
+	public updateAutoSoftwareUpdate(value: boolean) {
+		alert('TODO: API ENDPOINT NEEDED');
+	}
+}

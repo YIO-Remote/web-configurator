@@ -1,0 +1,79 @@
+<TabContainer ref="tabs">
+   <Tab :name="$t('components.profileOptions.pagesTab.title')">
+      <perfect-scrollbar>
+         <div class="items-container">
+            <div class="items-description">
+               {{$t('components.profileOptions.pagesTab.message')}}
+            </div>
+            <div class="items-list-title">
+               {{$t('components.profileOptions.pagesTab.availablePages')}}
+            </div>
+               <div class="items-list">
+                  <draggable class="list-group" v-bind="pagesDragOptions" :list="pages">
+                     <transition-group type="transition">
+                        <small-card v-for="page in pages" :key="page.id" :data-id="page.id" :title="page.name" :iconType="getIconType(page)" @onIconClick="onDeletePage(page)">
+                           <template v-slot:body v-if="page.groups.length > 0">
+                              <ul>
+                                 <li v-for="group in page.groups" :key="group.id">
+                                    {{group.name}}
+                                 </li>
+                              </ul>
+                           </template>
+                        </small-card>
+                     </transition-group>
+                  </draggable>
+               </div>
+         </div>
+      </perfect-scrollbar>
+   </Tab>
+   <Tab :name="$t('components.profileOptions.groupsTab.title')">
+      <perfect-scrollbar>
+         <div class="items-container">
+            <div class="items-description">
+               {{$t('components.profileOptions.groupsTab.message')}}
+            </div>
+            <div class="items-list-title">
+               {{$t('components.profileOptions.groupsTab.availableGroups')}}
+            </div>
+            <div class="items-list">
+               <draggable class="list-group" v-bind="groupsDragOptions" :list="groups">
+                  <transition-group type="transition">
+                     <small-card v-for="group in groups" :key="group.id" :data-id="group.id" :title="group.name" :iconType="'delete'" @onIconClick="onDeleteGroup(group)">
+                        <template v-slot:body>
+                           <ul>
+                              <li v-for="entity in group.entities" :key="entity.entity_id">
+                                 {{entity.friendly_name}}
+                              </li>
+                           </ul>
+                     </template>
+                     </small-card>
+                  </transition-group>
+               </draggable>
+            </div>
+         </div>
+      </perfect-scrollbar>
+   </Tab>
+   <Tab :name="$t('components.profileOptions.entitiesTab.title')">
+      <perfect-scrollbar>
+         <div class="items-container">
+            <div class="items-description">
+               {{$t('components.profileOptions.entitiesTab.message')}}
+            </div>
+            <ul>
+               <li v-for="(entities, entityType) in groupedEntities" :key="entityType">
+                  <div class="items-list-title">
+                     {{entityType}}
+                  </div>
+                  <div class="items-list">
+                     <draggable class="list-group" v-bind="entitiesDragOptions" :list="entities">
+                        <transition-group type="transition">
+                           <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity" :title="entity.friendly_name"></small-card>
+                        </transition-group>
+                     </draggable>
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </perfect-scrollbar>
+   </Tab>
+</TabContainer>

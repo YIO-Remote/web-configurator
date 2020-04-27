@@ -13,11 +13,18 @@ module.exports = merge(common, {
                     'css-loader',
                     'sass-loader'
                 ]
+            },
+            {
+                test: /\.css$/i,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
             }
         ]
     },
     devServer: {
-        host: '0.0.0.0',
+        host: '127.0.0.1',
         port: 8080,
         open: true,
         compress: true

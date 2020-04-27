@@ -1,3 +1,70 @@
-.title {
+.message {
     font-family: OpenSans;
+    font-size: 0.8rem;
+    color: #555555;
+    margin: 30px 0 20px;
+}
+
+.dock-container {
+    width: 700px;
+}
+
+.next-button {
+    margin-top: 30px;
+    float: right;
+}
+
+.card {
+    width: 48%;
+    margin-right: 2%;
+    display: inline-block;
+
+    &.is-selected {
+        background: #313247;
+
+        .select-tick {
+            background-color: #91bf4c;
+    
+            &:after {
+                content: '✔';
+            }
+        }
+    }
+}
+
+.card /deep/ .left-icon-container {
+    width: 30%;
+    max-width: none;
+}
+
+.card /deep/ .right-icon-container {
+    width: 10%;
+    max-width: none;
+}
+
+.dock-icon {
+    background-image: url('../../../assets/images/dock.svg');
+    width: 65px;
+    padding-bottom: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.select-tick {
+    position: relative;
+    top: 7px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #171717;
+    line-height: 1.5;
+
+    &.selected {
+        background-color: #91bf4c;
+
+        &:after {
+            content: '✔'
+        }
+    }
 }

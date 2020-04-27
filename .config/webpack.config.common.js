@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
+const pkg = require('../package.json');
 
 module.exports = {
     context: path.resolve(__dirname, '../src'),
@@ -24,7 +25,7 @@ module.exports = {
                 loader: 'ts-loader'
             },
             {
-                test: /\.(png|jpe?g|gif|svg|ttf)$/i,
+                test: /\.(png|jpe?g|gif|svg|ttf|woff|woff2|eot)$/i,
                 use: [
                     {
                         loader: 'file-loader',
@@ -39,7 +40,7 @@ module.exports = {
             template: 'index.html'
         }),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            'process.env.__VERSION__': JSON.stringify(pkg.version)
         })
     ]
 };

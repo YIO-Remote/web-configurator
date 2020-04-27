@@ -1,27 +1,61 @@
-.left-column {
-    float: left;
-    width: 45%;
+.settings-container {
+    width: 740px;
 }
 
-.right-column {
-    float: right;
-    width: 55%;
+.row {
+    width: 100%;
+    display: flex;
 }
 
-.item {
-    border-radius: 8px;
-    margin: 20px 10px 20px 0;
-    padding: 22px;
-    color: #FFFFFF;
-    background: #1C1C1C;
-    font-size: 0.9rem;
+.settings-item, .settings-description {
+    width: 48%;
+    margin-right: 2%;
 }
 
-.description {
-    margin: 20px 10px 20px 0;
-    padding: 20px;
-    color: #FFFFFF;
-    font-size: 12px;
-    line-height: 16px;
+.settings-description {
+    color: #ffffff;
     opacity: 0.3;
+    font-size: 12px;
+
+    .text {
+        position: relative;
+        top: 50%;
+        transform: translateY(calc(-50% + 10px));
+    }
+}
+
+.card /deep/ .title-container {
+    width: 100%;
+}
+
+.language-select {
+    width: 48%;
+    margin-right: 2%;
+    margin: 20px 0 0 0;
+    font-family: OpenSans;
+    font-size: 16px;
+
+    /deep/ .items {
+        top: 60px;
+    }
+
+    /deep/ .selected-item {
+        background-color: #1c1c1c;
+    }
+
+    /deep/ .selected-item, /deep/ .item {
+        padding: 20px;
+    }
+
+    /deep/ .selected-tick {
+        width: 20px;
+        height: 20px;
+        font-size: 13px;
+        line-height: 1.75;
+    }
+
+    /deep/ .arrow {
+        top: 44%;
+        right: 40px;
+    }
 }

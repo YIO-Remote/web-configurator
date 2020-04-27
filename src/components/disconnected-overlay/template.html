@@ -1,13 +1,13 @@
 <div v-if="isDisconnected" class="disconnected-overlay">
     <div class="message-container">
         <h1 class="title">
-            {{ $t('disconnectionOverlay.title') }}
+            {{ $t('overlays.disconnection.title') }}
         </h1>
         <p class="message">
-            {{ $t('disconnectionOverlay.message') }}
+            {{ $t('overlays.disconnection.message') }}
         </p>
         <p class="reconnecting">
-            {{ $t('disconnectionOverlay.reconnecting') }}{{loadingDots}}
+            {{ $t('overlays.disconnection.reconnecting') }}{{loadingDots}}
         </p>
     </div>
 </div>

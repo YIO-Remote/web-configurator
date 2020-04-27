@@ -1,0 +1,42 @@
+.integration-settings {
+    width: 100%;
+    height: 100%;
+    background-color: #313246;
+    padding: 30px;
+    font-family: OpenSans-Light;
+
+    .integration-title {
+        font-size: 14px;
+        padding: 25px 0 12px;
+        color: #FFFFFF;
+        text-align: left;
+    }
+
+    .right-button {
+        margin-left: 50px;
+    }
+
+    .setting {
+        margin: 15px 0;
+
+        .setting-name {
+            font-size: 12px;
+            padding: 5px 0;
+            border-bottom: 1px solid #3A3A3A;
+            color: #FFFFFF;
+            text-align: left;
+            opacity: 0.5;
+        }
+
+        .setting-input {
+            width: 75%;
+            border-radius: 6px;
+            background-color: #222332;
+            border: 0;
+            padding: 10px;
+            color: #FFFFFF;
+            font-family: OpenSans-Light;
+            outline: none;
+        }
+    }
+}

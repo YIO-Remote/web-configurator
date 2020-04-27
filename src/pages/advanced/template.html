@@ -1,0 +1,14 @@
+<div class="container">
+    <h1 class="title">
+        {{$t('pages.advanced.title')}}
+    </h1>
+    <div class="message">
+        {{$t('pages.advanced.message')}}
+    </div>
+    <div>
+        <action-button :text="$t('common.save')" :primary="true" @onClick="save()"></action-button>
+    </div>
+    <div class="editor-container">
+        <AceEditor ref="ace" v-model="code" :config="config" />
+    </div>
+</div>
