@@ -46,6 +46,7 @@ export default class TextInput extends Vue {
 	public onSave() {
 		this.isEditing = false;
 		this.$emit('onSave', this.editValue);
+		this.editValue = '';
 	}
 
 	public mounted() {

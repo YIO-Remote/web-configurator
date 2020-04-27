@@ -190,9 +190,7 @@ export class ServerConnection {
 	}
 
 	public setActiveProfile(profile: IProfileAggregate) {
-		return this.sendMessage({ type: 'set_profile', profile: profile.id })
-			.then((response) => this.showToast(response))
-			.catch((response) => this.showToast(response));
+		return this.sendMessage({ type: 'set_profile', profile: profile.id });
 	}
 
 	public renameProfile(profile: IProfileAggregate, name: string) {
