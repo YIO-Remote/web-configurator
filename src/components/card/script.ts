@@ -13,12 +13,19 @@ export default class Card extends Vue {
 	public title?: string;
 
 	@Prop({
+		type: Boolean,
+		required: false,
+		default: false
+	})
+	public alwaysExpanded: boolean;
+
+	@Prop({
 		type: Object,
 		required: false,
 		default: () => ({})
 	})
 	public data: object;
-	public isSelected: boolean = false;
+	public isSelected: boolean = this.alwaysExpanded || false;
 	public $parent: ICardListComponent;
 
 	public get cardList() {

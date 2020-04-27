@@ -1,7 +1,12 @@
 import Vue, { VueConstructor } from 'vue';
 import { IMenuPlugin } from '../types';
+import { Inject } from './dependency-injection';
+import { Localisation } from '../i18n';
 
 export default class MenuPlugin {
+	@Inject(() => Localisation)
+	public static localisation: Localisation;
+
 	// tslint:disable-next-line: no-shadowed-variable
 	public static install(Vue: VueConstructor) {
 		Vue.prototype.$menu = Vue.observable({
@@ -9,7 +14,7 @@ export default class MenuPlugin {
 
 			isVisible: false,
 
-			show<T extends object>(component: VueConstructor<Vue>, propsData?: T) {
+			show<T extends object>(root: Vue, component: VueConstructor<Vue>, propsData?: T) {
 				const element = document.getElementById('sub-menu');
 
 				if (this.instance && element) {
@@ -18,7 +23,7 @@ export default class MenuPlugin {
 				}
 
 				const Component = Vue.extend(component);
-				this.instance = new Component({ propsData });
+				this.instance = new Component({ propsData, parent: root });
 				this.instance.$mount();
 				this.isVisible = true;
 
@@ -34,7 +39,7 @@ export default class MenuPlugin {
 				this.isVisible = false;
 			},
 
-			getComponent<T extends Vue>(): T {
+			getComponent() {
 				return this.instance;
 			}
 		} as IMenuPlugin);

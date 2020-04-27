@@ -15,6 +15,10 @@
 	}
 }
 
+/deep/ .card .card {
+	cursor: grab;
+}
+
 .badge {
     width: 40px;
     height: 40px;

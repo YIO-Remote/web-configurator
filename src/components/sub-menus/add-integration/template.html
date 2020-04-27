@@ -1,19 +1,21 @@
 <div class="add-integration">
-   <action-button v-if="!isAddingNewIntegration" text="Add Integration" :primary="false" @onClick="onAddNewIntegration"></action-button>
+   <action-button v-if="!isAddingNewIntegration" :text="$t('pages.integrations.addIntegration')" :primary="false" @onClick="onAddNewIntegration"></action-button>
    <div v-else>
-      <h1 class="title">New Integration</h1>
+      <h1 class="title">
+         {{$t('pages.integrations.newIntegration')}}
+      </h1>
       <div class="setting">
          <div class="setting-name">
-            type
+            {{$t('common.type')}}
          </div>
          <div class="setting-value">
-            <drop-down :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
+            <drop-down :message="$t('common.pleaseSelect')" :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
          </div>
       </div>
       <div v-if="integrationTypeSelected">
          <div class="setting">
             <div class="setting-name">
-               id
+               {{$t('common.id')}}
             </div>
             <div class="setting-value">
                <input class="setting-input" type="input" v-model="id" />
@@ -21,7 +23,7 @@
          </div>
          <div class="setting">
             <div class="setting-name">
-               friendly name
+               {{$t('common.name')}}
             </div>
             <div class="setting-value">
                <input class="setting-input" type="input" v-model="name" />
@@ -36,7 +38,7 @@
             </div>
          </div>
       </div>
-      <action-button text="Save" :primary="true" @onClick="onSave"></action-button>
-      <action-button class="right-button" text="Cancel" :primary="false" @onClick="onCancel"></action-button>
+      <action-button :text="$t('common.save')" :primary="true" @onClick="onSave"></action-button>
+      <action-button class="right-button" :text="$t('common.cancel')" :primary="false" @onClick="onCancel"></action-button>
    </div>
 </div>

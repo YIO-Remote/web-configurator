@@ -26,4 +26,36 @@
 
 .card /deep/ .title-container {
     width: 100%;
-} 
+}
+
+.language-select {
+    width: 48%;
+    margin-right: 2%;
+    margin: 20px 0 0 0;
+    font-family: OpenSans;
+    font-size: 16px;
+
+    /deep/ .items {
+        top: 60px;
+    }
+
+    /deep/ .selected-item {
+        background-color: #1c1c1c;
+    }
+
+    /deep/ .selected-item, /deep/ .item {
+        padding: 20px;
+    }
+
+    /deep/ .selected-tick {
+        width: 20px;
+        height: 20px;
+        font-size: 13px;
+        line-height: 1.75;
+    }
+
+    /deep/ .arrow {
+        top: 44%;
+        right: 40px;
+    }
+}

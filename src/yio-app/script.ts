@@ -19,15 +19,15 @@ export default class YioApp extends Vue {
 
 	public enter(element: HTMLElement) {
 		const { height } = getComputedStyle(element);
-
 		element.style.height = this.previousHeight as string;
-
-		setTimeout(() => {
-			element.style.height = height;
-		});
+		setTimeout(() => element.style.height = height);
 	}
 
 	public afterEnter(element: HTMLElement) {
 		element.style.height = '100%';
+	}
+
+	public get version() {
+		return process.env.__VERSION__;
 	}
 }

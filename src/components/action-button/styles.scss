@@ -5,11 +5,12 @@
     min-width: 80px;
     font-size: 12px;
     border-radius: 20px;
-    border: solid 1px #ffffff;
+    border: solid 1px #FFFFFF;
     cursor: pointer;
     font-family: OpenSans-Bold;
 
     &.primary {
+        color: #FFFFFF;
         background-color: #91bf4c;
         border: solid 1px #91bf4c;
 

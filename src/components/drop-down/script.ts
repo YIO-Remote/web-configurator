@@ -8,8 +8,7 @@ import { IDropDownItem } from '../../types';
 export default class DropDown extends Vue {
 	@Prop({
 		type: String,
-		required: false,
-		default: 'Please select'
+		required: false
 	})
 	public message: string;
 

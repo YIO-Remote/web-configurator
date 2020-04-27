@@ -1,5 +1,7 @@
 <div class="profiles-page">
-    <h1 class="title">Profiles</h1>
+    <h1 class="title">
+        {{$t('pages.profiles.title')}}
+    </h1>
     <div class="profiles">
         <div class="profiles-container">
             <perfect-scrollbar>
@@ -12,18 +14,20 @@
                         </template>
                         <template v-slot:body>
                             <div class="pages-list">
-                                <div class="title">Pages</div>
+                                <div class="title">
+                                    {{$t('pages.profiles.profileList.title')}}
+                                </div>
                                 <card-list @onSelected="onPageSelected" @onSortUpdate="onPageSortOrderChanged" ref="pageCardList" :dragOptions="pagesDragOptions" :dragList="profile.pages">
                                     <small-card v-for="page in profile.pages" :key="page.id" :title="page.name" :data="page" :iconType="'delete'" @onIconClick="onRemovePage(page)"></small-card>
                                 </card-list>
                                 <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="page-drop-zone" @add="onPageDropped">
-                                        Drag a page here
+                                    {{$t('pages.profiles.profileList.dropZone')}}
                                 </draggable>
                             </div>
                         </template>
                     </card>
                 </card-list>
-                <card title="New Profile">
+                <card :title="$t('pages.profiles.newProfile.title')">
                     <template v-slot:leftIcon>
                         <div class="badge">
                             +
@@ -32,7 +36,7 @@
                     <template v-slot:body>
                         <div class="new-profile-container">
                             <input class="name-input" type="text" v-model="newProfileName" />
-                            <action-button class="create-button" text="Create" @onClick="createNewProfile()"></action-button>
+                            <action-button class="create-button" :text="$t('common.create')" @onClick="createNewProfile()"></action-button>
                         </div>
                     </template>
                 </card>

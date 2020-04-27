@@ -5,6 +5,7 @@ import entities from './entities/reducer';
 import profiles from './profiles/reducer';
 import pages from './pages/reducer';
 import groups from './groups/reducer';
+import settings from './settings/reducer';
 
 export default combineReducers({
 	config,
@@ -12,5 +13,6 @@ export default combineReducers({
 	entities,
 	profiles,
 	pages,
-	groups
+	groups,
+	settings
 });

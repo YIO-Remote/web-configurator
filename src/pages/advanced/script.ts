@@ -5,6 +5,7 @@ import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import { ServerConnection } from '../../server';
 import ActionButton from '../../components/action-button/index.vue';
+import { IAceEditor, IVueAce } from '../../types';
 
 @Component({
 	name: 'AdvancedPage',
@@ -30,7 +31,7 @@ export default class AdvancedEditPage extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	public $ace: any;
+	public $ace: IAceEditor;
 	public code: string = JSON.stringify(this.store.value.config, null, 4);
 	public config = {
 		lang: 'json',
@@ -43,12 +44,12 @@ export default class AdvancedEditPage extends Vue {
 			await this.server.setConfig(JSON.parse(config));
 			this.$ace.getSession().foldAll(1);
 		} catch (error) {
-			this.$ace.getSession().setValue(config);
+			this.$ace.setValue(config);
 		}
 	}
 
 	public mounted() {
-		this.$ace = (this.$refs.ace as any).$ace;
+		this.$ace = ((this.$refs.ace as IVueAce).$ace as IAceEditor);
 
 		this.$subscribeTo(
 			this.store.select('config').pipe(distinctUntilChanged((x, y) => JSON.stringify(x) === JSON.stringify(y))),

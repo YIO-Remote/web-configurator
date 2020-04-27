@@ -4,9 +4,12 @@
             <slot name="leftIcon" :is-selected="isSelected"></slot>
         </div>
         <div class="title-container">
-            <span class="title">{{title}}</span>
+            <slot name="title">
+                <span class="title">{{title}}</span>
+            </slot>
+            
         </div>
-        <div class="right-icon-container" v-if="hasRightIconContent || hasBodyContent">
+        <div class="right-icon-container" v-if="hasRightIconContent || hasBodyContent && !alwaysExpanded">
             <slot name="rightIcon" class="icon">
                 <i v-if="!hasRightIconContent" :class="arrowClasses"></i>
             </slot>

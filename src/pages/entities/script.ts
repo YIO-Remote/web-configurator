@@ -32,7 +32,7 @@ export default class EntitiesPage extends Vue {
 	}
 
 	public mounted() {
-		this.$menu.show(AvailableEntities, {});
+		this.$menu.show(this.$root, AvailableEntities, {});
 	}
 
 	public beforeDestroy() {

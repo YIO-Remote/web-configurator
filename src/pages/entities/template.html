@@ -1,17 +1,19 @@
 <div>
-    <h1 class="title">Entities controlled by YIO remote</h1>
+    <h1 class="title">
+        {{$t('pages.entities.title')}}
+    </h1>
     <yio-table :items="loaded" max-height="580px" :disable-selection="true">
         <template v-slot:header>
             <th>
             </th>
             <th>
-                Name
+                {{$t('common.name')}}
             </th>
             <th>
-                Integration
+                {{$t('pages.entities.integration')}}
             </th>
             <th>
-                Type
+                {{$t('common.type')}}
             </th>
             <th></th>
         </template>

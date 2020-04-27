@@ -85,8 +85,8 @@ export default class ProfilesPage extends Vue {
 
 	public get remoteMessage() {
 		return !this.isPageSelected ?
-			'Select a page in a profile to start editing' :
-			this.isSettingsPageSelected ? 'Settings content cannot be edited' : '';
+			this.$t('pages.profiles.remote.defaultMessage') :
+			this.isSettingsPageSelected ? this.$t('pages.profiles.remote.editSettingsMessage') : '';
 	}
 
 	public getBadgeClasses(isSelected: boolean) {
@@ -104,7 +104,7 @@ export default class ProfilesPage extends Vue {
 			return;
 		}
 
-		this.$menu.show(ProfileOptions, {});
+		this.$menu.show(this.$root, ProfileOptions, {});
 		this.tabs = this.$menu.getComponent<TabContainer>();
 		this.selectedProfile = profile;
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());

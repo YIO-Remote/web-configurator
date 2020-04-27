@@ -1,12 +1,12 @@
 <TabContainer ref="tabs">
-   <Tab name="Pages">
+   <Tab :name="$t('components.profileOptions.pagesTab.title')">
       <perfect-scrollbar>
          <div class="items-container">
             <div class="items-description">
-               You can add groups to a page after dragging it under a profile and selecting it.
+               {{$t('components.profileOptions.pagesTab.message')}}
             </div>
             <div class="items-list-title">
-               Available Pages
+               {{$t('components.profileOptions.pagesTab.availablePages')}}
             </div>
                <div class="items-list">
                   <draggable class="list-group" v-bind="pagesDragOptions" :list="pages">
@@ -26,14 +26,14 @@
          </div>
       </perfect-scrollbar>
    </Tab>
-   <Tab name="Groups">
+   <Tab :name="$t('components.profileOptions.groupsTab.title')">
       <perfect-scrollbar>
          <div class="items-container">
             <div class="items-description">
-               You can add entities to a group after dragging it under a page in the remote view to the left.
+               {{$t('components.profileOptions.groupsTab.message')}}
             </div>
             <div class="items-list-title">
-               Available Groups
+               {{$t('components.profileOptions.groupsTab.availableGroups')}}
             </div>
             <div class="items-list">
                <draggable class="list-group" v-bind="groupsDragOptions" :list="groups">
@@ -53,11 +53,11 @@
          </div>
       </perfect-scrollbar>
    </Tab>
-   <Tab name="Entities">
+   <Tab :name="$t('components.profileOptions.entitiesTab.title')">
       <perfect-scrollbar>
          <div class="items-container">
             <div class="items-description">
-               Drag entities to the remote view to add them to favorites or a group.
+               {{$t('components.profileOptions.entitiesTab.message')}}
             </div>
             <ul>
                <li v-for="(entities, entityType) in groupedEntities" :key="entityType">

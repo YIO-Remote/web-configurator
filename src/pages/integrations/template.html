@@ -1,12 +1,14 @@
 <div class="integrations">
-    <h1 class="title">Configured Integrations</h1>
+    <h1 class="title">
+        {{$t('pages.integrations.configuredIntegrations')}}
+    </h1>
     <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
         <template v-slot:header>
             <th>
-                Name
+                {{$t('common.name')}}
             </th>
             <th>
-                Type
+                {{$t('common.type')}}
             </th>
             <th :style="{ width: '80px' }"></th>
         </template>
@@ -22,5 +24,7 @@
             </td>
         </template>
     </yio-table>
-    <h1 class="title">Discovered Integrations</h1>
+    <h1 class="title">
+        {{$t('pages.integrations.discoveredIntegrations')}}
+    </h1>
 </div>

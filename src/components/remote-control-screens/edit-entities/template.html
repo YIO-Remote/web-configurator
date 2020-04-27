@@ -13,6 +13,6 @@
         </div>
     </draggable>
     <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="item drop-zone" @add="onEntityDropped">
-        Drag an entry here
+        {{$t('components.editEntities.dropZone')}}
     </draggable>
 </div>

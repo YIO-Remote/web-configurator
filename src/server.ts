@@ -2,7 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting } from './types';
 import Vue from 'vue';
 
 @Singleton
@@ -19,8 +19,7 @@ export class ServerConnection {
 	private requestId: number;
 
 	constructor() {
-		// TODO: Make this use window.location when in PROD build
-		this.host = '127.0.0.1';
+		this.host = window.location.hostname;
 		this.port = 946;
 		this.requestId = 0;
 		this.configPollingRequestId = 1316134911;
@@ -55,6 +54,7 @@ export class ServerConnection {
 		return this.wsp.open()
 			.then(() => this.isConnected$.next(true))
 			.then(() => this.authenticate('0'))
+			.then(() =>  this.getLanguages())
 			.then(() => this.getSupportedIntegrations())
 			.then(() => this.getSupportedEntityTypes())
 			.then(() => this.getProfiles())
@@ -110,7 +110,7 @@ export class ServerConnection {
 		return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
 			.then((response) => response.available_entities)
 			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)))
-			.catch(() => {});
+			.catch(() => ({}));
 	}
 
 	public getSupportedIntegrations(): Promise < void > {
@@ -440,12 +440,14 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
-	public getLanguages(value: boolean) {
-		return this.sendMessage({ type: 'get_languages', value });
+	public getLanguages() {
+		return this.sendMessage<ILanguageSetting[]>({ type: 'get_languages' })
+			.then((response) => response.languages)
+			.then((languages) => this.store.dispatch(this.store.actions.setLanguages(languages)));
 	}
 
-	public setLanguage(value: boolean) {
-		return this.sendMessage({ type: 'set_language', value })
+	public setLanguage(language: string) {
+		return this.sendMessage({ type: 'set_language', language })
 			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
 	}
@@ -468,8 +470,8 @@ export class ServerConnection {
 	}
 
 	private pollForData() {
-		window.setTimeout(() => this.getConfig(), 10000);
-		window.setTimeout(() => this.getAvailableEntities(), 10000);
+		window.setTimeout(() => this.getConfig(), 3000);
+		window.setTimeout(() => this.getAvailableEntities(), 3000);
 	}
 
 	private showToast(response: IServerResponse) {

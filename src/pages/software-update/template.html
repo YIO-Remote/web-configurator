@@ -1,0 +1,49 @@
+<div>
+    <h1 class="title">
+        {{$t('pages.softwareUpdate.title')}}
+    </h1>
+    <div class="software-update-container">
+        <div class="row">
+            <card :title="$t('pages.softwareUpdate.autoUpdate')" class="item" @onClick="updateAutoSoftwareUpdate(!autoSoftwareUpdate)">
+                <template v-slot:rightIcon>
+                    <switch-toggle v-model="autoSoftwareUpdate" @onToggle="updateAutoSoftwareUpdate"></switch-toggle>
+                </template>
+            </card>
+            <div class="description">
+                <div class="text">
+                    {{$t('pages.softwareUpdate.description')}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <card :alwaysExpanded="true" class="item" @onClick="updateAutoSoftwareUpdate(!autoSoftwareUpdate)">
+                <template v-slot:title>
+                    <div class="version message">
+                        {{message}}:
+                    </div>
+                    <div v-if="!isNewVersionAvailable">
+                        <div class="version current">
+                            {{$t('pages.softwareUpdate.installedVersion')}}: 1.0.0
+                        </div>
+                    </div>
+                    <div v-if="isNewVersionAvailable">
+                        <div class="version new">
+                            {{$t('common.release')}} 2.0.0
+                        </div>
+                        <div class="version current">
+                            {{$t('pages.softwareUpdate.installedVersion')}}: 1.0.0
+                        </div>
+                        <div class="update-btn-container">
+                            <action-button :text="$t('pages.softwareUpdate.update')" :primary="false" @onClick="update()"></action-button>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:body>
+                    <div class="check-new-version-btn-container">
+                        <action-button :text="$t('pages.softwareUpdate.checkForUpdate')" :primary="false" @onClick="checkForUpdate()"></action-button>
+                    </div>
+                </template>
+            </card>
+        </div>
+    </div>
+</div>

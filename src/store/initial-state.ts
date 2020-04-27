@@ -5,6 +5,7 @@ import entities from './entities/initial-state';
 import profiles from './profiles/initial-state';
 import pages from './pages/initial-state';
 import groups from './groups/initial-state';
+import settings from './settings/initial-state';
 
 const initialState: IState = {
 	config,
@@ -12,7 +13,8 @@ const initialState: IState = {
 	entities,
 	profiles,
 	pages,
-	groups
+	groups,
+	settings
 };
 
 export default initialState;

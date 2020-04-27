@@ -1,5 +1,5 @@
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import { IKeyValuePair, IEntity, IConfigState, IIntegration, IIntegrationSchema, IProfile, IPage, IGroup } from '../types';
+import { IKeyValuePair, IEntity, IConfigState, IIntegration, IIntegrationSchema, IProfile, IPage, IGroup, ILanguageSetting } from '../types';
 
 const actions = {
 	// Config
@@ -22,6 +22,9 @@ const actions = {
 
 	// Groups
 	setGroups: createStandardAction('store/groups/set-all')<IKeyValuePair<IGroup>>(),
+
+	// Settings
+	setLanguages: createStandardAction('store/settings/set-languages')<ILanguageSetting[]>(),
 };
 
 export default actions;

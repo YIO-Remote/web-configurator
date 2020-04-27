@@ -19,7 +19,7 @@
         </li>
         <li>
             <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="group-item drop-zone group" @add="onGroupDropped">
-                Drag a group here
+                {{$t('components.editPage.dropZone')}}
             </draggable>
         </li>
     </ul>

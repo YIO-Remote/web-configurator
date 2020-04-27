@@ -3,6 +3,11 @@
 	font-family: OpenSans-Light;
 	font-size:  12px;
 
+	.ps {
+		height: 200px;
+		border-radius: 8px;
+	}
+
 	.selected-item {
 		cursor: pointer;
 		width: 100%;

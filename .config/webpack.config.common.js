@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
+const pkg = require('../package.json');
 
 module.exports = {
     context: path.resolve(__dirname, '../src'),
@@ -37,6 +38,9 @@ module.exports = {
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             template: 'index.html'
+        }),
+        new webpack.DefinePlugin({
+            'process.env.__VERSION__': JSON.stringify(pkg.version)
         })
     ]
 };

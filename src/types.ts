@@ -50,6 +50,11 @@ export interface IKeyValuePair<T> {
 	[key: string]: T;
 }
 
+export interface ILanguageSetting {
+	name: string;
+	id: string;
+}
+
 export interface ISettings {
 	language: string;
 	autobrightness: boolean;
@@ -126,6 +131,10 @@ export interface IUiConfig {
 	groups: IKeyValuePair<IGroup>;
 }
 
+export interface ISettingsState {
+	languages: ILanguageSetting[];
+}
+
 export interface IConfigState {
 	settings: ISettings;
 	ui_config: IUiConfig;
@@ -134,9 +143,8 @@ export interface IConfigState {
 }
 
 export interface IIntegrationSchema {
-	default: any;
 	description: string;
-	examples: any[];
+	examples: string[];
 	friendly_name: string;
 	id: string;
 	properties: IKeyValuePair<IIntegrationSchema>;
@@ -175,6 +183,7 @@ export interface IState {
 	profiles: IProfilesState;
 	pages: IPagesState;
 	groups: IGroupsState;
+	settings: ISettingsState;
 }
 
 export interface IEntityAggregate {
@@ -210,14 +219,58 @@ export interface IProfileAggregate {
 
 // Locale
 export interface ILocale extends LocaleMessageObject {
-	settingsPage: {
-		darkMode: string;
-		autoBrightness: string;
-	};
-	disconnectionOverlay: {
+	header: {
 		title: string;
-		message: string;
-		reconnecting: string;
+		version: string;
+	};
+	menu: {
+		integrations: string;
+		entities: string;
+		profiles: string;
+		settings: string;
+		irLearning: string;
+		softwareUpdate: string;
+		advanced: string;
+	};
+	components: {
+
+	};
+	general: {
+		settings: string;
+		name: string;
+		type: string;
+		save: string;
+		cancel: string;
+		pleaseSelect: string;
+	};
+	pages: {
+		integrations: {
+			configuredIntegrations: string;
+			discoveredIntegrations: string;
+			addIntegration: string;
+			newIntegration: string;
+		};
+		entities: {
+			title: string;
+			availableEntities: string;
+		};
+		profiles: {};
+		irLearning: {};
+		softwareUpdate: {};
+		advanced: {};
+		settings: {
+			darkMode: {
+				title: string;
+			};
+			autoBrightness: {
+				title: string;
+				description: string;
+			};
+			autoSoftware: {
+				key: string;
+				description: string;
+			};
+		}
 	};
 }
 
@@ -231,6 +284,7 @@ export interface IServerResponse {
 
 export interface IServerResponseWithData<T> extends IServerResponse {
 	config: T;
+	languages: T;
 	groups: T;
 	pages: T;
 	profiles: T;
@@ -243,13 +297,13 @@ export interface IServerResponseWithData<T> extends IServerResponse {
 // Plugins
 export interface IMenuPlugin {
 	isVisible: boolean;
-	instance?: any;
+	instance?: Vue;
 }
 
 export interface IContextMenu {
 	getComponent<T extends Vue>(): T;
 	hide(): void;
-	show<T extends object>(component: VueConstructor<Vue>, props: T): void;
+	show<T extends object>(root: Vue, component: VueConstructor<Vue>, props: T): void;
 }
 
 export interface IToastOptions {
@@ -300,4 +354,19 @@ export interface IYioTableComponent extends Vue {
 export interface IDropDownItem {
 	text: string;
 	value: string;
+}
+
+export interface IVueAce extends Element {
+	$ace: IAceEditor;
+}
+
+export interface IAceEditor {
+	getSession(): IAceEditorSession;
+	setValue(value: string): void;
+	resize(): void;
+}
+
+export interface IAceEditorSession {
+	getValue(): string;
+	foldAll(index: number): void;
 }
