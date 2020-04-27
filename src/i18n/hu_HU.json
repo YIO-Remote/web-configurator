@@ -1,17 +1,17 @@
 {
 	"overlays": {
 		"disconnection": {
-			"title": "Oh No!",
+			"title": "Jaj, ne!",
 			"message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
 			"reconnecting": "Reconnecting"
 		}
 	},
 	"common": {
-		"id": "ID",
-		"save": "Save",
-		"cancel": "Cancel",
-		"create": "Create",
-		"name": "Name",
+		"id": "Azonosító",
+		"save": "Mentés",
+		"cancel": "Mégse",
+		"create": "Létrehoz",
+		"name": "Név",
 		"pleaseSelect": "Please Select",
 		"settings": "Settings",
 		"type": "Type",
