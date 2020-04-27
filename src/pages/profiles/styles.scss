@@ -13,6 +13,16 @@
 	.ps {
 		height: 100%;
 	}
+
+	.add-item {
+		font-size: 12px;
+		margin: 10px 0;
+	}
+
+	.remove-profile-button {
+		margin: 10px 0 0 0;
+		float: right;
+	}
 }
 
 /deep/ .card .card {

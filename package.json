@@ -43,6 +43,7 @@
   "dependencies": {
     "browser-lang": "^0.1.0",
     "core-js": "^3.4.7",
+    "guid-typescript": "^1.0.9",
     "object-hash": "^2.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",

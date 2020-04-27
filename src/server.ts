@@ -1,5 +1,6 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 import { BehaviorSubject } from 'rxjs';
+import { Guid } from 'guid-typescript';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
 import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting } from './types';
@@ -168,6 +169,20 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	public addNewProfile(name: string) {
+		const profile = {
+			[`${Guid.create()}`]: {
+				name,
+				favorites: [],
+				pages: []
+			}
+		};
+
+		return this.sendMessage({ type: 'add_profile', profile })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public getProfiles() {
 		return this.sendMessage<IKeyValuePair<IProfile>>({ type: 'get_all_profiles'})
 			.then((response) => response.profiles)
@@ -180,9 +195,9 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
-	public updateProfile(profile: IProfileAggregate) {
+	public renameProfile(profile: IProfileAggregate, name: string) {
 		const data = {
-			name: profile.name,
+			name,
 			favorites: profile.favorites.map((entity) => entity.entity_id),
 			pages: profile.pages.map((page) => page.id)
 		};
@@ -193,7 +208,7 @@ export class ServerConnection {
 	}
 
 	public deleteProfile(profile: IProfileAggregate) {
-		return this.sendMessage({ type: 'remove_page', profile_id: profile.id })
+		return this.sendMessage({ type: 'remove_profile', profile_id: profile.id })
 			.then((response) => response)
 			.catch((response) => this.showToast(response));
 	}
@@ -416,6 +431,20 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	public addNewPage(name: string) {
+		const page = {
+			[`${Guid.create()}`]: {
+				name,
+				image: '',
+				groups: []
+			}
+		};
+
+		return this.sendMessage({ type: 'add_page', page })
+			.then((response) => this.showToast(response))
+			.catch((response) => this.showToast(response));
+	}
+
 	public getPages() {
 		return this.sendMessage<IKeyValuePair<IPage>>({ type: 'get_all_pages'})
 			.then((response) => response.pages)
@@ -425,6 +454,19 @@ export class ServerConnection {
 	public deletePage(page: IPageAggregate) {
 		return this.sendMessage({ type: 'remove_page', page_id: page.id })
 			.then((response) => response)
+			.catch((response) => this.showToast(response));
+	}
+
+	public addNewGroup(name: string) {
+		const group = {
+			[`${Guid.create()}`]: {
+				name,
+				entities: []
+			}
+		};
+
+		return this.sendMessage({ type: 'add_group', group })
+			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
 	}
 
@@ -449,6 +491,7 @@ export class ServerConnection {
 	public setLanguage(language: string) {
 		return this.sendMessage({ type: 'set_language', language })
 			.then((response) => this.showToast(response))
+			.then(() => this.store.dispatch(this.store.actions.setLanguage(language)))
 			.catch((response) => this.showToast(response));
 	}
 

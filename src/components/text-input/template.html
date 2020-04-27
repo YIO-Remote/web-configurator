@@ -1,0 +1,14 @@
+<div class="textbox-container">
+    <div class="readonly-container" v-if="!isInEditMode">
+        <div class="value">{{editValue}}</div>
+        <div class="rename-button" @click.stop="onEdit()">
+            {{$t('common.rename')}}
+        </div>
+    </div>
+    <div class="edit-container" v-if="isInEditMode">
+        <input class="textbox" type="text" v-model="editValue" :placeholder="watermark" @click.stop />
+        <div class="ok-button" @click.stop="onSave()">
+            {{$t('common.ok')}}
+        </div>
+    </div>
+</div>

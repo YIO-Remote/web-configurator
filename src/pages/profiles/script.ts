@@ -14,6 +14,7 @@ import ActionButton from '../../components/action-button/index.vue';
 import EditFavorites from '../../components/remote-control-screens/edit-favorites/index.vue';
 import EditPage from '../../components/remote-control-screens/edit-page/index.vue';
 import TabContainer from '../../components/tabs/tab-container/script';
+import TextInput from '../../components/text-input/index.vue';
 
 @Component({
 	name: 'ProfilesPage',
@@ -25,7 +26,8 @@ import TabContainer from '../../components/tabs/tab-container/script';
 		ActionButton,
 		EditFavorites,
 		EditPage,
-		Draggable
+		Draggable,
+		TextInput
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
@@ -94,6 +96,18 @@ export default class ProfilesPage extends Vue {
 			badge: true,
 			selected: isSelected
 		};
+	}
+
+	public onAddNewProfile(value: string) {
+		this.server.addNewProfile(value).then(() => this.newProfileName = '');
+	}
+
+	public onDeleteProfile(profile: IProfileAggregate) {
+		this.server.deleteProfile(profile);
+	}
+
+	public onRenameProfile(profile: IProfileAggregate, value: string) {
+		this.server.renameProfile(profile, value);
 	}
 
 	public onProfileSelected(profile: IProfileAggregate, index: number) {

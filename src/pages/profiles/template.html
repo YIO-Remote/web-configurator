@@ -5,8 +5,14 @@
     <div class="profiles">
         <div class="profiles-container">
             <perfect-scrollbar>
+                <div class="add-item">
+                    <text-input :value="newProfileName" :watermark="$t('pages.profiles.addNewProfile')" :editMode="true" @onSave="onAddNewProfile"></text-input>
+                 </div>
                 <card-list @onSelected="onProfileSelected">
-                    <card v-for="profile in profiles" :title="profile.name" :key="profile.id" :data="profile">
+                    <card v-for="profile in profiles" :key="profile.id" :data="profile">
+                        <template v-slot:title>
+                            <text-input class="title" :value="profile.name" @onSave="(value) => onRenameProfile(profile, value)"></text-input>
+                        </template>
                         <template v-slot:leftIcon="{ isSelected }">
                             <div :class="getBadgeClasses(isSelected)">
                                 {{profile.initial}}
@@ -24,22 +30,10 @@
                                     {{$t('pages.profiles.profileList.dropZone')}}
                                 </draggable>
                             </div>
+                            <action-button class="remove-profile-button" :text="$t('common.delete')" @onClick="onDeleteProfile(profile)"></action-button>
                         </template>
                     </card>
                 </card-list>
-                <card :title="$t('pages.profiles.newProfile.title')">
-                    <template v-slot:leftIcon>
-                        <div class="badge">
-                            +
-                        </div>
-                    </template>
-                    <template v-slot:body>
-                        <div class="new-profile-container">
-                            <input class="name-input" type="text" v-model="newProfileName" />
-                            <action-button class="create-button" :text="$t('common.create')" @onClick="createNewProfile()"></action-button>
-                        </div>
-                    </template>
-                </card>
             </perfect-scrollbar>
         </div>
         <remote-control :message="remoteMessage">

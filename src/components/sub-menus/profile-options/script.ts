@@ -9,6 +9,7 @@ import TabContainer from '../../tabs/tab-container/index.vue';
 import Tab from '../../tabs/tab/index.vue';
 import CardList from '../../card-list/index.vue';
 import SmallCard from '../../small-card/index.vue';
+import TextInput from '../../text-input/index.vue';
 import { IPageAggregate, IGroupAggregate } from '../../../types';
 import { ServerConnection } from '../../../server';
 
@@ -20,7 +21,8 @@ import { ServerConnection } from '../../../server';
 		CardList,
 		SmallCard,
 		Drag,
-		Draggable
+		Draggable,
+		TextInput
 	},
 	subscriptions(this: ProfileOptions) {
 		return {
@@ -38,6 +40,8 @@ export default class ProfileOptions extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
+	public newPageName: string = '';
+	public newGroupName: string = '';
 	public pagesDragOptions = {
 		disabled: false,
 		sort: false,
@@ -81,8 +85,16 @@ export default class ProfileOptions extends Vue {
 		return (page.id === 'favorites' || page.id === 'settings') ? '' : 'delete';
 	}
 
+	public onAddNewPage(name: string) {
+		this.server.addNewPage(name).then(() => this.newPageName = '');
+	}
+
 	public onDeletePage(page: IPageAggregate) {
 		this.server.deletePage(page);
+	}
+
+	public onAddNewGroup(name: string) {
+		this.server.addNewGroup(name).then(() => this.newGroupName = '');
 	}
 
 	public onDeleteGroup(group: IGroupAggregate) {

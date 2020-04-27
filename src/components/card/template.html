@@ -15,7 +15,7 @@
             </slot>
         </div>
     </div>
-    <div :class="bodyContainerClasses" v-if="hasBodyContent">
+    <div :class="bodyContainerClasses" v-if="hasBodyContent" @click.stop>
         <slot name="body" class="body" :is-selected="isSelected"></slot>
     </div>
 </div>

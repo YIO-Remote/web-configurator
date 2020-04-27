@@ -11,12 +11,15 @@
 		"save": "Save",
         "cancel": "Cancel",
         "create": "Create",
+        "delete": "Delete",
         "name": "Name",
 		"pleaseSelect": "Please Select",
 		"settings": "Settings",
 		"type": "Type",
 		"version": "Version",
-		"release": "Release"
+		"release": "Release",
+		"rename": "Rename",
+		"ok": "OK"
 	},
 	"header": {
         "title": "Web Configurator"
@@ -40,6 +43,8 @@
 		"profileOptions" : {
 			"pagesTab": {
 				"title": "Pages",
+				"addNewPage": "Add A New Page",
+				"addNewGroup": "Add A New Group",
 				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
 				"availablePages": "Available Pages"
 			},
@@ -67,9 +72,10 @@
 			"availableEntities": "Available Entities"
 		},
 		"profiles": {
-            "title": "Profiles",
+			"title": "Profiles",
+			"addNewProfile": "Add A New Profile",
             "profileList": {
-                "title": "Pages",
+				"title": "Pages",
                 "dropZone": "Drag a page here"
 			},
 			"newProfile": {

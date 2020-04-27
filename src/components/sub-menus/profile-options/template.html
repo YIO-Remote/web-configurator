@@ -1,6 +1,12 @@
 <TabContainer ref="tabs">
    <Tab :name="$t('components.profileOptions.pagesTab.title')">
       <perfect-scrollbar>
+         <div class="add-item">
+            <div class="title">
+               {{$t('components.profileOptions.pagesTab.addNewPage')}}
+            </div>
+            <text-input :value="newPageName" :editMode="true" @onSave="onAddNewPage"></text-input>
+         </div>
          <div class="items-container">
             <div class="items-description">
                {{$t('components.profileOptions.pagesTab.message')}}
@@ -28,6 +34,12 @@
    </Tab>
    <Tab :name="$t('components.profileOptions.groupsTab.title')">
       <perfect-scrollbar>
+         <div class="add-item">
+            <div class="title">
+               {{$t('components.profileOptions.pagesTab.addNewGroup')}}
+            </div>
+            <text-input :value="newGroupName" :editMode="true" @onSave="onAddNewGroup"></text-input>
+         </div>
          <div class="items-container">
             <div class="items-description">
                {{$t('components.profileOptions.groupsTab.message')}}

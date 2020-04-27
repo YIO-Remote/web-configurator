@@ -1,0 +1,50 @@
+.textbox-container {
+  font-family: OpenSans;
+}
+
+.readonly-container {
+  display: flex;
+
+  .value {
+    width: calc(100% - 50px);
+  }
+
+  .rename-button {
+    cursor: pointer;
+    font-size: 10px;
+    width: 50px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    opacity: 0.5;
+    padding: 2px 0 0 10px;
+  }
+}
+
+.edit-container {
+  display: flex;
+  width: 100%;
+  position: relative;
+  background: #000000;
+  border-radius: 8px;
+  padding: 5px 5px 5px 10px;
+
+  .textbox {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #FFFFFF;
+    font-size: inherit;
+    font-family: inherit;
+    opacity: 0.5;
+  }
+  
+  .ok-button {
+    cursor: pointer;
+    background: #313247;
+    padding: 6px;
+    border-radius: 8px;
+    font-size: 10px;
+  }
+}
