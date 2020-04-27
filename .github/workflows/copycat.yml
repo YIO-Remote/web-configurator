@@ -1,0 +1,22 @@
+name: Copy translation master file
+on:
+  push:
+    branches:
+      - master
+jobs:
+  copycat:
+    name: Copycat
+    runs-on: ubuntu-latest
+    steps:
+    - name: Copycat
+      uses: andstor/copycat-action@v3
+      with:
+        dst_branch: master
+        dst_owner: YIO-Remote
+        dst_repo_name: translations
+        dst_path: web-configurator/en_US.json
+        personal_token: ${{ secrets.GH_TOKEN }}
+        src_branch: master
+        src_path: src/i18n/en_US.json
+        username: Workflow
+        email: hello@yio-remote.com
