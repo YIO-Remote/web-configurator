@@ -64,6 +64,25 @@
 	}
 }
 
+.search-container {
+	display: flex;
+	flex-direction: row;
+	margin: 20px 0 10px 0;
+	
+	.icon-container {
+		width: 30px;
+
+		/deep/ .icon {
+			font-size: 25px;
+		}
+	}
+
+	.search-input {
+		width: 100%;
+		font-size: 0.75rem;
+	}
+}
+
 .flip-list-move {
 	transition: transform 0.5s;
 }

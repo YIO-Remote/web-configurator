@@ -65,8 +65,15 @@
             <div class="items-description">
                {{$t('components.profileOptions.entitiesTab.message')}}
             </div>
+            <div class="search-container">
+               <text-input class="search-input" :watermark="$t('components.profileOptions.entitiesTab.searchWatermark')" mode="input" @input="onFilterChanged()" v-model="entitySearchName">
+                  <template slot="icon">
+                     <icon type="search"></icon>
+                  </template>
+               </text-input>
+            </div>
             <ul>
-               <li v-for="(entities, entityType) in groupedEntities" :key="entityType">
+               <li v-for="(entities, entityType) in filteredGroupedEntities" :key="entityType">
                   <div class="items-list-title">
                      {{entityType}}
                   </div>

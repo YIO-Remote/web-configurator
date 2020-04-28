@@ -49,7 +49,8 @@
 		"release": "Release",
 		"rename": "Rename",
 		"ok": "OK",
-		"authenticate": "Authenticate"
+		"authenticate": "Authenticate",
+		"search": "Search"
 	},
 	"header": {
         "title": "Web Configurator"
@@ -96,7 +97,8 @@
 			},
 			"entitiesTab": {
 				"title": "Entities",
-				"message": "Drag entities to the remote view to add them to favorites or a group."
+				"message": "Drag entities to the remote view to add them to favorites or a group.",
+				"searchWatermark": "Search For Entities..."
 			}
 		}
 	},

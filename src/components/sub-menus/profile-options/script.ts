@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Drag } from 'vue-drag-drop';
+import Fuse from 'fuse.js';
 import Draggable from 'vuedraggable';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
-import { IPageAggregate, IGroupAggregate } from '../../../types';
+import { IPageAggregate, IGroupAggregate, IKeyValuePair, IEntityAggregate } from '../../../types';
 import { ServerConnection } from '../../../server';
 import ITabContainer from '../../tabs/tab-container/script';
 import TabContainer from '../../tabs/tab-container/index.vue';
@@ -42,6 +43,10 @@ export default class ProfileOptions extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
+	public entities: IEntityAggregate[];
+	public groupedEntities: IKeyValuePair<IEntityAggregate[]>;
+	public filteredGroupedEntities: IKeyValuePair<IEntityAggregate[]> = {};
+	public entitySearchName: string = '';
 	public newPageName: string = '';
 	public newGroupName: string = '';
 	public pagesDragOptions = {
@@ -78,6 +83,11 @@ export default class ProfileOptions extends Vue {
 		}
 	};
 
+	public mounted() {
+		this.filteredGroupedEntities = this.groupedEntities;
+		this.onFilterChanged();
+	}
+
 	public selectTab(index: number) {
 		const tabs = this.$refs.tabs as ITabContainer;
 		tabs.selectTab(index);
@@ -85,6 +95,26 @@ export default class ProfileOptions extends Vue {
 
 	public getIconType(page: IPageAggregate) {
 		return (page.id === 'favorites' || page.id === 'settings') ? '' : 'delete';
+	}
+
+	public onFilterChanged() {
+		console.log(this.entitySearchName);
+		if (!this.entitySearchName) {
+			this.filteredGroupedEntities = this.groupedEntities;
+			return;
+		}
+
+		const fuse = new Fuse(this.entities, {
+			keys: ['friendly_name'],
+			threshold: 0.3
+		});
+
+		const results = fuse.search<IEntityAggregate>(this.entitySearchName).map((result) => result.item);
+		this.filteredGroupedEntities = results.reduce((groups, entity) => {
+			groups[entity.type] = groups[entity.type] || [];
+			groups[entity.type].push(entity);
+			return groups;
+		}, {} as IKeyValuePair<IEntityAggregate[]>);
 	}
 
 	public onAddNewPage(name: string) {

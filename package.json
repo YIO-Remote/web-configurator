@@ -45,6 +45,7 @@
     "axios": "^0.19.2",
     "browser-lang": "^0.1.0",
     "core-js": "^3.4.7",
+    "fuse.js": "^5.2.3",
     "guid-typescript": "^1.0.9",
     "object-hash": "^2.0.1",
     "query-string": "^6.12.1",
