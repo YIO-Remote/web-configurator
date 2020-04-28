@@ -7,7 +7,7 @@
                     {{title}}
                 </div>
             </div>
-            <icon v-if="!showButtons" class="close-icon" type="close" @onClick.stop="onButtonClick(true)"></icon>
+            <icon v-if="!showButtons && !static" class="close-icon" type="close" @onClick.stop="onButtonClick(true)"></icon>
         </div>
         <p class="message">
             {{message}}

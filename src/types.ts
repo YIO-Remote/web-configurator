@@ -304,7 +304,8 @@ export interface IDialogPlugin {
 export interface IDialogOptions {
 	title: string;
 	message: string;
-	showButtons: boolean;
+	showButtons?: boolean;
+	static?: boolean;
 }
 
 export interface IMenuPlugin {

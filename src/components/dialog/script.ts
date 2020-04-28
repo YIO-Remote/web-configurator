@@ -36,6 +36,13 @@ export default class Dialog extends Vue {
 		default: true
 	})
 	public showButtons: boolean;
+
+	@Prop({
+		type: Boolean,
+		required: false,
+		default: false
+	})
+	public static: boolean;
 	public promise: Promise<boolean>;
 	public resolve: () => void;
 	public reject: () => void;
@@ -57,7 +64,7 @@ export default class Dialog extends Vue {
 	}
 
 	public onBackgroundClick() {
-		if (!this.showButtons) {
+		if (!this.showButtons && !this.static) {
 			this.onButtonClick(true);
 		}
 	}

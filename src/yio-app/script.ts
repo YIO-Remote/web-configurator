@@ -23,7 +23,8 @@ export default class YioApp extends Vue {
 				this.$dialog.info({
 					title: this.$t('dialogs.disconnection.title').toString(),
 					message: this.$t('dialogs.disconnection.message').toString(),
-					showButtons: false
+					showButtons: false,
+					static: true
 				});
 			} else {
 				this.$dialog.close();
