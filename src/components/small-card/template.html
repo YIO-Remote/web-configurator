@@ -1,7 +1,9 @@
 <div :class="classes" @click="onClick()">
     <div class="card-face">
         <div class="title-container">
-            <span class="title">{{title}}</span>
+            <slot name="title" :is-selected="isSelected">
+                <span class="title">{{title}}</span>
+            </slot>
         </div>
         <div class="right-icon-container">
             <action-icon-button v-if="hasRightIconContent" :type="iconType" @onClick.self="onIconClick()"></action-icon-button>

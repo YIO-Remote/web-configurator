@@ -142,7 +142,6 @@ export class ServerConnection {
 	public addIntegration(config: IIntegrationInstance) {
 		return this.sendMessage({type: 'add_integration', config})
 			.then((response) => this.showToast(response))
-			.then(() => this.reboot())
 			.catch((response) => this.showToast(response));
 	}
 

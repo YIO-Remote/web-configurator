@@ -19,7 +19,7 @@
         </template>
         <template v-slot:item="{ item }">
             <td>
-                <span class="icon" :class="item.type"></span>
+                <icon :type="item.type"></icon>
             </td>
             <td>
                  {{item.friendly_name}}

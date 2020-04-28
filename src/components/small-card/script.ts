@@ -12,7 +12,8 @@ import { ICardListComponent } from '../../types';
 export default class SmallCard extends Vue {
 	@Prop({
 		type: String,
-		required: true
+		required: false,
+		default: ''
 	})
 	public title: string;
 

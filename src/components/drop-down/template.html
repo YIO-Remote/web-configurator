@@ -1,7 +1,7 @@
 <div class="drop-down">
     <div class="selected-item" @click="onToggle()">
         <span>{{selected.text}}</span>
-        <i class="arrow" :class="{ down: !isOpen, up: isOpen }"></i>
+        <span class="arrow" :class="{ down: !isOpen, up: isOpen }"></span>
     </div>
     <ul class="items" v-if="isOpen">
         <perfect-scrollbar>

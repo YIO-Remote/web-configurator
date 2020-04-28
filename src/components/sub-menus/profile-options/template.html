@@ -47,8 +47,8 @@
                      <small-card v-for="group in groups" :key="group.id" :data-id="group.id" :title="group.name" :iconType="'delete'" @onIconClick="onDeleteGroup(group)">
                         <template v-slot:body>
                            <ul>
-                              <li v-for="entity in group.entities" :key="entity.entity_id">
-                                 {{entity.friendly_name}}
+                              <li class="group-entity" v-for="entity in group.entities" :key="entity.entity_id">
+                                 <icon :type="entity.type"></icon>{{entity.friendly_name}}
                               </li>
                            </ul>
                      </template>
@@ -73,7 +73,13 @@
                   <div class="items-list">
                      <draggable class="list-group" v-bind="entitiesDragOptions" :list="entities">
                         <transition-group type="transition">
-                           <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity" :title="entity.friendly_name"></small-card>
+                           <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity">
+                              <template slot="title">
+                                 <div class="title entity">
+                                    <icon :type="entity.type"></icon>{{entity.friendly_name}}
+                                 </div>
+                              </template>
+                           </small-card>
                         </transition-group>
                      </draggable>
                   </div>

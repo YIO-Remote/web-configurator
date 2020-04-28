@@ -40,6 +40,30 @@
 	}
 }
 
+.entity, .group-entity {
+	display: flex;
+}
+
+.entity {
+	.icon-container {
+		width: 40px;
+
+		/deep/ .icon {
+			font-size: 30px;
+		}
+	}
+}
+
+.group-entity {
+	.icon-container {
+		width: 22px;
+
+		/deep/ .icon {
+			font-size: 20px;
+		}
+	}
+}
+
 .flip-list-move {
 	transition: transform 0.5s;
 }

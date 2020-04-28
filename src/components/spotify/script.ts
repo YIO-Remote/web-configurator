@@ -89,7 +89,7 @@ export default class Spotify extends Vue {
 			friendly_name: this.name,
 			type: 'spotify',
 			data: {
-				entity_id: `${Guid.create()}`,
+				entity_id: `spotify_${`${Guid.create()}`.substr(0, 4)}`,
 				client_id: this.clientId,
 				client_secret: this.clientSecret,
 				access_token: this.accessToken

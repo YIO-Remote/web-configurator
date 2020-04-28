@@ -1,0 +1,14 @@
+<div class="dialog">
+    <div class="container">
+        <h1 class="title">
+            {{title}}
+        </h1>
+        <p class="message">
+            {{message}}
+        </p>
+        <p class="buttons" v-if="showButtons">
+            <action-button :name="$t('common.ok')" @onClick="onConfirm()"></action-button>
+            <action-button :name="$t('common.cancel')" @onClick="onCancel()"></action-button>
+        </p>
+    </div>
+</div>

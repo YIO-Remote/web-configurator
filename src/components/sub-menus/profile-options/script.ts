@@ -4,14 +4,15 @@ import { Drag } from 'vue-drag-drop';
 import Draggable from 'vuedraggable';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
+import { IPageAggregate, IGroupAggregate } from '../../../types';
+import { ServerConnection } from '../../../server';
 import ITabContainer from '../../tabs/tab-container/script';
 import TabContainer from '../../tabs/tab-container/index.vue';
 import Tab from '../../tabs/tab/index.vue';
 import CardList from '../../card-list/index.vue';
 import SmallCard from '../../small-card/index.vue';
 import TextInput from '../../text-input/index.vue';
-import { IPageAggregate, IGroupAggregate } from '../../../types';
-import { ServerConnection } from '../../../server';
+import Icon from '../../icon/index.vue';
 
 @Component({
 	name: 'ProfileOptions',
@@ -22,7 +23,8 @@ import { ServerConnection } from '../../../server';
 		SmallCard,
 		Drag,
 		Draggable,
-		TextInput
+		TextInput,
+		Icon
 	},
 	subscriptions(this: ProfileOptions) {
 		return {

@@ -11,7 +11,7 @@
         </div>
         <div class="right-icon-container" v-if="hasRightIconContent || hasBodyContent && !alwaysExpanded">
             <slot name="rightIcon" class="icon">
-                <i v-if="!hasRightIconContent" :class="arrowClasses"></i>
+                <span v-if="!hasRightIconContent" :class="arrowClasses"></span>
             </slot>
         </div>
     </div>

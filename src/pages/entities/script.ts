@@ -5,6 +5,7 @@ import { YioStore } from '../../store';
 import { ServerConnection } from '../../server';
 import { IEntity } from '../../types';
 import YioTable from '../../components/table/index.vue';
+import Icon from '../../components/icon/index.vue';
 import ActionIconButton from '../../components/action-icon-button/index.vue';
 import AvailableEntities from '../../components/sub-menus/available-entities/index.vue';
 
@@ -12,6 +13,7 @@ import AvailableEntities from '../../components/sub-menus/available-entities/ind
 	name: 'EntitiesPage',
 	components: {
 		YioTable,
+		Icon,
 		ActionIconButton
 	},
 	subscriptions(this: EntitiesPage) {
