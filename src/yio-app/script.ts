@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { distinctUntilChanged } from 'rxjs/operators';
 import MainMenu from '../components/main-menu/index.vue';
 import { Inject } from '../utilities/dependency-injection';
 import { ServerConnection } from '../server';
@@ -17,7 +18,7 @@ export default class YioApp extends Vue {
 	public previousHeight: string | null;
 
 	public mounted() {
-		this.$subscribeTo(this.server.isConnected$, (isConnected) => {
+		this.$subscribeTo(this.server.isConnected$.pipe(distinctUntilChanged()), (isConnected) => {
 			if (!isConnected) {
 				this.$dialog.info({
 					title: this.$t('dialogs.disconnection.title').toString(),
