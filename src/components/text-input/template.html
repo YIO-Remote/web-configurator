@@ -1,13 +1,26 @@
 <div class="textbox-container">
+    <div class="label" v-if="hasLabel">
+        {{label}}
+    </div>
     <div class="readonly-container" v-if="!isInEditMode">
         <div class="value">{{editValue}}</div>
         <div class="rename-button" @click.stop="onEdit()">
             {{$t('common.rename')}}
         </div>
     </div>
-    <div class="edit-container" v-if="isInEditMode" @keyup.enter="onSave()">
-        <input class="textbox" type="text" v-model="editValue" :placeholder="watermark" @click.stop />
-        <div class="ok-button" @click.stop="onSave()">
+    <div class="edit-container" v-if="isInEditMode" @keyup.enter="onSave()" :class="{ 'input-mode': isInInputMode }">
+        <input
+            ref="input"
+            class="textbox"
+            :class="{ 'disabled': disabled }"
+            type="text"
+            v-model="editValue"
+            :placeholder="watermark"
+            :disabled="disabled"
+            @input="onChange()"
+            @focus="onFocus($event)"
+            @click.stop />
+        <div v-if="!isInInputMode" class="ok-button" @click.stop="onSave()">
             {{$t('common.ok')}}
         </div>
     </div>

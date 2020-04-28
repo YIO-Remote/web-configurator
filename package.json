@@ -20,6 +20,7 @@
   "homepage": "https://github.com/YIO-Remote/web-configurator#readme",
   "devDependencies": {
     "@types/ace": "0.0.43",
+    "@types/query-string": "^6.3.0",
     "css-loader": "^3.2.0",
     "fibers": "^4.0.2",
     "file-loader": "^4.2.0",
@@ -41,10 +42,12 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "browser-lang": "^0.1.0",
     "core-js": "^3.4.7",
     "guid-typescript": "^1.0.9",
     "object-hash": "^2.0.1",
+    "query-string": "^6.12.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "typesafe-actions": "^3.0.0",

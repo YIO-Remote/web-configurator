@@ -2,7 +2,7 @@
    <Tab :name="$t('components.profileOptions.pagesTab.title')">
       <perfect-scrollbar>
          <div class="add-item">
-            <text-input :value="newPageName" :watermark="$t('components.profileOptions.pagesTab.addNewPage')" :editMode="true" @onSave="onAddNewPage"></text-input>
+            <text-input :value="newPageName" :watermark="$t('components.profileOptions.pagesTab.addNewPage')" mode="edit" @onSave="onAddNewPage"></text-input>
          </div>
          <div class="items-container">
             <div class="items-description">
@@ -32,7 +32,7 @@
    <Tab :name="$t('components.profileOptions.groupsTab.title')">
       <perfect-scrollbar>
          <div class="add-item">
-            <text-input :value="newGroupName" :watermark="$t('components.profileOptions.pagesTab.addNewGroup')" :editMode="true" @onSave="onAddNewGroup"></text-input>
+            <text-input :value="newGroupName" :watermark="$t('components.profileOptions.pagesTab.addNewGroup')" mode="edit" @onSave="onAddNewGroup"></text-input>
          </div>
          <div class="items-container">
             <div class="items-description">

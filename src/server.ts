@@ -142,6 +142,7 @@ export class ServerConnection {
 	public addIntegration(config: IIntegrationInstance) {
 		return this.sendMessage({type: 'add_integration', config})
 			.then((response) => this.showToast(response))
+			.then(() => this.reboot())
 			.catch((response) => this.showToast(response));
 	}
 
@@ -154,6 +155,7 @@ export class ServerConnection {
 	public removeIntegration(id: string) {
 		return this.sendMessage({type: 'remove_integration', integration_id: id })
 			.then((response) => this.showToast(response))
+			.then(() => this.reboot())
 			.catch((response) => this.showToast(response));
 	}
 
@@ -490,6 +492,11 @@ export class ServerConnection {
 		return this.sendMessage({ type: 'set_language', language })
 			.then((response) => this.showToast(response))
 			.then(() => this.store.dispatch(this.store.actions.setLanguage(language)))
+			.catch((response) => this.showToast(response));
+	}
+
+	public reboot() {
+		return this.sendMessage({ type: 'reboot' })
 			.catch((response) => this.showToast(response));
 	}
 

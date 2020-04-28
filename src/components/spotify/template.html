@@ -1,0 +1,51 @@
+<div class="spotify-configuration">
+    <div class="instructions">
+        <span v-if="!isInAuthenticationCycle">
+            {{$t('components.spotify.message')}}
+        </span>
+        <ol type="1" class="instruction-steps" v-if="!isInAuthenticationCycle">
+            <li class="instruction-step">
+                {{$t('components.spotify.stepOne')}}
+                <a href="https://developer.spotify.com/dashboard/login" target="_blank">here</a>
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepTwo')}}
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepThree')}}
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepFour')}}
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepFive')}} <span class="bold selectable">{{redirectUrl}}</span>
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepSix')}}
+            </li>
+            <li class="instruction-step">
+                {{$t('components.spotify.stepSeven')}}
+            </li>
+        </ol>
+        <div class="instruction-step" v-if="isInAuthenticationCycle">
+            {{$t('components.spotify.stepEight')}}
+        </div>
+    </div>
+    <div class="setting">
+        <text-input :label="$t('common.name').toLowerCase()" mode="input" v-model="name"></text-input>
+    </div>
+    <div class="setting">
+        <text-input label="client_id" mode="input" v-model="clientId" :disabled="isInAuthenticationCycle"></text-input>
+    </div>
+    <div class="setting">
+        <text-input label="client_secret" mode="input" v-model="clientSecret" :disabled="isInAuthenticationCycle"></text-input>
+    </div>
+    <div class="setting" v-if="isInAuthenticationCycle">
+        <text-input label="access_token" mode="input" v-model="accessToken" :disabled="true"></text-input>
+    </div>
+    <action-button v-if="!isInAuthenticationCycle" :text="$t('common.authenticate')" @onClick="onAuthenticate()"></action-button>
+    <div v-if="isInAuthenticationCycle">
+        <action-button :text="$t('common.save')" :primary="true" @onClick="onSave"></action-button>
+        <action-button class="right-button" :text="$t('common.cancel')" :primary="false" @onClick="onCancel"></action-button>
+    </div>
+</div>

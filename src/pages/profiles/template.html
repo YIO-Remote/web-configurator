@@ -6,7 +6,7 @@
         <div class="profiles-container">
             <perfect-scrollbar>
                 <div class="add-item">
-                    <text-input :value="newProfileName" :watermark="$t('pages.profiles.addNewProfile')" :editMode="true" @onSave="onAddNewProfile"></text-input>
+                    <text-input :value="newProfileName" :watermark="$t('pages.profiles.addNewProfile')" mode="edit" @onSave="onAddNewProfile"></text-input>
                  </div>
                 <card-list @onSelected="onProfileSelected">
                     <card v-for="profile in profiles" :key="profile.id" :data="profile">

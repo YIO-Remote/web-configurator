@@ -19,7 +19,8 @@
 		"version": "Version",
 		"release": "Release",
 		"rename": "Rename",
-		"ok": "OK"
+		"ok": "OK",
+		"authenticate": "Authenticate"
 	},
 	"header": {
         "title": "Web Configurator"
@@ -34,6 +35,17 @@
 		"softwareUpdate": "Software Update"
 	},
 	"components": {
+		"spotify": {
+			"message": "To create the required Spotify application:",
+			"stepOne": "Login to Spotify Developer",
+			"stepTwo": "Visit the My Applications page",
+			"stepThree": "Select Create An App. Enter any name and description",
+			"stepFour": "Once your application is created, view it and copy your Client ID and Client Secret into the input boxes below",
+			"stepFive": "Add the following Redirect URI:",
+			"stepSix": "Click Save after adding the URI",
+			"stepSeven": "Click the Authenticate button (you will be redirect to login into Spotify)",
+			"stepEight": "If you're happy with the name you have provided, hit Save"
+		},
 		"editEntities": {
 			"dropZone": "Drag an entity here"
 		},
@@ -63,8 +75,8 @@
         "integrations": {
 			"configuredIntegrations": "Configured Integrations",
 			"discoveredIntegrations": "Discovered Integrations",
-			"addIntegration": "Add Integrations",
-			"newIntegration": "New Integrations"
+			"addIntegration": "Add Integration",
+			"newIntegration": "New Integration"
 		},
 		"entities": {
 			"title": "Entities Controlled By YIO Remote",

@@ -1,0 +1,44 @@
+.spotify-configuration {
+  font-size: 12px;
+  color: #898994;
+}
+
+a {
+  color: #FFFFFF;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.instructions {
+
+  .instruction-steps {
+    list-style: decimal;
+    margin: 10px;
+
+    .instruction-step {
+      padding: 5px 0;
+    }
+  }
+}
+
+.selectable {
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: text;
+}
+
+.bold {
+  color: #FFFFFF;
+}
+
+.setting {
+  margin: 15px 0;
+}
+
+.right-button {
+  margin-left: 50px;
+}

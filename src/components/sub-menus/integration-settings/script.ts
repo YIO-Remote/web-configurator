@@ -51,11 +51,21 @@ export default class IntegrationSettings extends Vue {
 	}
 
 	public mounted() {
-		console.log(this.supportedIntegrations, this.integration);
 		const selectedIntegration = this.supportedIntegrations[this.integration.type];
 		const properties = selectedIntegration.properties || {};
-		this.properties = { ...properties };
-		this.propertyValues = { ...Object.keys(this.properties).reduce((values, propName) => {
+		const filteredProps = Object.keys(properties)
+			.filter((key) => key !== 'entity_id' && key !== 'access_token')
+			.reduce((values, propName) => {
+				return {
+					...values,
+					[`${propName}`]: properties[propName]
+				};
+			}, {} as IKeyValuePair<IIntegrationSchema>);
+
+		this.properties = { ...filteredProps };
+		this.propertyValues = { ...Object.keys(filteredProps)
+			.filter((key) => key !== 'entity_id' && key !== 'access_token')
+			.reduce((values, propName) => {
 			return {
 				...values,
 				[`${propName}`]: this.integration.data[propName]

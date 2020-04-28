@@ -6,24 +6,16 @@
       </h1>
       <div class="setting">
          <div class="setting-name">
-            {{$t('common.type')}}
+            {{$t('common.type').toLowerCase()}}
          </div>
          <div class="setting-value">
-            <drop-down :message="$t('common.pleaseSelect')" :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
+            <drop-down :selectedValue="selectedValue" :message="$t('common.pleaseSelect')" :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
          </div>
       </div>
-      <div v-if="integrationTypeSelected">
+      <div v-if="integrationTypeSelected && !isIntegrationTypeSelectedSpotify">
          <div class="setting">
             <div class="setting-name">
-               {{$t('common.id')}}
-            </div>
-            <div class="setting-value">
-               <input class="setting-input" type="input" v-model="id" />
-            </div>
-         </div>
-         <div class="setting">
-            <div class="setting-name">
-               {{$t('common.name')}}
+               {{$t('common.name').toLowerCase()}}
             </div>
             <div class="setting-value">
                <input class="setting-input" type="input" v-model="name" />
@@ -37,8 +29,9 @@
                <input class="setting-input" :placeholder="`example: ${property.examples[0]}`" type="text" v-model="propertyValues[key]" />
             </div>
          </div>
+         <action-button :text="$t('common.save')" :primary="true" @onClick="onSave"></action-button>
+         <action-button class="right-button" :text="$t('common.cancel')" :primary="false" @onClick="onCancel"></action-button>
       </div>
-      <action-button :text="$t('common.save')" :primary="true" @onClick="onSave"></action-button>
-      <action-button class="right-button" :text="$t('common.cancel')" :primary="false" @onClick="onCancel"></action-button>
    </div>
+   <spotify v-if="isIntegrationTypeSelectedSpotify"></spotify>
 </div>
