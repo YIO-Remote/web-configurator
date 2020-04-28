@@ -1,41 +1,36 @@
-import Vue, { VueConstructor } from 'vue';
+import { VueConstructor } from 'vue';
+// import Dialog from '../components/dialog/index.vue';
+import { IDialogPlugin, IDialogOptions } from '../types';
 
 export default class DialogPlugin {
 	// tslint:disable-next-line: no-shadowed-variable
 	public static install(Vue: VueConstructor) {
-		Vue.prototype.$menu = Vue.observable({
-			instance: void 0,
+		// const attachToDocument = (dialog: Dialog) => {
+		// 	document.appendChild(dialog.$el);
+		// };
 
-			isVisible: false,
-
-			show<T extends object>(root: Vue, component: VueConstructor<Vue>, propsData?: T) {
-				const element = document.getElementById('sub-menu');
-
-				if (this.instance && element) {
-					this.instance.$destroy();
-					this.instance.$el.remove();
+		Vue.prototype.$dialog = {
+			info(options: IDialogOptions) {
+				if (!options.showButtons) {
+					return Promise.resolve(true);
 				}
+				// if (this.instance && element) {
+				// 	this.instance.$destroy();
+				// 	this.instance.$el.remove();
+				// }
 
-				const Component = Vue.extend(component);
-				this.instance = new Component({ propsData, parent: root });
-				this.instance.$mount();
-				this.isVisible = true;
+				// const Component = Vue.extend(component);
+				// this.instance = new Component({ propsData, parent: root });
+				// this.instance.$mount();
+				// this.isVisible = true;
 
-				if (!element) {
-					this.instance.$destroy();
-					return;
-				}
+				// if (!element) {
+				// 	this.instance.$destroy();
+				// 	return;
+				// }
 
-				element.appendChild(this.instance.$el);
-			},
-
-			hide() {
-				this.isVisible = false;
-			},
-
-			getComponent() {
-				return this.instance;
+				// element.appendChild(this.instance.$el);
 			}
-		});
+		} as IDialogPlugin;
 	}
 }

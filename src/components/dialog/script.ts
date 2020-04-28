@@ -27,4 +27,14 @@ export default class DisconnectedOverlay extends Vue {
 		default: true
 	})
 	public showButtons: boolean;
+	public resolve: (value: boolean) => void;
+
+	public created() {
+		// tslint:disable-next-line:no-unused-expression
+		new Promise((resolve) => this.resolve = resolve);
+	}
+
+	public onButtonClick(isConfirm: boolean) {
+		this.resolve(isConfirm);
+	}
 }

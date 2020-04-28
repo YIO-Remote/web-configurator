@@ -295,6 +295,16 @@ export interface IServerResponseWithData<T> extends IServerResponse {
 }
 
 // Plugins
+export interface IDialogPlugin {
+	info(options: IDialogOptions): Promise<boolean>;
+}
+
+export interface IDialogOptions {
+	title: string;
+	message: string;
+	showButtons: boolean;
+}
+
 export interface IMenuPlugin {
 	isVisible: boolean;
 	instance?: Vue;
