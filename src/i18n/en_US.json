@@ -1,9 +1,8 @@
 {
-	"overlays": {
+	"dialogs": {
         "disconnection": {
             "title": "Oh No!",
-            "message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
-            "reconnecting": "Reconnecting"
+            "message": "It looks like we lost connection with your remote. Please make sure it is accessible on your network."
 	    }
     },
 	"common": {
@@ -56,6 +55,8 @@
 			"pagesTab": {
 				"title": "Pages",
 				"addNewPage": "Add A New Page",
+				"deletePage": "Delete Page",
+				"deletePageMessage": "Are you sure you want to delete the page \"{name}\"? The settings will be lost.",
 				"addNewGroup": "Add A New Group",
 				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
 				"availablePages": "Available Pages"
@@ -63,6 +64,8 @@
 			"groupsTab": {
 				"title": "Groups",
 				"message": "You can add entities to a group after dragging it under a page in the remote view to the left.",
+				"deleteGroup": "Delete Group",
+				"deleteGroupMessage": "Are you sure you want to delete the group \"{name}\"? The settings will be lost.",
 				"availableGroups": "Available Groups"
 			},
 			"entitiesTab": {
@@ -86,6 +89,8 @@
 		"profiles": {
 			"title": "Profiles",
 			"addNewProfile": "Add A New Profile",
+			"deleteProfile": "Delete Profile",
+			"deleteProfileWarning": "Are you sure you want to delete the profile \"{name}\"? The profile settings will be lost.",
             "profileList": {
 				"title": "Pages",
                 "dropZone": "Drag a page here"
@@ -111,7 +116,11 @@
 		},
 		"advanced": {
             "title": "Advanced Configuration",
-            "message": "Manually set the remote config by hand:"
+			"message": "Manually set the remote config by hand:",
+			"unsavedChanges": "Unsaved Changes",
+			"unsavedChangesWarning": "You have unsaved changes that will be lost. Do you want to leave?",
+			"areYouSure": "Are You Sure",
+			"areYouSureWarning": "Manually updating the configuration can result in corrupt data. Are you sure you want to save?"
         },
 		"settings": {
 			"title": "Settings",

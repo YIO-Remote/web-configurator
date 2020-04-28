@@ -296,7 +296,9 @@ export interface IServerResponseWithData<T> extends IServerResponse {
 
 // Plugins
 export interface IDialogPlugin {
-	info(options: IDialogOptions): Promise<boolean>;
+	info(options: IDialogOptions): Promise<void>;
+	warning(options: IDialogOptions): Promise<void>;
+	close(): void;
 }
 
 export interface IDialogOptions {
@@ -337,6 +339,10 @@ export interface IToast {
 }
 
 // Components
+export interface IDialogComponent extends Vue {
+	promise: Promise<boolean>;
+}
+
 export interface ICardComponent extends Vue {
 	// tslint:disable-next-line:no-any
 	data: any;
@@ -379,4 +385,10 @@ export interface IAceEditor {
 export interface IAceEditorSession {
 	getValue(): string;
 	foldAll(index: number): void;
+}
+
+export interface ISpotifyTokenData {
+	access_token: string;
+	refresh_token: string;
+	expires_in: number;
 }

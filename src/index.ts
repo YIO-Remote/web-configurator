@@ -13,6 +13,7 @@ import VueDragDrop from 'vue-drag-drop';
 import AceEditor from 'vue-editor-ace';
 import PerfectScrollbar from 'vue2-perfect-scrollbar';
 import MenuPlugin from './utilities/menu-plugin';
+import DialogPlugin from './utilities/dialog-plugin';
 import YioApp from './yio-app/index.vue';
 import { Router } from './router';
 import { Localisation } from './i18n';
@@ -25,6 +26,7 @@ Vue.use(PerfectScrollbar);
 Vue.use(VueRx);
 Vue.use(VueRouter);
 Vue.use(MenuPlugin);
+Vue.use(DialogPlugin);
 Vue.use(VueI18n);
 
 const i18n = new Localisation();

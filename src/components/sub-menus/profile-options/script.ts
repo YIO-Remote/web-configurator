@@ -92,7 +92,11 @@ export default class ProfileOptions extends Vue {
 	}
 
 	public onDeletePage(page: IPageAggregate) {
-		this.server.deletePage(page);
+		this.$dialog.warning({
+			title: this.$t('components.profileOptions.pagesTab.deletePage').toString(),
+			message: this.$t('components.profileOptions.pagesTab.deletePageMessage', { name: page.name }).toString(),
+			showButtons: true
+		}).then(() => this.server.deletePage(page));
 	}
 
 	public onAddNewGroup(name: string) {
@@ -100,6 +104,10 @@ export default class ProfileOptions extends Vue {
 	}
 
 	public onDeleteGroup(group: IGroupAggregate) {
-		this.server.deleteGroup(group);
+		this.$dialog.warning({
+			title: this.$t('components.profileOptions.groupsTab.deleteGroup').toString(),
+			message: this.$t('components.profileOptions.groupsTab.deleteGroupMessage', { name: group.name }).toString(),
+			showButtons: true
+		}).then(() => this.server.deleteGroup(group));
 	}
 }

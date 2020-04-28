@@ -20,8 +20,11 @@ import { IAceEditor, IVueAce } from '../../types';
 			return next();
 		}
 
-		const result = window.confirm('You will lose any unsaved changes, are you sure?');
-		next(result === true ? undefined : result);
+		this.$dialog.warning({
+			title: this.$t('pages.advanced.unsavedChanges').toString(),
+			message: this.$t('pages.advanced.unsavedChangesWarning').toString(),
+			showButtons: true
+		}).then(() => next()).catch(() => next(false));
 	}
 })
 export default class AdvancedEditPage extends Vue {
@@ -40,12 +43,14 @@ export default class AdvancedEditPage extends Vue {
 	public async save() {
 		const config = this.$ace.getSession().getValue();
 
-		try {
-			await this.server.setConfig(JSON.parse(config));
-			this.$ace.getSession().foldAll(1);
-		} catch (error) {
-			this.$ace.setValue(config);
-		}
+		this.$dialog.warning({
+			title: this.$t('pages.advanced.areYouSure').toString(),
+			message: this.$t('pages.advanced.areYouSureWarning').toString(),
+			showButtons: true
+		})
+		.then(() => this.server.setConfig(JSON.parse(config)))
+		.then(() => this.$ace.getSession().foldAll(1))
+		.catch(() => this.$ace.setValue(config));
 	}
 
 	public mounted() {

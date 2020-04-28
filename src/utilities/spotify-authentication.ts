@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Singleton } from './dependency-injection';
 import { getQueryString, stringifyFormParams } from './querystring';
+import { ISpotifyTokenData } from '../types';
 
 @Singleton
 export class SpotifyAuthentication {
@@ -54,7 +55,7 @@ export class SpotifyAuthentication {
 		this.expiresIn = 0;
 	}
 
-	private setTokenValues(data: any) {
+	private setTokenValues(data: ISpotifyTokenData) {
 		this.accessToken = data.access_token;
 		this.refreshToken = data.refresh_token;
 		this.expiresIn = data.expires_in;

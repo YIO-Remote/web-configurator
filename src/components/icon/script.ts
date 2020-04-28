@@ -25,4 +25,8 @@ export default class Icon extends Vue {
 			[`icon-${this.mappedType}`]: true
 		};
 	}
+
+	public onClick($event: Event) {
+		this.$emit('onClick', $event);
+	}
 }

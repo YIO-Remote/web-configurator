@@ -103,7 +103,11 @@ export default class ProfilesPage extends Vue {
 	}
 
 	public onDeleteProfile(profile: IProfileAggregate) {
-		this.server.deleteProfile(profile);
+		this.$dialog.warning({
+			title: this.$t('pages.profiles.deleteProfile').toString(),
+			message: this.$t('pages.profiles.deleteProfileWarning', { name: profile.name }).toString(),
+			showButtons: true
+		}).then(() => this.server.deleteProfile(profile));
 	}
 
 	public onRenameProfile(profile: IProfileAggregate, value: string) {
