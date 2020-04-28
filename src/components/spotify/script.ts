@@ -37,7 +37,7 @@ export default class Spotify extends Vue {
 			window.sessionStorage.removeItem('yio.spotify');
 
 			if (!options.name || !options.clientId || !options.clientSecret) {
-				alert('WENT WRONG');
+				this.$toast.error('Sorry - Something went wrong, please try again');
 				return;
 			}
 
@@ -84,20 +84,8 @@ export default class Spotify extends Vue {
 	}
 
 	public onSave() {
-		// {
-		// 	"config": {
-		// 		"type": "homeassistant",
-		// 		"id": "homeassistant_pro",
-		// 		"friendly_name": "My Home Assistant Server",
-		// 		"data": {
-		// 			"ip": "192.168.0.2",
-		// 			"token": "832748hfjkdfu21ytr79218ohfi2"
-		// 		}
-		// 	}
-		// }
-
 		this.server.addIntegration({
-			id: `${Guid.create()}`,
+			id: `spotify_${`${Guid.create()}`.substr(0, 4)}`,
 			friendly_name: this.name,
 			type: 'spotify',
 			data: {
@@ -106,6 +94,8 @@ export default class Spotify extends Vue {
 				client_secret: this.clientSecret,
 				access_token: this.accessToken
 			}
-		});
+		})
+		.then(() => this.onCancel())
+		.catch(() => this.onCancel());
 	}
 }

@@ -1,5 +1,5 @@
 import { YioStore } from '..';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { IEntityAggregate, IKeyValuePair, IIntegrationInstance } from '../../types';
 
@@ -26,8 +26,7 @@ export class EntitiesAggregate {
 						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
 					}))
 					], [] as IEntityAggregate[]
-				)),
-				shareReplay()
+				))
 			);
 
 		this.loadedGroupedByIntegration$ = this.loaded$
@@ -38,8 +37,7 @@ export class EntitiesAggregate {
 						groups[entity.type].push(entity);
 						return groups;
 					}, {} as IKeyValuePair<IEntityAggregate[]>);
-				}),
-				shareReplay()
+				})
 			);
 
 		this.available$ = combineLatest(
@@ -59,8 +57,7 @@ export class EntitiesAggregate {
 					}));
 
 					return availableEntities.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
-				}),
-				shareReplay()
+				})
 			);
 
 		this.availableGroupedByIntegration$ = this.available$
@@ -71,8 +68,7 @@ export class EntitiesAggregate {
 						groups[entity.integration.friendly_name].push(entity);
 						return groups;
 					}, {} as IKeyValuePair<IEntityAggregate[]>);
-				}),
-				shareReplay()
+				})
 			);
 	}
 }

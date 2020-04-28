@@ -1,4 +1,4 @@
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { YioStore } from '..';
 import { IPageAggregate, IGroupAggregate } from '../../types';
@@ -36,8 +36,7 @@ export class PagesAggregate {
 							image: pages[pageId].image,
 							groups: pages[pageId].groups.map((groupId) => groups.find((group) => group.id === groupId) as IGroupAggregate)
 						}], [this.favoritePage, this.settingsPage] as IPageAggregate[]
-				)),
-				shareReplay()
+				))
 			);
 	}
 }
