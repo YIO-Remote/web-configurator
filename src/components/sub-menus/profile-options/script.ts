@@ -93,8 +93,8 @@ export default class ProfileOptions extends Vue {
 
 	public onDeletePage(page: IPageAggregate) {
 		this.$dialog.warning({
-			title: this.$t('components.profileOptions.pagesTab.deletePage').toString(),
-			message: this.$t('components.profileOptions.pagesTab.deletePageMessage', { name: page.name }).toString(),
+			title: this.$t('dialogs.deletePage.title').toString(),
+			message: this.$t('dialogs.deletePage.message', { name: page.name }).toString(),
 			showButtons: true
 		}).then(() => this.server.deletePage(page));
 	}
@@ -105,8 +105,8 @@ export default class ProfileOptions extends Vue {
 
 	public onDeleteGroup(group: IGroupAggregate) {
 		this.$dialog.warning({
-			title: this.$t('components.profileOptions.groupsTab.deleteGroup').toString(),
-			message: this.$t('components.profileOptions.groupsTab.deleteGroupMessage', { name: group.name }).toString(),
+			title: this.$t('dialogs.deleteGroup.title').toString(),
+			message: this.$t('dialogs.deleteGroup.message', { name: group.name }).toString(),
 			showButtons: true
 		}).then(() => this.server.deleteGroup(group));
 	}

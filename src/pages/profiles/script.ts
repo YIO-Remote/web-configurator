@@ -104,8 +104,8 @@ export default class ProfilesPage extends Vue {
 
 	public onDeleteProfile(profile: IProfileAggregate) {
 		this.$dialog.warning({
-			title: this.$t('pages.profiles.deleteProfile').toString(),
-			message: this.$t('pages.profiles.deleteProfileWarning', { name: profile.name }).toString(),
+			title: this.$t('dialogs.deleteProfile.title').toString(),
+			message: this.$t('dialogs.deleteProfile.message', { name: profile.name }).toString(),
 			showButtons: true
 		}).then(() => this.server.deleteProfile(profile));
 	}
@@ -122,7 +122,7 @@ export default class ProfilesPage extends Vue {
 			return;
 		}
 
-		this.$menu.show(this.$root, ProfileOptions, {});
+		this.$menu.show(ProfileOptions, {});
 		this.tabs = this.$menu.getComponent<TabContainer>();
 		this.selectedProfile = profile;
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());

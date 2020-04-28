@@ -5,6 +5,7 @@ import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
 import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting } from './types';
 import Vue from 'vue';
+import { Localisation } from './i18n';
 
 @Singleton
 export class ServerConnection {
@@ -12,6 +13,10 @@ export class ServerConnection {
 
 	@Inject(() => YioStore)
 	private store: YioStore;
+
+	@Inject(() => Localisation)
+	private localisation: Localisation;
+
 	private host: string;
 	private port: number;
 	private wsp: WebSocketAsPromised;
@@ -208,7 +213,7 @@ export class ServerConnection {
 
 	public deleteProfile(profile: IProfileAggregate) {
 		return this.sendMessage({ type: 'remove_profile', profile_id: profile.id })
-			.then((response) => response)
+			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
 	}
 
@@ -216,7 +221,9 @@ export class ServerConnection {
 		const match = profile.pages.find((page) => page.id === pageToAdd.id);
 
 		if (match) {
-			Vue.$toast.warning(`Page "${pageToAdd.name}" Already Exists In Profile`);
+			Vue.$toast.error(
+				this.localisation.t('toasts.pageAlreadyExists', { name: pageToAdd.name }).toString()
+			);
 			return;
 		}
 
@@ -238,7 +245,9 @@ export class ServerConnection {
 		const indexToRemove = profile.pages.findIndex((page) => page.id === pageIdToRemove);
 
 		if (indexToRemove === -1) {
-			Vue.$toast.warning(`Could Not Remove Page - It Does Not Exist In Profile`);
+			Vue.$toast.error(
+				this.localisation.t('toasts.pageDoesNotExist').toString()
+			);
 			return;
 		}
 
@@ -275,7 +284,9 @@ export class ServerConnection {
 		const match = profile.favorites.find((entity) => entity.entity_id === entityToAdd.entity_id);
 
 		if (match) {
-			Vue.$toast.warning(`Entity "${entityToAdd.friendly_name}" Already Exists In Favorites`);
+			Vue.$toast.error(
+				this.localisation.t('toasts.entityAlreadyExists', { name: entityToAdd.friendly_name }).toString()
+			);
 			return;
 		}
 
@@ -297,7 +308,7 @@ export class ServerConnection {
 		const indexToRemove = profile.favorites.findIndex((entity) => entity.entity_id === entityToRemove.entity_id);
 
 		if (indexToRemove === -1) {
-			Vue.$toast.warning(`Could Not Remove Entity - It Does Not Exist In Favorites`);
+			Vue.$toast.error(this.localisation.t('toasts.entityDoesNotExist').toString());
 			return;
 		}
 
@@ -334,7 +345,9 @@ export class ServerConnection {
 		const match = group.entities.find((entity) => entity.entity_id === entityToAdd.entity_id);
 
 		if (match) {
-			Vue.$toast.warning(`Entity "${entityToAdd.friendly_name}" Already Exists In "${group.name}"`);
+			Vue.$toast.error(
+				this.localisation.t('toasts.entityAlreadyExists', { name: entityToAdd.friendly_name }).toString()
+			);
 			return;
 		}
 
@@ -355,7 +368,7 @@ export class ServerConnection {
 		const indexToRemove = group.entities.findIndex((entity) => entity.entity_id === entityToRemove.entity_id);
 
 		if (indexToRemove === -1) {
-			Vue.$toast.warning(`Could Not Remove Entity - It Does Not Exist In Group`);
+			Vue.$toast.error(this.localisation.t('toasts.entityDoesNotExist').toString());
 			return;
 		}
 
@@ -390,7 +403,7 @@ export class ServerConnection {
 		const match = page.groups.find((group) => group.id === groupToAdd.id);
 
 		if (match) {
-			Vue.$toast.warning(`Entity "${groupToAdd.name}" Already Exists In "${page.name}"`);
+			Vue.$toast.error(this.localisation.t('toasts.groupAlreadyExists', { name: groupToAdd.name }).toString());
 			return;
 		}
 
@@ -412,7 +425,7 @@ export class ServerConnection {
 		const indexToRemove = page.groups.findIndex((group) => group.id === groupToRemove.id);
 
 		if (indexToRemove === -1) {
-			Vue.$toast.warning(`Could Not Remove Group - It Does Not Exist In Page`);
+			Vue.$toast.error(this.localisation.t('toasts.groupDoesNotExist').toString());
 			return;
 		}
 
@@ -452,7 +465,7 @@ export class ServerConnection {
 
 	public deletePage(page: IPageAggregate) {
 		return this.sendMessage({ type: 'remove_page', page_id: page.id })
-			.then((response) => response)
+			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
 	}
 
@@ -477,7 +490,7 @@ export class ServerConnection {
 
 	public deleteGroup(group: IGroupAggregate) {
 		return this.sendMessage({ type: 'remove_group', group_id: group.id })
-			.then((response) => response)
+			.then((response) => this.showToast(response))
 			.catch((response) => this.showToast(response));
 	}
 
@@ -523,10 +536,11 @@ export class ServerConnection {
 
 	private showToast(response: IServerResponse) {
 		if (response.success) {
-			Vue.$toast.success(`Success - ${response.message || 'Config Updated'}`);
+			Vue.$toast.success(this.localisation.t('toasts.configUpdated').toString());
 			return;
 		}
 
-		Vue.$toast.error(`Failed To Update Config - ${response.message || 'API Request Failed'}`);
+		const message = response.message || '';
+		Vue.$toast.error(this.localisation.t('toasts.configUpdateFailed', { message }).toString());
 	}
 }

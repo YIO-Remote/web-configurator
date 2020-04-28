@@ -301,6 +301,13 @@ export interface IDialogPlugin {
 	close(): void;
 }
 
+export interface IToastPlugin {
+	success(message: string, duration?: number): void;
+	info(message: string, duration?: number): void;
+	error(message: string, duration?: number): void;
+	clear(): void;
+}
+
 export interface IDialogOptions {
 	title: string;
 	message: string;
@@ -316,32 +323,16 @@ export interface IMenuPlugin {
 export interface IContextMenu {
 	getComponent<T extends Vue>(): T;
 	hide(): void;
-	show<T extends object>(root: Vue, component: VueConstructor<Vue>, props: T): void;
-}
-
-export interface IToastOptions {
-	message: string;
-	type: 'success' | 'info' | 'warning' | 'error';
-	position: 'top' | 'bottom' | 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
-	duration?: number;
-	dismissible?: boolean;
-	onClick?: () => void;
-	onClose?: () => void;
-	queue?: boolean;
-}
-
-export interface IToast {
-	open: (options: IToastOptions) => void;
-	success: (message: string, options?: IToastOptions) => void;
-	error: (message: string, options?: IToastOptions) => void;
-	info: (message: string, options?: IToastOptions) => void;
-	warning: (message: string, options?: IToastOptions) => void;
-	clear: () => void;
+	show<T extends object>(component: VueConstructor<Vue>, props: T): void;
 }
 
 // Components
 export interface IDialogComponent extends Vue {
 	promise: Promise<boolean>;
+}
+
+export interface IToastComponent extends Vue {
+	hide(): Promise<void>;
 }
 
 export interface ICardComponent extends Vue {

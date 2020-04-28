@@ -21,8 +21,8 @@ import { IAceEditor, IVueAce } from '../../types';
 		}
 
 		this.$dialog.warning({
-			title: this.$t('pages.advanced.unsavedChanges').toString(),
-			message: this.$t('pages.advanced.unsavedChangesWarning').toString(),
+			title: this.$t('dialogs.unsavedChanges.title').toString(),
+			message: this.$t('dialogs.unsavedChanges.message').toString(),
 			showButtons: true
 		}).then(() => next()).catch(() => next(false));
 	}
@@ -44,8 +44,8 @@ export default class AdvancedEditPage extends Vue {
 		const config = this.$ace.getSession().getValue();
 
 		this.$dialog.warning({
-			title: this.$t('pages.advanced.areYouSure').toString(),
-			message: this.$t('pages.advanced.areYouSureWarning').toString(),
+			title: this.$t('dialogs.areYouSure.title').toString(),
+			message: this.$t('dialogs.areYouSure.message').toString(),
 			showButtons: true
 		})
 		.then(() => this.server.setConfig(JSON.parse(config)))

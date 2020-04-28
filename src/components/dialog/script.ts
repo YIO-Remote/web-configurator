@@ -49,7 +49,7 @@ export default class Dialog extends Vue {
 
 	public get mappedType() {
 		if (this.type === 'info') {
-			return 'about';
+			return 'bell';
 		}
 
 		return this.type;

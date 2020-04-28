@@ -1,0 +1,8 @@
+<div class="toast" :class="{ visible: isVisible, [`${type}`]: true }">
+    <div class="body" :class="type">
+        <icon :type="mappedType"></icon>
+        <div class="message">
+            {{message}}
+        </div>
+    </div>
+</div>

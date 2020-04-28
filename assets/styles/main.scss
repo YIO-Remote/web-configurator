@@ -7,6 +7,15 @@ html, body {
     background: #000000;
 }
 
+.toasts-container {
+    z-index: 9999;
+    position: absolute;
+    left: 80px;
+    width: 210px;
+    bottom: 0;
+    height: auto;
+}
+
 * {
     -moz-user-select: none;
     -ms-user-select: none;

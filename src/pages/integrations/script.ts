@@ -32,14 +32,14 @@ export default class IntegrationsPage extends Vue {
 	public supportedIntegrations: IKeyValuePair<object>;
 
 	public mounted() {
-		this.$menu.show(this.$root, AddIntegration, {});
+		this.$menu.show(AddIntegration, {});
 	}
 
 	public onItemSelected(index: number) {
 		const integration = this.integrations[index];
 		const schema = this.supportedIntegrations[integration.type];
 
-		this.$menu.show(this.$root, IntegrationSettings, {
+		this.$menu.show(IntegrationSettings, {
 			integration,
 			schema,
 			onCancel: this.onItemDeselected
@@ -47,7 +47,7 @@ export default class IntegrationsPage extends Vue {
 	}
 
 	public onItemDeselected() {
-		this.$menu.show(this.$root, AddIntegration, {});
+		this.$menu.show(AddIntegration, {});
 		(this.$refs.table as IYioTableComponent).deselect();
 	}
 
