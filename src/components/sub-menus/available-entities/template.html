@@ -1,13 +1,20 @@
 <div class="available-entities">
    <h1 class="title">Available Entities</h1>
-   <div v-for="(entities, integrationName) in available" :key="integrationName">
-      <h2 class="entity-title">{{integrationName}}</h2>
+   <div class="search-container">
+      <text-input class="search-input" :watermark="$t('components.profileOptions.entitiesTab.searchWatermark')" mode="input" v-model="entitySearchName">
+         <template slot="icon">
+            <icon type="search"></icon>
+         </template>
+      </text-input>
+   </div>
+   <div v-for="(entities, integrationName) in filteredGroupedEntities" :key="integrationName">
+      <h2 class="entity-title" v-html="integrationName"></h2>
       <ul class="entity-list">
          <li v-for="entity in entities" class="entity">
             <div class="details">
                <span class="icon" :class="entity.type"></span>
                <div>
-                  <div class="name">{{entity.friendly_name}}</div>
+                  <div class="name" v-html="entity.friendly_name_search_term"></div>
                   <div class="id">{{entity.entity_id}}</div>
                </div>
             </div>

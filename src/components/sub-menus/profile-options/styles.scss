@@ -44,6 +44,11 @@
 	display: flex;
 }
 
+/deep/ .highlight {
+	background: #91bf4c;
+	color: #000000;
+}
+
 .entity {
 	.icon-container {
 		width: 40px;

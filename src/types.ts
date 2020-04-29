@@ -115,6 +115,7 @@ export interface IIntegrationInstance {
 	id: string;
 	type: string;
 	friendly_name: string;
+	friendly_name_search_term: string;
 	data: IKeyValuePair<string>;
 }
 
@@ -192,6 +193,7 @@ export interface IEntityAggregate {
 	integration: IIntegrationInstance;
 	area: string;
 	friendly_name: string;
+	friendly_name_search_term: string;
 	supported_features: string[];
 }
 

@@ -87,6 +87,7 @@ export default class Spotify extends Vue {
 		this.server.addIntegration({
 			id: `spotify_${`${Guid.create()}`.substr(0, 4)}`,
 			friendly_name: this.name,
+			friendly_name_search_term: this.name,
 			type: 'spotify',
 			data: {
 				entity_id: `spotify_${`${Guid.create()}`.substr(0, 4)}`,

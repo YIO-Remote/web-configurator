@@ -19,7 +19,11 @@ export class IntegrationsAggregate {
 					return types.reduce((array: IIntegrationInstance[], type: string) => {
 						return [
 							...array,
-							...integrations[type].data.map((integrationInstance) => ({  ...integrationInstance, type }))
+							...integrations[type].data.map((integrationInstance) => ({
+								...integrationInstance,
+								type,
+								friendly_name_search_term: integrationInstance.friendly_name
+							}))
 						];
 					}, [] as IIntegrationInstance[]);
 				})

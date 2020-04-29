@@ -9,6 +9,25 @@
         margin: 0 0 10px;
     }
 
+    .search-container {
+        display: flex;
+        flex-direction: row;
+        margin: 20px 0 10px 0;
+        
+        .icon-container {
+            width: 30px;
+    
+            /deep/ .icon {
+                font-size: 25px;
+            }
+        }
+    
+        .search-input {
+            width: 100%;
+            font-size: 0.75rem;
+        }
+    }
+
     .entity-title {
         font-size: 14px;
         padding: 10px 0;
@@ -19,6 +38,11 @@
 
     .entity-list {
         padding: 20px 0 0;
+    }
+
+    /deep/ .highlight {
+        background: #91bf4c;
+        color: #000000;
     }
 
     .entity {

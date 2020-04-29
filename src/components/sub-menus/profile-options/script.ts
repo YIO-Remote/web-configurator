@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Drag } from 'vue-drag-drop';
-import Fuse from 'fuse.js';
 import Draggable from 'vuedraggable';
+import { map } from 'rxjs/operators';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { IPageAggregate, IGroupAggregate, IKeyValuePair, IEntityAggregate } from '../../../types';
@@ -30,7 +30,6 @@ import Icon from '../../icon/index.vue';
 	subscriptions(this: ProfileOptions) {
 		return {
 			entities: this.store.entities.loaded$,
-			groupedEntities: this.store.entities.loadedGroupedByIntegration$,
 			groups: this.store.groups.all$,
 			pages: this.store.pages.all$
 		};
@@ -44,7 +43,6 @@ export default class ProfileOptions extends Vue {
 	public server: ServerConnection;
 
 	public entities: IEntityAggregate[];
-	public groupedEntities: IKeyValuePair<IEntityAggregate[]>;
 	public filteredGroupedEntities: IKeyValuePair<IEntityAggregate[]> = {};
 	public entitySearchName: string = '';
 	public newPageName: string = '';
@@ -84,8 +82,23 @@ export default class ProfileOptions extends Vue {
 	};
 
 	public mounted() {
-		this.filteredGroupedEntities = this.groupedEntities;
-		this.onFilterChanged();
+		this.$subscribeTo(
+			this.store.entities.generateFilterStream$(
+				this.$watchAsObservable('entitySearchName').pipe(map((watcher) => watcher.newValue as string)),
+				this.store.entities.loaded$.pipe(map((entities) => entities.filter((entity) => !!entity.integration))),
+				['friendly_name', 'integration.friendly_name']
+			).pipe(map((results) => {
+				return results.reduce((groups, entity) => {
+					groups[entity.integration.friendly_name_search_term] = groups[entity.integration.friendly_name_search_term] || [];
+					groups[entity.integration.friendly_name_search_term].push(entity);
+					return groups;
+				}, {} as IKeyValuePair<IEntityAggregate[]>);
+			})),
+			(results) => this.filteredGroupedEntities = results);
+	}
+
+	public beforeDestroy() {
+		this.entitySearchName = '';
 	}
 
 	public selectTab(index: number) {
@@ -95,26 +108,6 @@ export default class ProfileOptions extends Vue {
 
 	public getIconType(page: IPageAggregate) {
 		return (page.id === 'favorites' || page.id === 'settings') ? '' : 'delete';
-	}
-
-	public onFilterChanged() {
-		console.log(this.entitySearchName);
-		if (!this.entitySearchName) {
-			this.filteredGroupedEntities = this.groupedEntities;
-			return;
-		}
-
-		const fuse = new Fuse(this.entities, {
-			keys: ['friendly_name'],
-			threshold: 0.3
-		});
-
-		const results = fuse.search<IEntityAggregate>(this.entitySearchName).map((result) => result.item);
-		this.filteredGroupedEntities = results.reduce((groups, entity) => {
-			groups[entity.type] = groups[entity.type] || [];
-			groups[entity.type].push(entity);
-			return groups;
-		}, {} as IKeyValuePair<IEntityAggregate[]>);
 	}
 
 	public onAddNewPage(name: string) {

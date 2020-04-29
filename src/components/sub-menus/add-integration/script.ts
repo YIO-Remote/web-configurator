@@ -103,6 +103,7 @@ export default class AddIntegration extends Vue {
 			id: `${Guid.create()}`,
 			type: this.type,
 			friendly_name: this.name,
+			friendly_name_search_term: this.name,
 			data: this.propertyValues
 		}).then(() => this.onCancel());
 	}
