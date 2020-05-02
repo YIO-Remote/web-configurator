@@ -8,7 +8,7 @@ import { ICardListComponent } from '../../types';
 export default class Card extends Vue {
 	@Prop({
 		type: String,
-		required: true
+		required: false
 	})
 	public title?: string;
 

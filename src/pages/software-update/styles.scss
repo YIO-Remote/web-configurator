@@ -42,6 +42,10 @@
     }
 }
 
+.card /deep/ .title-container {
+    width: calc(100% - 50px);
+}
+
 .card /deep/ .body-container.is-visible {
     border-top: 1px solid black;
     margin-top: 0;

@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
+import { map } from 'rxjs/operators';
+import { Guid } from 'guid-typescript';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../server';
@@ -7,18 +9,25 @@ import { IKeyValuePair, IDropDownItem, IIntegrationSchema } from '../../../types
 import ActionButton from '../../action-button/index.vue';
 import ActionIconButton from '../../action-icon-button/index.vue';
 import DropDown from '../../drop-down/index.vue';
+import Spotify from '../../spotify/index.vue';
+import { SpotifyAuthentication } from '../../../utilities/spotify-authentication';
 
 @Component({
 	name: 'AddIntegration',
 	subscriptions(this: AddIntegration) {
 		return {
-			supportedIntegrations: this.store.integrations.supported$
+			supportedIntegrations: this.store.integrations.supported$,
+			typeOptions: this.store.integrations.supported$.pipe(map((supportedIntegrations) => Object.keys(supportedIntegrations).map((key) => ({
+				text: key,
+				value: key
+			}))))
 		};
 	},
 	components: {
 		ActionButton,
 		ActionIconButton,
-		DropDown
+		DropDown,
+		Spotify
 	}
 })
 export default class AddIntegration extends Vue {
@@ -28,37 +37,45 @@ export default class AddIntegration extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	public isAddingNewIntegration: boolean = false;
+	@Inject(() => SpotifyAuthentication)
+	public spotifyAuthentication: SpotifyAuthentication;
+
+	public isAddingNewIntegration: boolean = this.spotifyAuthentication.isInAuthenticationCycle;
 	public supportedIntegrations: IKeyValuePair<IIntegrationSchema>;
 	public integrationTypeSelected: boolean = false;
+	public isIntegrationTypeSelectedSpotify: boolean = this.spotifyAuthentication.isInAuthenticationCycle;
 	public typeOptions: IDropDownItem[] = [];
-	public id: string = '';
 	public name: string = '';
 	public type: string = '';
 	public properties: IKeyValuePair<IIntegrationSchema> = {};
 	public propertyValues: IKeyValuePair<string> = {};
 	public newDataKey: string = '';
 	public newDataValue: string = '';
-
-	public mounted() {
-		this.typeOptions = Object.keys(this.supportedIntegrations).map((key) => ({
-			text: key,
-			value: key
-		}));
-	}
+	public selectedValue: string = this.isIntegrationTypeSelectedSpotify ? 'spotify' : '';
 
 	public onIntegrationTypeChanged(item: IDropDownItem) {
 		const selectedIntegration = this.supportedIntegrations[item.value];
 		const properties = selectedIntegration.properties || {};
-		this.integrationTypeSelected = true;
+		const filteredProps = Object.keys(properties)
+			.filter((key) => key !== 'entity_id')
+			.reduce((values, propName) => {
+				return {
+					...values,
+					[`${propName}`]: properties[propName]
+				};
+			}, {} as IKeyValuePair<IIntegrationSchema>);
+
 		this.type = item.value;
-		this.properties = { ...properties };
-		this.propertyValues = { ...Object.keys(properties).reduce((values, propName) => {
-			return {
-				...values,
-				[`${propName}`]: ''
-			};
-		}, {} as IKeyValuePair<string>) };
+		this.integrationTypeSelected = true;
+		this.isIntegrationTypeSelectedSpotify = (this.type === 'spotify');
+		this.properties = { ...filteredProps };
+		this.propertyValues = { ...Object.keys(filteredProps)
+			.reduce((values, propName) => {
+				return {
+					...values,
+					[`${propName}`]: ''
+				};
+			}, {} as IKeyValuePair<string>) };
 	}
 
 	public onAddNewIntegration() {
@@ -67,7 +84,6 @@ export default class AddIntegration extends Vue {
 
 	public onCancel() {
 		this.isAddingNewIntegration = false;
-		this.id = '';
 		this.name = '';
 		this.type = '';
 		this.properties = {};
@@ -75,10 +91,6 @@ export default class AddIntegration extends Vue {
 	}
 
 	public onSave() {
-		if (!this.id) {
-			return;
-		}
-
 		if (!this.name) {
 			return;
 		}
@@ -88,9 +100,10 @@ export default class AddIntegration extends Vue {
 		}
 
 		this.server.addIntegration({
-			id: this.id,
+			id: `${Guid.create()}`,
 			type: this.type,
 			friendly_name: this.name,
+			friendly_name_search_term: this.name,
 			data: this.propertyValues
 		}).then(() => this.onCancel());
 	}

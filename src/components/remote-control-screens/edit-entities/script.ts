@@ -2,13 +2,15 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import Draggable, { IDragEndEvent } from 'vuedraggable';
 import { IEntityAggregate } from '../../../types';
-import ActionIconButton from '../../action-icon-button/index.vue';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
+import ActionIconButton from '../../action-icon-button/index.vue';
+import Icon from '../../icon/index.vue';
 
 @Component({
 	name: 'EditEntities',
 	components: {
+		Icon,
 		ActionIconButton,
 		Draggable
 	},

@@ -11,6 +11,11 @@ export default class MainMenu extends Vue {
 	private router: Router;
 
 	public get routes() {
-		return this.router.routes.filter((route) => route.path !== '/');
+		return this.router.routes.filter((route) => {
+			if (!route.meta) {
+				return true;
+			}
+			return !route.meta.excludeFromMenu;
+		});
 	}
 }

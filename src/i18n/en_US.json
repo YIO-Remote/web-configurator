@@ -1,22 +1,56 @@
 {
-	"overlays": {
+	"dialogs": {
         "disconnection": {
             "title": "Oh No!",
-            "message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
-            "reconnecting": "Reconnecting"
-	    }
-    },
+            "message": "It looks like we lost connection with your remote. Please make sure it is accessible on your network."
+		},
+		"deleteProfile": {
+			"title": "Delete Profile",
+			"message": "Are you sure you want to delete the profile \"{name}\"? The profile settings will be lost."
+		},
+		"deletePage": {
+			"title": "Delete Page",
+			"message": "Are you sure you want to delete the page \"{name}\"? The settings will be lost."
+		},
+		"deleteGroup": {
+			"title": "Delete Group",
+			"message": "Are you sure you want to delete the group \"{name}\"? The settings will be lost."
+		},
+		"unsavedChanges": {
+			"title": "Unsaved Changes",
+			"message": "You have unsaved changes that will be lost. Do you want to leave?"
+		},
+		"areYouSure": {
+			"title": "Are You Sure",
+			"message": "Manually updating the configuration can result in corrupt data. Are you sure you want to save?"
+		}
+	},
+	"toasts": {
+		"pageAlreadyExists": "Page \"{name}\" Already Exists",
+		"pageDoesNotExist": "Page Does Not Exist In Profile",
+		"entityAlreadyExists": "Entity \"{name}\" Already Exists",
+		"entityDoesNotExist": "Entity Does Not Exist",
+		"groupAlreadyExists": "Group \"{name}\" Already Exists",
+		"groupDoesNotExist": "Group Does Not Exist",
+		"configUpdated": "Config Successfully Updated",
+		"configUpdateFailed": "Failed To Update Config - {message}"
+	},
 	"common": {
 		"id": "ID",
 		"save": "Save",
         "cancel": "Cancel",
         "create": "Create",
+        "delete": "Delete",
         "name": "Name",
 		"pleaseSelect": "Please Select",
 		"settings": "Settings",
 		"type": "Type",
 		"version": "Version",
-		"release": "Release"
+		"release": "Release",
+		"rename": "Rename",
+		"ok": "OK",
+		"authenticate": "Authenticate",
+		"search": "Search"
 	},
 	"header": {
         "title": "Web Configurator"
@@ -31,6 +65,17 @@
 		"softwareUpdate": "Software Update"
 	},
 	"components": {
+		"spotify": {
+			"message": "To create the required Spotify application:",
+			"stepOne": "Login to Spotify Developer",
+			"stepTwo": "Visit the My Applications page",
+			"stepThree": "Select Create An App. Enter any name and description",
+			"stepFour": "Once your application is created, view it and copy your Client ID and Client Secret into the input boxes below",
+			"stepFive": "Add the following Redirect URI:",
+			"stepSix": "Click Save after adding the URI",
+			"stepSeven": "Click the Authenticate button (you will be redirect to login into Spotify)",
+			"stepEight": "If you're happy with the name you have provided, hit Save"
+		},
 		"editEntities": {
 			"dropZone": "Drag an entity here"
 		},
@@ -40,6 +85,8 @@
 		"profileOptions" : {
 			"pagesTab": {
 				"title": "Pages",
+				"addNewPage": "Add A New Page",
+				"addNewGroup": "Add A New Group",
 				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
 				"availablePages": "Available Pages"
 			},
@@ -50,7 +97,8 @@
 			},
 			"entitiesTab": {
 				"title": "Entities",
-				"message": "Drag entities to the remote view to add them to favorites or a group."
+				"message": "Drag entities to the remote view to add them to favorites or a group.",
+				"searchWatermark": "Search For Entities..."
 			}
 		}
 	},
@@ -58,8 +106,8 @@
         "integrations": {
 			"configuredIntegrations": "Configured Integrations",
 			"discoveredIntegrations": "Discovered Integrations",
-			"addIntegration": "Add Integrations",
-			"newIntegration": "New Integrations"
+			"addIntegration": "Add Integration",
+			"newIntegration": "New Integration"
 		},
 		"entities": {
 			"title": "Entities Controlled By YIO Remote",
@@ -67,9 +115,10 @@
 			"availableEntities": "Available Entities"
 		},
 		"profiles": {
-            "title": "Profiles",
+			"title": "Profiles",
+			"addNewProfile": "Add A New Profile",
             "profileList": {
-                "title": "Pages",
+				"title": "Pages",
                 "dropZone": "Drag a page here"
 			},
 			"newProfile": {
@@ -93,7 +142,7 @@
 		},
 		"advanced": {
             "title": "Advanced Configuration",
-            "message": "Manually set the remote config by hand:"
+			"message": "Manually set the remote config by hand:"
         },
 		"settings": {
 			"title": "Settings",

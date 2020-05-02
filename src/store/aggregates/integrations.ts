@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { YioStore } from '..';
 import { IIntegrationInstance, IKeyValuePair } from '../../types';
 
@@ -19,13 +19,16 @@ export class IntegrationsAggregate {
 					return types.reduce((array: IIntegrationInstance[], type: string) => {
 						return [
 							...array,
-							...integrations[type].data.map((integrationInstance) => ({  ...integrationInstance, type }))
+							...integrations[type].data.map((integrationInstance) => ({
+								...integrationInstance,
+								type,
+								friendly_name_search_term: integrationInstance.friendly_name
+							}))
 						];
 					}, [] as IIntegrationInstance[]);
-				}),
-				shareReplay()
+				})
 			);
 
-		this.supported$ = this.store.select('integrations', 'supported').pipe(shareReplay());
+		this.supported$ = this.store.select('integrations', 'supported');
 	}
 }

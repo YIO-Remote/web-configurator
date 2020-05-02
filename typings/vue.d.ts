@@ -1,15 +1,16 @@
 import Vue, { VueConstructor } from 'vue';
 import { PropsDefinition } from 'vue/types/options';
-import { IContextMenu, IToastOptions, IToast } from '../src/types';
+import { IContextMenu, IToastPlugin, IDialogPlugin } from '../src/types';
 
+// tslint:disable:interface-name
 declare module 'vue/types/vue' {
-  	// tslint:disable:interface-name
   	interface Vue {
+		$dialog: IDialogPlugin;
+		$toast: IToastPlugin;
 		$menu: IContextMenu;
-		$toast: IToast;
 	}
 
 	  interface VueConstructor {
-		$toast: IToast;
+		$toast: IToastPlugin;
 	}
 }

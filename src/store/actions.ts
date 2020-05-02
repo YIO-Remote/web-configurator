@@ -25,6 +25,7 @@ const actions = {
 
 	// Settings
 	setLanguages: createStandardAction('store/settings/set-languages')<ILanguageSetting[]>(),
+	setLanguage: createStandardAction('store/settings/set-language')<string>()
 };
 
 export default actions;

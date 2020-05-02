@@ -1,5 +1,5 @@
 import { Observable, combineLatest } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { YioStore } from '..';
 import { IProfile, IKeyValuePair, IProfileAggregate, IPageAggregate, IEntityAggregate } from '../../types';
 
@@ -32,8 +32,7 @@ export class ProfilesAggregate {
 			).pipe(
 				map<[IKeyValuePair<IProfile>, IPageAggregate[], IEntityAggregate[]], IProfileAggregate[]>(([profile, pages, entities]) => {
 					return mapProfiles(profile, entities, pages);
-				}),
-				shareReplay()
+				})
 			);
 	}
 

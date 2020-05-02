@@ -1,0 +1,20 @@
+<div class="dialog" @click.self="onBackgroundClick()">
+    <div class="body" :class="type">
+        <div class="title">
+            <icon class="type-icon" :type="mappedType"></icon>
+            <div class="text-container">
+                <div class="text">
+                    {{title}}
+                </div>
+            </div>
+            <icon v-if="!showButtons && !static" class="close-icon" type="close" @onClick.stop="onButtonClick(true)"></icon>
+        </div>
+        <p class="message">
+            {{message}}
+        </p>
+        <p class="buttons" v-if="showButtons">
+            <action-button :text="$t('common.ok')" @onClick.stop="onButtonClick(true)"></action-button>
+            <action-button :text="$t('common.cancel')" :primary="false" @onClick.stop="onButtonClick(false)" class="right-button"></action-button>
+        </p>
+    </div>
+</div>

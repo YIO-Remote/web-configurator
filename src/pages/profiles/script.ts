@@ -14,6 +14,7 @@ import ActionButton from '../../components/action-button/index.vue';
 import EditFavorites from '../../components/remote-control-screens/edit-favorites/index.vue';
 import EditPage from '../../components/remote-control-screens/edit-page/index.vue';
 import TabContainer from '../../components/tabs/tab-container/script';
+import TextInput from '../../components/text-input/index.vue';
 
 @Component({
 	name: 'ProfilesPage',
@@ -25,7 +26,8 @@ import TabContainer from '../../components/tabs/tab-container/script';
 		ActionButton,
 		EditFavorites,
 		EditPage,
-		Draggable
+		Draggable,
+		TextInput
 	},
 	subscriptions(this: ProfilesPage) {
 		return {
@@ -96,6 +98,22 @@ export default class ProfilesPage extends Vue {
 		};
 	}
 
+	public onAddNewProfile(value: string) {
+		this.server.addNewProfile(value).then(() => this.newProfileName = '');
+	}
+
+	public onDeleteProfile(profile: IProfileAggregate) {
+		this.$dialog.warning({
+			title: this.$t('dialogs.deleteProfile.title').toString(),
+			message: this.$t('dialogs.deleteProfile.message', { name: profile.name }).toString(),
+			showButtons: true
+		}).then(() => this.server.deleteProfile(profile));
+	}
+
+	public onRenameProfile(profile: IProfileAggregate, value: string) {
+		this.server.renameProfile(profile, value);
+	}
+
 	public onProfileSelected(profile: IProfileAggregate, index: number) {
 		if (index === -1) {
 			this.selectedProfile = {} as IProfileAggregate;
@@ -104,7 +122,7 @@ export default class ProfilesPage extends Vue {
 			return;
 		}
 
-		this.$menu.show(this.$root, ProfileOptions, {});
+		this.$menu.show(ProfileOptions, {});
 		this.tabs = this.$menu.getComponent<TabContainer>();
 		this.selectedProfile = profile;
 		(Array.isArray(this.pageCardList) ? this.pageCardList : [this.pageCardList]).forEach((list) => list.deselect());

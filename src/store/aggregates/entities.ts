@@ -1,6 +1,7 @@
-import { YioStore } from '..';
-import { map, shareReplay } from 'rxjs/operators';
+import Fuse from 'fuse.js';
 import { Observable, combineLatest } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { YioStore } from '..';
 import { IEntityAggregate, IKeyValuePair, IIntegrationInstance } from '../../types';
 
 export class EntitiesAggregate {
@@ -22,24 +23,23 @@ export class EntitiesAggregate {
 						area: entity.area,
 						entity_id: entity.entity_id,
 						friendly_name: entity.friendly_name,
+						friendly_name_search_term: entity.friendly_name,
 						supported_features: entity.supported_features,
 						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
 					}))
 					], [] as IEntityAggregate[]
-				)),
-				shareReplay()
+				))
 			);
 
 		this.loadedGroupedByIntegration$ = this.loaded$
 			.pipe(
 				map((loaded) => {
-					return loaded.reduce((groups, entity) => {
-						groups[entity.type] = groups[entity.type] || [];
-						groups[entity.type].push(entity);
+					return loaded.filter((entity) => !!entity.integration).reduce((groups, entity) => {
+						groups[entity.integration.friendly_name] = groups[entity.integration.friendly_name] || [];
+						groups[entity.integration.friendly_name].push(entity);
 						return groups;
 					}, {} as IKeyValuePair<IEntityAggregate[]>);
-				}),
-				shareReplay()
+				})
 			);
 
 		this.available$ = combineLatest(
@@ -53,26 +53,92 @@ export class EntitiesAggregate {
 						area: entity.area,
 						entity_id: entity.entity_id,
 						friendly_name: entity.friendly_name,
+						friendly_name_search_term: entity.friendly_name,
 						supported_features: entity.supported_features,
 						type: entity.type,
 						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
 					}));
 
 					return availableEntities.filter((availableEntity) => !configuredIds.includes(availableEntity.entity_id));
-				}),
-				shareReplay()
+				})
 			);
 
 		this.availableGroupedByIntegration$ = this.available$
 			.pipe(
 				map((available) => {
-					return available.reduce((groups, entity) => {
+					return available.filter((entity) => !!entity.integration).reduce((groups, entity) => {
 						groups[entity.integration.friendly_name] = groups[entity.integration.friendly_name] || [];
 						groups[entity.integration.friendly_name].push(entity);
 						return groups;
 					}, {} as IKeyValuePair<IEntityAggregate[]>);
-				}),
-				shareReplay()
+				})
 			);
 	}
+
+	public generateFilterStream$(criteriaStream$: Observable<string>, itemsStream$: Observable<IEntityAggregate[]>, keys: string[]): Observable<IEntityAggregate[]> {
+		return combineLatest(
+			itemsStream$,
+			criteriaStream$.pipe(startWith(''))
+		).pipe(
+			map(([items, searchTerm]) => {
+				if (!searchTerm) {
+					return items;
+				}
+
+				const fuse = new Fuse(items, {
+					keys,
+					threshold: 0.4,
+					includeMatches: true
+				});
+
+				return fuse.search<IEntityAggregate>(searchTerm).map((result) => {
+					if (!result.matches) {
+						return result.item;
+					}
+
+					return result.matches.reduce((item, match) => {
+						if (match.key === 'friendly_name') {
+							return {
+								...item,
+								friendly_name_search_term: generateHighlightedText(match.value as string, match.indices)
+							};
+						}
+
+						if (match.key === 'integration.friendly_name') {
+							return {
+								...item,
+								integration: {
+									...item.integration,
+									friendly_name_search_term: generateHighlightedText(match.value as string, match.indices)
+								}
+							};
+						}
+
+						return item;
+					}, result.item);
+				});
+			})
+		);
+	}
 }
+
+function generateHighlightedText(text: string, regions: ReadonlyArray<Fuse.RangeTuple>) {
+	if (!regions) { return text; }
+
+	let content = '';
+	let nextUnhighlightedRegionStartingIndex = 0;
+
+	regions.forEach((region) => {
+	  content += '' +
+		text.substring(nextUnhighlightedRegionStartingIndex, region[0]) +
+		'<span class="highlight">' +
+		  text.substring(region[0], region[1]) +
+		'</span>' +
+	  '';
+	  nextUnhighlightedRegionStartingIndex = region[1];
+	});
+
+	content += text.substring(nextUnhighlightedRegionStartingIndex);
+
+	return content;
+  }

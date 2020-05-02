@@ -19,14 +19,24 @@ export default class DropDown extends Vue {
 	public items: IDropDownItem[];
 
 	@Prop({
-		type: Object,
-		required: false
+		type: String,
+		required: false,
+		default: ''
 	})
-	public selectedItem?: IDropDownItem;
+	public selectedValue: string;
 	public isOpen: boolean = false;
-	public selected: IDropDownItem = this.selectedItem || this.options[0];
+	public selected: IDropDownItem;
+
+	public created() {
+		this.selected = this.options.find((option) => option.value === this.selectedValue) || this.options[0];
+	}
 
 	public mounted() {
+		if (this.selected.value === this.selectedValue) {
+			this.onChanged(this.selected);
+			this.isOpen = false;
+		}
+
 		document.addEventListener('click', (event) => {
 			if (event.target === null) {
 				this.isOpen = false;

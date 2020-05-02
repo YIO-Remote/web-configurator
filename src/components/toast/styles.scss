@@ -1,0 +1,45 @@
+.toast {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+    font-size: 12px;
+    transition: all 0.5s;
+    opacity: 0;
+    width: 100%;
+    padding: 20px 20px 20px 5px;
+    border-radius: 6px;
+    line-height: 1.5;
+
+    &.visible {
+        opacity: 1;
+    }
+
+    &.success {
+        background: #91bf4c;
+    }
+
+    &.warning {
+        background: #ea003c;
+    }
+
+    &.info {
+        background: #313246;
+    }
+
+    .body {
+        display: flex;
+
+        .message {
+            text-align: center;
+        }
+
+        .icon-container {
+            width: 38px;
+
+            /deep/ .icon {
+                font-size: 32px;
+            }
+        }
+    }
+}

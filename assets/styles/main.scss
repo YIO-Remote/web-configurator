@@ -1,11 +1,19 @@
 @import './reset.scss';
 @import './fonts.scss';
-@import './icons.scss';
 @import './scrollbar.scss';
 
 html, body {
     font-family: OpenSans;
     background: #000000;
+}
+
+.toasts-container {
+    z-index: 9999;
+    position: absolute;
+    left: 80px;
+    width: 210px;
+    bottom: 0;
+    height: auto;
 }
 
 * {

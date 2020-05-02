@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import VueRouter, { RouteConfig } from 'vue-router';
 import IntegrationsPage from './pages/integrations/index.vue';
 import EntitiesPage from './pages/entities/index.vue';
 import ProfilesPage from './pages/profiles/index.vue';
@@ -25,11 +25,18 @@ export class Router extends VueRouter {
 	public routes = [
 		{
 			path: '/',
-			redirect: { path: '/integrations' }
+			redirect: () => {
+				return {
+					name: 'menu.integrations'
+				};
+			},
+			meta: {
+				excludeFromMenu: true
+			}
 		},
 		{
 			name: 'menu.integrations',
-			path: '/integrations',
+			path: '/integrations/',
 			component: IntegrationsPage
 		},
 		{
@@ -63,7 +70,7 @@ export class Router extends VueRouter {
 			path: '/advanced',
 			component: AdvancedPage
 		}
-	];
+	] as RouteConfig[];
 
 	constructor() {
 		super();

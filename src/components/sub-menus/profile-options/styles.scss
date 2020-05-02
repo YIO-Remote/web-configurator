@@ -2,6 +2,11 @@
 	height: 100%;
 }
 
+.add-item {
+	font-size: 12px;
+	margin: 10px 0 10px 0;
+}
+
 /deep/ .card {
 	cursor: grab;
 }
@@ -32,6 +37,54 @@
 
 	&:last-child {
 		margin-bottom: 0;
+	}
+}
+
+.entity, .group-entity {
+	display: flex;
+}
+
+/deep/ .highlight {
+	background: #91bf4c;
+	color: #000000;
+}
+
+.entity {
+	.icon-container {
+		width: 40px;
+
+		/deep/ .icon {
+			font-size: 30px;
+		}
+	}
+}
+
+.group-entity {
+	.icon-container {
+		width: 22px;
+
+		/deep/ .icon {
+			font-size: 20px;
+		}
+	}
+}
+
+.search-container {
+	display: flex;
+	flex-direction: row;
+	margin: 20px 0 10px 0;
+	
+	.icon-container {
+		width: 30px;
+
+		/deep/ .icon {
+			font-size: 25px;
+		}
+	}
+
+	.search-input {
+		width: 100%;
+		font-size: 0.75rem;
 	}
 }
 

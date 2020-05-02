@@ -1,6 +1,9 @@
 <TabContainer ref="tabs">
    <Tab :name="$t('components.profileOptions.pagesTab.title')">
       <perfect-scrollbar>
+         <div class="add-item">
+            <text-input :value="newPageName" :watermark="$t('components.profileOptions.pagesTab.addNewPage')" mode="edit" @onSave="onAddNewPage"></text-input>
+         </div>
          <div class="items-container">
             <div class="items-description">
                {{$t('components.profileOptions.pagesTab.message')}}
@@ -28,6 +31,9 @@
    </Tab>
    <Tab :name="$t('components.profileOptions.groupsTab.title')">
       <perfect-scrollbar>
+         <div class="add-item">
+            <text-input :value="newGroupName" :watermark="$t('components.profileOptions.pagesTab.addNewGroup')" mode="edit" @onSave="onAddNewGroup"></text-input>
+         </div>
          <div class="items-container">
             <div class="items-description">
                {{$t('components.profileOptions.groupsTab.message')}}
@@ -41,8 +47,8 @@
                      <small-card v-for="group in groups" :key="group.id" :data-id="group.id" :title="group.name" :iconType="'delete'" @onIconClick="onDeleteGroup(group)">
                         <template v-slot:body>
                            <ul>
-                              <li v-for="entity in group.entities" :key="entity.entity_id">
-                                 {{entity.friendly_name}}
+                              <li class="group-entity" v-for="entity in group.entities" :key="entity.entity_id">
+                                 <icon :type="entity.type"></icon>{{entity.friendly_name}}
                               </li>
                            </ul>
                      </template>
@@ -59,15 +65,26 @@
             <div class="items-description">
                {{$t('components.profileOptions.entitiesTab.message')}}
             </div>
+            <div class="search-container">
+               <text-input class="search-input" :watermark="$t('components.profileOptions.entitiesTab.searchWatermark')" mode="input" v-model="entitySearchName">
+                  <template slot="icon">
+                     <icon type="search"></icon>
+                  </template>
+               </text-input>
+            </div>
             <ul>
-               <li v-for="(entities, entityType) in groupedEntities" :key="entityType">
-                  <div class="items-list-title">
-                     {{entityType}}
-                  </div>
+               <li v-for="(entities, integrationName) in filteredGroupedEntities" :key="integrationName">
+                  <div class="items-list-title" v-html="integrationName"></div>
                   <div class="items-list">
                      <draggable class="list-group" v-bind="entitiesDragOptions" :list="entities">
                         <transition-group type="transition">
-                           <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity" :title="entity.friendly_name"></small-card>
+                           <small-card v-for="entity in entities" :key="entity.entity_id" :data-id="entity.entity_id" :data="entity">
+                              <template slot="title">
+                                 <div class="title entity">
+                                    <icon :type="entity.type"></icon><span v-html="entity.friendly_name_search_term"></span>
+                                 </div>
+                              </template>
+                           </small-card>
                         </transition-group>
                      </draggable>
                   </div>

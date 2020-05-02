@@ -1,9 +1,7 @@
 <div class="item-list">
     <draggable v-bind="dragOptions" :list="entitiesListData" @update="onEntitySortOrderChanged($event)">
         <div class="item added" v-for="entity in entities" :key="entity.id">
-            <div class="icon-container">
-                <span class="icon" :class="entity.type"></span>
-            </div>
+            <icon :type="entity.type"></icon>
             <div class="name-container">
                 <div class="name">{{entity.friendly_name}}</div>
             </div>
