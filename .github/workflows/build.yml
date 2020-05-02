@@ -13,10 +13,10 @@
       runs-on: ubuntu-latest
       steps:
         - name: github env vars
-            run: |
-              echo "$GITHUB_REF"
-              echo "$GITHUB_HEAD_REF"
-              echo "$GITHUB_BASE_REF"
+          run: |
+            echo "$GITHUB_REF"
+            echo "$GITHUB_HEAD_REF"
+            echo "$GITHUB_BASE_REF"
 
         - name: Checkout ${{ env.PROJECT_NAME}}
           uses: actions/checkout@v2
