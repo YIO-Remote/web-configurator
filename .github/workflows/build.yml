@@ -72,3 +72,12 @@
             title: "Development Build ${{ env.APP_VERSION }}"
             files: |
                 *.tar
+                
+        - name: Create Release ${{ env.VERSION }}
+          uses: "marvinpinto/action-automatic-releases@latest"
+          if: "contains(github.ref, 'tags/v')"
+          with:
+            repo_token: "${{ secrets.GITHUB_TOKEN }}"
+            prerelease: false
+            files: |
+              *.tar
