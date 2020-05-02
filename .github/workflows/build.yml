@@ -30,7 +30,6 @@
             
         - name: add version
           run: |
-            cd dist
             echo ${{ env.VERSION }} > version.txt
  
         - name: Archive production artifacts
@@ -38,6 +37,12 @@
           with:
             name: YIO-Web-configurator
             path: dist
+            
+        - name: Archive production artifacts
+          uses: actions/upload-artifact@v1
+          with:
+            name: YIO-Web-configurator
+            path: version.txt
       
     release:
       name: Create Release
@@ -52,6 +57,11 @@
           with:
             name: YIO-Web-configurator
             path: dist
+        - name: Download release artifact
+          uses: actions/download-artifact@v1
+          with:
+            name: YIO-Web-configurator
+            path: version.txt
 
         - name: Get artifact version
           run: |
