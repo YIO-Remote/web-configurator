@@ -30,7 +30,8 @@
             
         - name: add version
           run: |
-            echo ${{ env.VERSION }} >> version.txt
+            cd dist
+            echo ${{ env.VERSION }} > version.txt
  
         - name: Archive production artifacts
           uses: actions/upload-artifact@v1
