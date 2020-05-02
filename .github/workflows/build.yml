@@ -38,10 +38,10 @@
             name: YIO-Web-configurator
             path: dist
             
-        - name: Archive production artifacts
+        - name: Archive production artifacts version
           uses: actions/upload-artifact@v1
           with:
-            name: YIO-Web-configurator
+            name: version
             path: version.txt
       
     release:
@@ -57,14 +57,15 @@
           with:
             name: YIO-Web-configurator
             path: dist
-        - name: Download release artifact
+        - name: Download release version
           uses: actions/download-artifact@v1
           with:
-            name: YIO-Web-configurator
+            name: version
             path: version.txt
 
         - name: Get artifact version
           run: |
+            cd version
             read -r APP_VERSION < version.txt
             echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"
             
