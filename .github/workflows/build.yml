@@ -51,7 +51,7 @@
           uses: actions/download-artifact@v1
           with:
             name: YIO-Web-configurator
-            path: dist
+            path: ./release
        
         - name: Get artifact version
           run: |
