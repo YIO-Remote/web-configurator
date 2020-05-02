@@ -30,6 +30,7 @@
             
         - name: add version
           run: |
+            cd dist
             echo ${{ env.VERSION }} > version.txt
  
         - name: Archive production artifacts
@@ -38,12 +39,6 @@
             name: YIO-Web-configurator
             path: dist
             
-        - name: Archive production artifacts version
-          uses: actions/upload-artifact@v1
-          with:
-            name: version
-            path: version.txt
-      
     release:
       name: Create Release
       if: github.ref == 'refs/heads/master' || contains(github.ref, 'tags/v')
@@ -51,23 +46,16 @@
       needs: build
 
       steps:
-        - run: |
-            mkdir release
-            cd release
+        - run: mkdir release
         - name: Download release artifact
           uses: actions/download-artifact@v1
           with:
             name: YIO-Web-configurator
             path: dist
        
-        - name: Download release version
-          uses: actions/download-artifact@v1
-          with:
-            name: version
-
         - name: Get artifact version
           run: |
-            echo "::set-env name=APP_VERSION::$(cat version/version.txt)"
+            echo "::set-env name=APP_VERSION::$(cat release/version.txt)"
             echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"
             
         - name: Create GitHub release archives
