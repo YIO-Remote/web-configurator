@@ -27,7 +27,6 @@
 
         - name: Fetch all tags to determine version
           run: |
-            cd ${{ env.PROJECT_NAME}}
             git fetch origin +refs/tags/*:refs/tags/*
             git describe --match "v[0-9]*" --tags HEAD --always
 
