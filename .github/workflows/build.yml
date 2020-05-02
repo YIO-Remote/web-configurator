@@ -12,23 +12,13 @@
     build:
       runs-on: ubuntu-latest
       steps:
-        - name: github env vars
-          run: |
-            echo "$GITHUB_REF"
-            echo "$GITHUB_HEAD_REF"
-            echo "$GITHUB_BASE_REF"
-
-        - name: Checkout ${{ env.PROJECT_NAME }}
+        - name: Checkout
           uses: actions/checkout@v2
-          with:
-            # History of 500 should be more than enough to calculate commit count since last release tag.
-            fetch-depth: 500
-            path: ${{ env.PROJECT_NAME }}
 
         - name: Fetch all tags to determine version
           run: |
             git fetch origin +refs/tags/*:refs/tags/*
-            git describe --match "v[0-9]*" --tags HEAD --always
+            echo "::set-env name=VERSION::$(git describe --match "v[0-9]*" --tags HEAD --always)"
 
         - name: Set build timestamp
           run: echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"      
@@ -41,6 +31,6 @@
         - name: Archive production artifacts
           uses: actions/upload-artifact@v1
           with:
-            name: ${{ env.PROJECT_NAME }}
+            name: YIO Web configurator-${{env.VERSION}}
             path: dist
       
