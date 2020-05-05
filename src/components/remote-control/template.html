@@ -13,15 +13,44 @@
                 </slot>
             </perfect-scrollbar>
         </div>
-        <div class="button-container">
-            <div class="up-down-button">
-                <div class="up-button" @click="buttonPress('left', 'up')"></div>
-                <div class="down-button" @click="buttonPress('left', 'down')"></div>
-            </div>
-            <div class="dpad-button"></div>
-            <div class="up-down-button">
-                <div class="up-button" @click="buttonPress('right', 'up')"></div>
-                <div class="down-button" @click="buttonPress('right', 'down')"></div>
+        <div class="button-aspect-container">
+            <div class="button-container">
+                <div class="up-down-container left">
+                    <div class="split">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="split">
+                        <div class="fill"></div>
+                    </div>
+                </div>
+                <div class="dpad-container">
+                    <div class="centre-diamond"></div>
+                    <div class="tri-outer top-left">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-outer top-right">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-outer bottom-right">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-outer bottom-left">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-inner left"></div>
+                    <div class="tri-inner right"></div>
+                    <div class="tri-inner bottom"></div>
+                    <div class="tri-inner top"></div>
+                    <div class="centre-circle"></div>
+                </div>
+                <div class="up-down-container right">
+                    <div class="split">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="split">
+                        <div class="fill"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

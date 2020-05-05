@@ -1,19 +1,23 @@
 <div class="ir-learning-page">
-    <h1 class="title">IR Learning</h1>
-    <div class="message">
-        Select the dock to use to turn on IR learning:
-    </div>
-    <div class="dock-container">
-        <card-list @onSelected="onDockSelected">
-            <card v-for="(dock, index) in docks" :key="index" :title="dock.name">
-                <template v-slot:leftIcon>
-                    <div class="dock-icon"></div>
-                </template>
-                <template v-slot:rightIcon>
-                    <div class="select-tick"></div>
-                </template>
-            </card>
-        </card-list>
-        <action-button v-if="showNextButton" text="Next" class="next-button" @onClick="onNext"></action-button>
+    <div class="container">
+        <div class="selections">
+            <h1 class="title">IR Learning</h1>
+            <div class="dock-selection">
+                <div class="message">
+                    Select the dock:
+                </div>
+                <drop-down :items="docks" :selectedItem="selectedDock" @onChanged="onDockSelected"></drop-down>
+            </div>
+            <div class="remote-selection" v-if="isDockSelected">
+                <div class="message">
+                    Select the remote:
+                </div>
+                <drop-down ref="remote-drop-down" :items="remotes" :selectedItem="selectedRemote" @onChanged="onRemoteSelected"></drop-down>
+                <div class="new-remote" v-if="showNewRemoteInput">
+                    <text-input v-model="newRemoteName" mode="edit" watermark="New Remote Name" @onSave="onNewRemoteCreated"></text-input>
+                </div>
+            </div>
+        </div>
+        <remote-control v-if="isRemoteSelected"></remote-control>
     </div>
 </div>

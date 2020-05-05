@@ -4,7 +4,7 @@
 	font-size:  12px;
 
 	.ps {
-		height: 200px;
+		max-height: 200px;
 		border-radius: 8px;
 	}
 
@@ -80,15 +80,19 @@
 
 	.selected-tick {
 		float: right;
-		width: 12px;
-		height: 12px;
+		width: 50%;
+		padding-bottom: 50%;
 		border-radius: 50%;
 		background-color: #91bf4c;
-		font-size: 8px;
-    	line-height: 1.5;
+		font-size: 60%;
+		position: relative;
 
 		&:after {
-			content: '✔'
+			content: '✔';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
 		}
 	}
 }

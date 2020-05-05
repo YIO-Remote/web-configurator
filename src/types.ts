@@ -46,6 +46,14 @@ export type Reducers<S> = {
 export type UpdateFromServer = boolean | undefined;
 
 // State Types
+export interface IRemote {
+
+}
+
+export interface IRemoteCommand {
+
+}
+
 export interface IKeyValuePair<T> {
 	[key: string]: T;
 }
@@ -329,6 +337,10 @@ export interface IContextMenu {
 }
 
 // Components
+export interface IDropDownComponent extends Vue {
+	resetSelection(item?: IDropDownItem): void;
+}
+
 export interface IDialogComponent extends Vue {
 	promise: Promise<boolean>;
 }

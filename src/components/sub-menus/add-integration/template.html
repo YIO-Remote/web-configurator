@@ -9,7 +9,7 @@
             {{$t('common.type').toLowerCase()}}
          </div>
          <div class="setting-value">
-            <drop-down :selectedValue="selectedValue" :message="$t('common.pleaseSelect')" :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
+            <drop-down :selectedItem="selectedItem" :message="$t('common.pleaseSelect')" :items="typeOptions" @onChanged="onIntegrationTypeChanged"></drop-down>
          </div>
       </div>
       <div v-if="integrationTypeSelected && !isIntegrationTypeSelectedSpotify">

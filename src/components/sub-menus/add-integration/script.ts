@@ -51,7 +51,8 @@ export default class AddIntegration extends Vue {
 	public propertyValues: IKeyValuePair<string> = {};
 	public newDataKey: string = '';
 	public newDataValue: string = '';
-	public selectedValue: string = this.isIntegrationTypeSelectedSpotify ? 'spotify' : '';
+	public selectedItem: IDropDownItem = this.isIntegrationTypeSelectedSpotify ?
+		{ text: 'spotify', value: 'spotify' } : {} as IDropDownItem;
 
 	public onIntegrationTypeChanged(item: IDropDownItem) {
 		const selectedIntegration = this.supportedIntegrations[item.value];

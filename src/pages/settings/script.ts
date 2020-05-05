@@ -20,7 +20,6 @@ import { ILanguageSetting, IDropDownItem } from '../../types';
 		return {
 			darkMode: this.store.select('config', 'ui_config', 'darkmode'),
 			autoBrightness: this.store.select('config', 'settings', 'autobrightness'),
-			autoSoftwareUpdate: this.store.select('config', 'settings', 'softwareupdate', 'autoUpdate'),
 			availableLanguages: this.store.select('settings', 'languages').pipe(
 				map((languages) => languages.map((language) => ({ text: language.name, value: language.id })))
 			),
@@ -37,8 +36,13 @@ export default class SettingsPage extends Vue {
 
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
+	public selectedLanguage: IDropDownItem;
 
 	public onLanguageSelected(language: IDropDownItem) {
+		if (language.value === this.selectedLanguage.value) {
+			return;
+		}
+
 		this.server.setLanguage(language.value);
 		this.$i18n.locale = language.value;
 	}
@@ -49,9 +53,5 @@ export default class SettingsPage extends Vue {
 
 	public updateAutoBrightness(value: boolean) {
 		this.server.setAutoBrightness(value);
-	}
-
-	public updateAutoSoftwareUpdate(value: boolean) {
-		alert('TODO: API ENDPOINT NEEDED');
 	}
 }

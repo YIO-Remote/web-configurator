@@ -3,7 +3,7 @@ import IntegrationsPage from './pages/integrations/index.vue';
 import EntitiesPage from './pages/entities/index.vue';
 import ProfilesPage from './pages/profiles/index.vue';
 import SettingsPage from './pages/settings/index.vue';
-// import IRLearningPage from './pages/ir-learning/index.vue';
+import IRLearningPage from './pages/ir-learning/index.vue';
 import SoftwareUpdatePage from './pages/software-update/index.vue';
 import AdvancedPage from './pages/advanced/index.vue';
 import { Inject, Singleton } from './utilities/dependency-injection';
@@ -49,12 +49,11 @@ export class Router extends VueRouter {
 			path: '/profiles',
 			component: ProfilesPage
 		},
-		// TODO: NEED COMPLETED DESIGNS
-		// {
-		// 	name: 'menu.irLearning',
-		// 	path: '/ir-learning',
-		// 	component: IRLearningPage
-		// },
+		{
+			name: 'menu.irLearning',
+			path: '/ir-learning',
+			component: IRLearningPage
+		},
 		{
 			name: 'menu.settings',
 			path: '/settings',

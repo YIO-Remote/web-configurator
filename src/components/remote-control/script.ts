@@ -25,4 +25,6 @@ export default class RemoteControl extends Vue {
 		default: ''
 	})
 	public readonly message: string;
+
+	public readonly buttonMap: IRemoteButtonMap;
 }

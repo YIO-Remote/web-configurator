@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Component, Prop, Emit } from 'vue-property-decorator';
+import { Component, Prop, Emit, Watch } from 'vue-property-decorator';
 import { IDropDownItem } from '../../types';
 
 @Component({
@@ -19,20 +19,23 @@ export default class DropDown extends Vue {
 	public items: IDropDownItem[];
 
 	@Prop({
-		type: String,
+		type: Object,
 		required: false,
-		default: ''
+		default: () => ({})
 	})
-	public selectedValue: string;
+	public selectedItem: IDropDownItem;
 	public isOpen: boolean = false;
-	public selected: IDropDownItem;
+	public options: IDropDownItem[] = [];
+	public selected: IDropDownItem = {} as IDropDownItem;
+	public displayMessage: string;
 
 	public created() {
-		this.selected = this.options.find((option) => option.value === this.selectedValue) || this.options[0];
+		this.setOptions();
+		this.selected = this.options.find((option) => option.value === this.selectedItem.value) || this.options[0];
 	}
 
 	public mounted() {
-		if (this.selected.value === this.selectedValue) {
+		if (this.selected.value === this.selectedItem.value) {
 			this.onChanged(this.selected);
 			this.isOpen = false;
 		}
@@ -48,9 +51,12 @@ export default class DropDown extends Vue {
 		});
 	}
 
-	public get options() {
-		return [
-			{ text: this.message, value: this.message },
+	@Watch('items')
+	public setOptions() {
+		const displayMessage = this.message || this.$t('common.pleaseSelect').toString();
+
+		this.options = [
+			{ text: displayMessage, value: '-1' },
 			...this.items,
 		];
 	}
@@ -63,9 +69,20 @@ export default class DropDown extends Vue {
 		this.isOpen = !this.isOpen;
 	}
 
+	public resetSelection(item?: IDropDownItem) {
+		if (!item) {
+			this.onChanged(this.options[0], false);
+		} else {
+			this.onChanged(this.options.find((option) => option.value === item.value) || this.options[0], false);
+		}
+	}
+
 	@Emit('onChanged')
-	public onChanged(item: IDropDownItem) {
-		this.onToggle();
+	public onChanged(item: IDropDownItem, toggle: boolean = true) {
+		if (toggle) {
+			this.onToggle();
+		}
+
 		this.selected = item;
 		return item;
 	}
