@@ -39,6 +39,13 @@ export default class RemoteControl extends Vue {
 	public readonly scrollable: boolean;
 
 	@Prop({
+		type: Boolean,
+		required: false,
+		default: true
+	})
+	public readonly showControls: boolean;
+
+	@Prop({
 		type: Object,
 		required: false
 	})

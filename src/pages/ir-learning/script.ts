@@ -151,6 +151,14 @@ export default class IRLearningPage extends Vue {
 		return !!this.selectedRemote.value && this.selectedRemote.value !== '-1' && this.selectedRemote.value !== 'remote.new-remote';
 	}
 
+	public get mediaControlFeatureSelected() {
+		return this.dropZoneList.includes('Media Controls');
+	}
+
+	public get numberPadFeatureSelected() {
+		return this.dropZoneList.includes('Number Pad');
+	}
+
 	public beforeDestroy() {
 		this.$menu.hide();
 	}
