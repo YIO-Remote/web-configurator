@@ -46,12 +46,104 @@ export type Reducers<S> = {
 export type UpdateFromServer = boolean | undefined;
 
 // State Types
-export interface IRemote {
+export enum ButtonMap {
+	// power control
+	C_POWER_OFF,
+	C_POWER_ON,
+	C_POWER_TOGGLE,
 
+	// navigation
+	C_CURSOR_UP,
+	C_CURSOR_DOWN,
+	C_CURSOR_LEFT,
+	C_CURSOR_RIGHT,
+	C_CURSOR_OK,
+	C_BACK,
+	C_HOME,
+	C_MENU,
+	C_EXIT,
+	C_APP,
+
+	// tuner
+	C_CHANNEL_UP,
+	C_CHANNEL_DOWN,
+	C_CHANNEL_SEARCH,
+	C_FAVORITE,
+	C_GUIDE,
+
+	// volume
+	C_VOLUME_UP,
+	C_VOLUME_DOWN,
+	C_MUTE_TOGGLE,
+
+	// media controls
+	C_PLAY,
+	C_PAUSE,
+	C_PLAYTOGGLE,
+	C_STOP,
+	C_FORWARD,
+	C_BACKWARD,
+	C_NEXT,
+	C_PREVIOUS,
+	C_INFO,
+	C_RECORDINGS,
+	C_RECORD,
+	C_LIVE,
+
+	// digits
+	C_DIGIT_0,
+	C_DIGIT_1,
+	C_DIGIT_2,
+	C_DIGIT_3,
+	C_DIGIT_4,
+	C_DIGIT_5,
+	C_DIGIT_6,
+	C_DIGIT_7,
+	C_DIGIT_8,
+	C_DIGIT_9,
+	C_DIGIT_10,
+	C_DIGIT_10plus,
+	C_DIGIT_11,
+	C_DIGIT_12,
+	C_DIGIT_SEPARATOR,
+	C_DIGIT_ENTER,
+	C_FUNCTION_RED,
+	C_FUNCTION_GREEN,
+	C_FUNCTION_YELLOW,
+	C_FUNCTION_BLUE,
+	C_FUNCTION_ORANGE,
+
+	// source selection
+	C_SOURCE,
+	C_INPUT_TUNER_1,
+	C_INPUT_TUNER_2,
+	C_INPUT_TUNER_X,
+	C_INPUT_HDMI_1,
+	C_INPUT_HDMI_2,
+	C_INPUT_HDMI_X,
+	C_INPUT_X_1,
+	C_INPUT_X_2,
+
+	// UNKNOWNS
+	C_FORMAT_16_9,
+	C_FORMAT_4_3,
+	C_FORMAT_AUTO,
+	C_OUTPUT_HDMI_1,
+	C_OUTPUT_HDMI_2,
+	C_OUTPUT_DVI_1,
+	C_OUTPUT_AUDIO_X,
+	C_OUTPUT_X,
+	C_SERVICE_NETFLIX,
+	C_SERVICE_HULU
+}
+
+export interface IRemoteEntityAggregate extends IEntityAggregate {
+	commands: IRemoteCommand[];
 }
 
 export interface IRemoteCommand {
-
+	button_map: ButtonMap;
+	code: string;
 }
 
 export interface IKeyValuePair<T> {

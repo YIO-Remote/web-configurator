@@ -1,23 +1,64 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { IDropDownItem, IDropDownComponent } from '../../types';
+import { SwiperOptions } from 'swiper';
+import { Guid } from 'guid-typescript';
+import Draggable, { IDragEndEvent } from 'vuedraggable';
+import { IDropDownItem, IDropDownComponent, IRemoteEntityAggregate } from '../../types';
+import Icon from '../../components/icon/index.vue';
 import TextInput from '../../components/text-input/index.vue';
 import ActionButton from '../../components/action-button/index.vue';
 import DropDown from '../../components/drop-down/index.vue';
 import RemoteControl from '../../components/remote-control/index.vue';
+import CardList from '../../components/card-list/index.vue';
+import SmallCard from '../../components/small-card/index.vue';
 import IRButtonMapping from '../../components/sub-menus/ir-button-mapping/index.vue';
-import { Guid } from 'guid-typescript';
 
 @Component({
 	name: 'IRLearningPage',
 	components: {
+		Icon,
 		TextInput,
 		ActionButton,
 		DropDown,
-		RemoteControl
+		RemoteControl,
+		CardList,
+		SmallCard,
+		Draggable
 	}
 })
 export default class IRLearningPage extends Vue {
+	public featuresDragOptions = {
+		disabled: false,
+		sort: false,
+		group: {
+			name: 'features',
+			pull: 'features',
+			put: false
+		}
+	};
+
+	public dropZoneOptions = {
+		disabled: false,
+		sort: false,
+		group: {
+			name: 'features',
+			pull: false,
+			put: 'features'
+		}
+	};
+
+	public dropZoneList: string[] = [];
+
+	public features = [
+		'Power Control',
+		'Navigation',
+		'Tuner',
+		'Volume',
+		'Media Controls',
+		'Number Pad',
+		'Source Selection'
+	];
+
 	public docks: IDropDownItem[] = [{
 		text: 'Living Room',
 		value: 'dock.living-room'
@@ -46,7 +87,13 @@ export default class IRLearningPage extends Vue {
 	public selectedDock: IDropDownItem = {} as IDropDownItem;
 	public selectedRemote: IDropDownItem = {} as IDropDownItem;
 	public showNewRemoteInput: boolean = false;
-	public newRemoteName: string = '';
+	public newRemote: IRemoteEntityAggregate = {} as IRemoteEntityAggregate;
+	public swiperOptions: SwiperOptions = {
+		pagination: {
+		el: '.swiper-pagination',
+		clickable: true
+		}
+	};
 
 	public onDockSelected(selected: IDropDownItem) {
 		this.selectedDock = selected;
@@ -72,21 +119,28 @@ export default class IRLearningPage extends Vue {
 		}
 	}
 
+	public onFeatureDropped(event: IDragEndEvent) {
+		const feature = event.item.getAttribute('data-id') as string;
+		const indexToRemove = this.features.findIndex((f) => f === feature);
+		this.features.splice(indexToRemove, 1);
+		this.dropZoneList.push(feature);
+	}
+
 	public onNewRemoteCreated() {
-		const newRemote = {
-			text: this.newRemoteName,
+		const newRemoteOption = {
+			text: this.newRemote.friendly_name,
 			value: `${Guid.create()}`
 		};
 
 		this.remotes = [
 			...this.remotes.splice(0, this.remotes.length - 1),
-			newRemote,
+			newRemoteOption,
 			...this.remotes
 		];
-		this.selectedRemote = newRemote;
+		this.selectedRemote = newRemoteOption;
 		this.showNewRemoteInput = false;
-		this.newRemoteName = '';
-		this.$nextTick().then(() => (this.$refs['remote-drop-down'] as IDropDownComponent).resetSelection(newRemote));
+		this.newRemote = {} as IRemoteEntityAggregate;
+		this.$nextTick().then(() => (this.$refs['remote-drop-down'] as IDropDownComponent).resetSelection(newRemoteOption));
 	}
 
 	public get isDockSelected() {

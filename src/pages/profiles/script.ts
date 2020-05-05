@@ -144,10 +144,6 @@ export default class ProfilesPage extends Vue {
 		}
 	}
 
-	public createNewProfile() {
-		alert(1);
-	}
-
 	public onDragOver() {
 		this.isDraggedOver = true;
 	}

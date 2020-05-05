@@ -14,10 +14,40 @@
                 </div>
                 <drop-down ref="remote-drop-down" :items="remotes" :selectedItem="selectedRemote" @onChanged="onRemoteSelected"></drop-down>
                 <div class="new-remote" v-if="showNewRemoteInput">
-                    <text-input v-model="newRemoteName" mode="edit" watermark="New Remote Name" @onSave="onNewRemoteCreated"></text-input>
+                    <text-input v-model="newRemote.friendly_name" mode="edit" watermark="New Remote Name" @onSave="onNewRemoteCreated"></text-input>
+                </div>
+            </div>
+            <div class="feature-selection" v-if="isRemoteSelected && features.length > 0">
+                <div class="message">
+                    Select the features of the remote:
+                </div>
+                <div class="features">
+                    <card-list :dragOptions="featuresDragOptions" :dragList="features" :disableSelect="true">
+                        <small-card v-for="(feature, index) in features" :key="index" :title="feature" :data-id="feature"></small-card>
+                    </card-list>
                 </div>
             </div>
         </div>
-        <remote-control v-if="isRemoteSelected"></remote-control>
+        <remote-control v-if="isRemoteSelected" :scrollable="false" message="Drag features into this bit">
+            <div class="remote-features">
+                <draggable v-bind="dropZoneOptions" :list="dropZoneList" class="feature-drop-zone" @add="onFeatureDropped">
+                    Drag a feature here
+                </draggable>
+                <div class="remote-card" v-if="dropZoneList.length > 0">
+                    <div class="header">
+                        <icon type="remote"></icon>
+                        <div class="title">
+                            {{selectedRemote.text}}
+                        </div>
+                    </div>
+                    <div class="content">
+                        <swiper :options="swiperOptions">
+                            <swiper-slide v-for="(f, index) in dropZoneList" :key="index">{{f}}</swiper-slide>
+                            <div class="swiper-pagination" slot="pagination"></div>
+                        </swiper>
+                    </div>
+                </div>
+            </div>
+        </remote-control>
     </div>
 </div>

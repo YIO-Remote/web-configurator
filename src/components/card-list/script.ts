@@ -33,6 +33,13 @@ export default class CardList extends Vue {
 	})
 	public dragItems: [];
 
+	@Prop({
+		type: Boolean,
+		required: false,
+		default: false
+	})
+	public disableSelect: boolean;
+
 	public cards: ICardComponent[] = [];
 
 	public addCard(card: ICardComponent) {
@@ -50,6 +57,10 @@ export default class CardList extends Vue {
 	}
 
 	public selectCard(cardToSelect: ICardComponent) {
+		if (this.disableSelect) {
+			return;
+		}
+
 		this.cards.forEach((card, index) => {
 			let isSelected = (cardToSelect === card);
 

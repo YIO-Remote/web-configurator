@@ -5,13 +5,20 @@
                 <div class="time">{{time}}</div>
                 <div class="battery">98%</div>
             </div>
-            <perfect-scrollbar>
-                <slot>
+            <div class="screen-content">
+                <perfect-scrollbar v-if="scrollable">
+                    <slot>
+                        <div class="default-message">
+                            {{message}}
+                        </div>
+                    </slot>
+                </perfect-scrollbar>
+                <slot v-else>
                     <div class="default-message">
                         {{message}}
                     </div>
                 </slot>
-            </perfect-scrollbar>
+            </div>
         </div>
         <div class="button-aspect-container">
             <div class="button-container">
@@ -26,21 +33,37 @@
                 <div class="dpad-container">
                     <div class="centre-diamond"></div>
                     <div class="tri-outer top-left">
+                        <i class="icon icon-circle"></i>
                         <div class="fill"></div>
                     </div>
                     <div class="tri-outer top-right">
+                        <i class="icon icon-circle-full"></i>
                         <div class="fill"></div>
                     </div>
                     <div class="tri-outer bottom-right">
+                        <i class="icon icon-square-full"></i>
                         <div class="fill"></div>
                     </div>
                     <div class="tri-outer bottom-left">
+                        <i class="icon icon-square"></i>
                         <div class="fill"></div>
                     </div>
-                    <div class="tri-inner left"></div>
-                    <div class="tri-inner right"></div>
-                    <div class="tri-inner bottom"></div>
-                    <div class="tri-inner top"></div>
+                    <div class="tri-inner left">
+                        <i class="icon icon-left-arrow"></i>
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-inner right">
+                        <i class="icon icon-right-arrow"></i>
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-inner bottom">
+                        <i class="icon icon-down-arrow"></i>
+                        <div class="fill"></div>
+                    </div>
+                    <div class="tri-inner top">
+                        <i class="icon icon-up-arrow"></i>
+                        <div class="fill"></div>
+                    </div>
                     <div class="centre-circle"></div>
                 </div>
                 <div class="up-down-container right">

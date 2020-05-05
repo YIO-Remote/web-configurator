@@ -1,12 +1,14 @@
 import 'core-js';
 import '../assets/styles/reset.scss';
 import '../assets/styles/main.scss';
+import 'swiper/css/swiper.css';
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueRx from 'vue-rx';
 import VueI18n from 'vue-i18n';
 import VueDragDrop from 'vue-drag-drop';
+import VueAwesomeSwiper from 'vue-awesome-swiper';
 import AceEditor from 'vue-editor-ace';
 import PerfectScrollbar from 'vue2-perfect-scrollbar';
 import MenuPlugin from './utilities/menu-plugin';
@@ -26,6 +28,7 @@ Vue.use(MenuPlugin);
 Vue.use(ToastPlugin);
 Vue.use(DialogPlugin);
 Vue.use(VueI18n);
+Vue.use(VueAwesomeSwiper);
 
 const i18n = new Localisation();
 DIContainer.registerSingletonFactory(Localisation, () => i18n);

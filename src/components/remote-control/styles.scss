@@ -1,3 +1,5 @@
+$hover: rgba(0, 0, 0, 0.4);
+
 .delete-button {
 	transform: translateY(-50%);
 	position: absolute;
@@ -59,6 +61,12 @@
 				}
 			}
 
+			.screen-content {
+				flex: 1;
+				overflow: hidden;
+				position: relative;
+			}
+
 			.contents {
 				position: relative;
 			}
@@ -92,6 +100,7 @@
 				cursor: pointer;
 				display: flex;
 				flex-direction: column;
+				position: relative;
 
 				.split {
 					height: 50%;
@@ -101,7 +110,7 @@
 						display: none;
 						width: 100%;
 						height: 100%;;
-						background-color: rgba(0, 0, 0, 0.2);
+						background-color: $hover;
 					}
 
 					&:hover {
@@ -113,10 +122,30 @@
 
 				&.left {
 					background-position: center right;
+
+					&:after {
+						content: 'vol';
+						position: absolute;
+						top: 50%;
+						transform: translate(-50%, -50%);
+						left: 50%;
+						font-size: 10px;
+						opacity: 0.3;
+					}
 				}
 
 				&.right {
 					background-position: center left;
+
+					&:after {
+						content: 'ch';
+						position: absolute;
+						top: 50%;
+						transform: translate(-50%, -50%);
+						left: 50%;
+						font-size: 10px;
+						opacity: 0.3;
+					}
 				}
 			}
 
@@ -142,8 +171,18 @@
 					left: 50%;
 					position: absolute;
 
+					&:after {
+						content: 'OK';
+						position: absolute;
+						top: 50%;
+						transform: translate(-50%, -50%);
+						left: 50%;
+						font-size: 10px;
+						opacity: 0.3;
+					}
+
 					&:hover {
-						background-color: rgba(0,0,0,0.2);
+						background-color: $hover;
 					}
 				}
 
@@ -160,54 +199,120 @@
 				}
 
 				.tri-inner {
-					width: 0;
-					height: 0;
-					border-style: solid;
 					position: absolute;
-					border-color: transparent transparent transparent transparent;
-					cursor: pointer;
+
+					.fill {
+						width: 0;
+						height: 0;
+						border-style: solid;
+						position: absolute;
+						border-color: transparent transparent transparent transparent;
+						cursor: pointer;
+					}
+
+					.icon {
+						position: absolute;
+						font-size: 30px;
+						color: #5b5b5b;
+					}
 
 					&.left {
-						border-width: 30px 30px 30px 5px;
-						transform: translateY(-53%);
 						top: 50%;
+						transform: translateY(-50%);
 						left: 0;
+						width: 30%;
+						height: 50%;
 
-						&:hover {
-							border-color: transparent rgba(0,0,0,0.2) transparent transparent;
+						.icon {
+							transform: translateY(-50%);
+							top: 50%;
+							left: 0;
+						}
+
+						.fill {
+							border-width: 30px 30px 30px 5px;
+							transform: translateY(-53%);
+							top: 50%;
+							left: 0;
+						}
+
+						&:hover .fill {
+							border-color: transparent $hover transparent transparent;
 						}
 					}
 
 					&.right {
-						border-width: 30px 5px 30px 30px;
-						transform: translateY(-53%);
 						top: 50%;
+						transform: translateY(-50%);
 						right: 0;
+						width: 30%;
+						height: 50%;
 
-						&:hover {
-							border-color: transparent transparent transparent rgba(0,0,0,0.2);
+						.icon {
+							transform: translateY(-50%);
+							top: 50%;
+							right: 0;
+						}
+
+						.fill {
+							border-width: 30px 5px 30px 30px;
+							transform: translateY(-53%);
+							top: 50%;
+							right: 0;
+						}
+
+						&:hover .fill {
+							border-color: transparent transparent transparent $hover;
 						}
 					}
 
 					&.bottom {
-						border-width: 30px 30px 5px 30px;
-						transform: translateX(-50%);
 						bottom: 0;
 						left: 50%;
+						transform: translateX(-50%);
+						width: 50%;
+						height: 30%;
 
-						&:hover {
-							border-color: rgba(0,0,0,0.2) transparent transparent transparent;
+						.icon {
+							transform: translateX(-50%);
+							bottom: 0;
+							left: 50%;
+						}
+
+						.fill {
+							border-width: 30px 30px 5px 30px;
+							transform: translateX(-50%);
+							bottom: 0;
+							left: 50%;
+						}
+
+						&:hover .fill {
+							border-color: $hover transparent transparent transparent;
 						}
 					}
 
 					&.top {
-						border-width: 5px 30px 30px 30px;
-						transform: translateX(-50%);
 						top: 0;
 						left: 50%;
+						transform: translateX(-50%);
+						width: 50%;
+						height: 30%;
 
-						&:hover {
-							border-color: transparent transparent rgba(0,0,0,0.2) transparent;
+						.icon {
+							transform: translateX(-50%);
+							top: 0;
+							left: 50%;
+						}
+
+						.fill {
+							border-width: 5px 30px 30px 30px;
+							transform: translateX(-50%);
+							top: 0;
+							left: 50%;
+						}
+
+						&:hover .fill {
+							border-color: transparent transparent $hover transparent;
 						}
 					}
 				}
@@ -219,6 +324,12 @@
 					background-size: contain;
 					background-repeat: no-repeat;
 					position: absolute;
+
+					.icon {
+						position: absolute;
+						font-size: 30px;
+						color: #5b5b5b;
+					}
 
 					.fill {
 						cursor: pointer;
@@ -238,9 +349,14 @@
 						left: 2px;
 						background-image: url('../../../assets/images/top-left-tri.svg');
 
+						.icon {
+							top: 0;
+							left: 0;
+						}
+
 						.fill {
 							border-width: 52px 52px 0 0;
-							border-color: rgba(0, 0, 0, 0.2) transparent transparent transparent;
+							border-color: $hover transparent transparent transparent;
 							top: 2px;
 							left: 2px;
 						}
@@ -251,9 +367,14 @@
 						right: 2px;
 						background-image: url('../../../assets/images/top-right-tri.svg');
 
+						.icon {
+							top: 0;
+							right: 0;
+						}
+
 						.fill {
 							border-width: 0 52px 52px 0;
-							border-color: transparent rgba(0, 0, 0, 0.2) transparent transparent;
+							border-color: transparent $hover transparent transparent;
 							top: 2px;
 							right: 2px;
 						}
@@ -264,9 +385,14 @@
 						right: 2px;
 						background-image: url('../../../assets/images/bottom-right-tri.svg');
 
+						.icon {
+							bottom: 0;
+							right: 0;
+						}
+
 						.fill {
 							border-width: 0 0 52px 52px;
-							border-color: transparent transparent rgba(0, 0, 0, 0.2) transparent;
+							border-color: transparent transparent $hover transparent;
 							bottom: 2px;
 							right: 2px;
 						}
@@ -277,11 +403,16 @@
 						left: 2px;
 						background-image: url('../../../assets/images/bottom-left-tri.svg');
 
+						.icon {
+							bottom: 0;
+							left: 0;
+						}
+
 						.fill {
 							border-width: 52px 0 0 52px;
-							border-color: transparent transparent transparent rgba(0, 0, 0, 0.2);
-							bottom: 0;
-							right: 2px;
+							border-color: transparent transparent transparent $hover;
+							bottom: 2px;
+							left: 2px;
 						}
 					}
 				}
