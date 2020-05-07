@@ -77,30 +77,37 @@
     border-top-left-radius: 12px;
     border-bottom: 1px solid black;
     width: 100%;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     flex: 1;
 
     .header {
-        height: 60px;
+        padding: 5px;
         position: relative;
         display: flex;
         flex-direction: row;
 
         /deep/ .icon-container {
             width: 40px;
+
+            .icon {
+                font-size: 35px;
+            }
         }
 
         .title {
-            font-size: 18px;
-            line-height: 60px;
+            font-size: 15px;
+            line-height: 35px;
         }
     }
 
     .content {
         flex: 1;
     }
+}
+
+/deep/ .swiper-slide {
+    padding: 10px;
 }
 
 /deep/ .swiper-pagination-bullet.swiper-pagination-bullet-active {
@@ -114,55 +121,98 @@
     opacity: 1;
 }
 
-.number-pad {
+.feature-button-pad {
     display: flex;
     flex-direction: column;
+    padding: 2px;
+    margin-bottom: 5px;
+    border: 1px dashed #666666;
+    border-radius: 8px;
+    cursor: pointer;
 
-    .numbers {
+    .feature-header {
+        display: flex;
+        flex-direction: row;
+        color: #666666;
+        margin: 3px 5px 0 6px;
+        font-size: 12px;
+
+        .title {
+            flex: 1;
+            line-height: 1.5;
+        }
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    } 
+
+    &:hover {
+        border: 1px dashed #AAAAAA;
+
+        .feature-header {
+            color: #AAAAAA;
+        }
+    }
+
+    .red {
+        background: #E70D41;
+        border: none !important;
+    }
+
+    .green {
+        background: #92BD53;
+        border: none !important;
+    }
+
+    .yellow {
+        background: #D6B342;
+        border: none !important;
+    }
+
+    .blue {
+        background: #2B50C2;
+        border: none !important;
+    }
+
+    .buttons {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         width: 100%;
 
-        .number {
-            width: 22%;
+        .button {
             border: 1px solid #444444;
             border-radius: 18px;
             padding: 10px 5px;
             text-align: center;
-            margin: 10px;
-        }
-    }
+            margin: 8px;
 
-    .colours {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-
-        .colour {
-            width: 22px;
-            border-radius: 50%;
-            padding: 10px;
-            margin: 10px;
-            height: 22px;
-
-            &.red {
-                background: #E70D41;
+            &.hide {
+                visibility: collapse;
             }
 
-            &.green {
-                background: #92BD53;
+            &.colour {
+                width: 22px;
+                border-radius: 50%;
+                padding: 10px;
+                height: 22px;
             }
 
-            &.yellow {
-                background: #D6B342;
+            &.number {
+                width: 22%;
             }
 
-            &.blue {
-                background: #2B50C2;
+            &.icon {
+                width: auto;
+                padding: 5px 0;
+                margin: 5px;
+
+                .icon {
+                    width: 50px;
+                    font-size: 25px;
+                }
             }
         }
     }

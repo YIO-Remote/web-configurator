@@ -7,6 +7,7 @@ import { IDropDownItem, IDropDownComponent, IRemoteEntityAggregate } from '../..
 import Icon from '../../components/icon/index.vue';
 import TextInput from '../../components/text-input/index.vue';
 import ActionButton from '../../components/action-button/index.vue';
+import ActionIconButton from '../../components/action-icon-button/index.vue';
 import DropDown from '../../components/drop-down/index.vue';
 import RemoteControl from '../../components/remote-control/index.vue';
 import CardList from '../../components/card-list/index.vue';
@@ -19,6 +20,7 @@ import IRButtonMapping from '../../components/sub-menus/ir-button-mapping/index.
 		Icon,
 		TextInput,
 		ActionButton,
+		ActionIconButton,
 		DropDown,
 		RemoteControl,
 		CardList,
@@ -157,6 +159,14 @@ export default class IRLearningPage extends Vue {
 
 	public get numberPadFeatureSelected() {
 		return this.dropZoneList.includes('Number Pad');
+	}
+
+	public get powerFeatureSelected() {
+		return this.dropZoneList.includes('Power Control');
+	}
+
+	public get sourceFeatureSelected() {
+		return this.dropZoneList.includes('Source Selection');
 	}
 
 	public beforeDestroy() {
