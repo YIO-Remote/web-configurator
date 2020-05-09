@@ -14,6 +14,9 @@
       steps:
         - name: Checkout
           uses: actions/checkout@v2
+          with:
+            # History of 500 should be more than enough to calculate commit count since last release tag.
+            fetch-depth: 500
 
         - name: Fetch all tags to determine version
           run: |
@@ -34,9 +37,9 @@
             echo ${{ env.VERSION }} > version.txt
  
         - name: Archive production artifacts
-          uses: actions/upload-artifact@v1
+          uses: actions/upload-artifact@v2
           with:
-            name: YIO-Web-configurator
+            name: YIO-web-configurator
             path: dist
             
     release:
@@ -48,19 +51,20 @@
       steps:
         - run: mkdir release
         - name: Download release artifact
-          uses: actions/download-artifact@v1
+          uses: actions/download-artifact@v2
           with:
-            name: YIO-Web-configurator
-            path: ./release
+            name: YIO-web-configurator
+            path: ./dist
        
         - name: Get artifact version
           run: |
-            echo "::set-env name=APP_VERSION::$(cat release/version.txt)"
+            echo "::set-env name=APP_VERSION::$(cat dist/version.txt)"
             echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"
             
-        - name: Create GitHub release archives
+        - name: Create GitHub release archive
           run: |
-            tar cvf YIO-Web-configurator-${{ env.APP_VERSION }}-${{ env.TIMESTAMP }}-release.tar -C release .
+            cd dist
+            zip -r ../YIO-web-configurator-${{ env.APP_VERSION }}.zip .
             
         - name: Create Pre-Release ${{ env.VERSION }}
           uses: "marvinpinto/action-automatic-releases@latest"
@@ -71,7 +75,7 @@
             prerelease: true
             title: "Development Build ${{ env.APP_VERSION }}"
             files: |
-                *.tar
+                *.zip
                 
         - name: Create Release ${{ env.VERSION }}
           uses: "marvinpinto/action-automatic-releases@latest"
@@ -80,4 +84,4 @@
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             prerelease: false
             files: |
-              *.tar
+              *.zip
