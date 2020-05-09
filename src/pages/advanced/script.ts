@@ -62,7 +62,6 @@ export default class AdvancedEditPage extends Vue {
 			showButtons: true
 		})
 		.then(() => this.server.setConfig(JSON.parse(config)))
-		.then(() => this.editor.execCommand('foldAll'))
 		.catch(() => this.editor.setValue(config));
 	}
 
