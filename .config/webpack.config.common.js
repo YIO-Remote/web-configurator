@@ -37,7 +37,8 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
-            template: 'index.html'
+            template: 'index.html',
+            favicon: '../assets/images/favicon-32.png'
         }),
         new webpack.DefinePlugin({
             'process.env.__VERSION__': JSON.stringify(pkg.version)

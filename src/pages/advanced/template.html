@@ -9,6 +9,6 @@
         <action-button :text="$t('common.save')" :primary="true" @onClick="save()"></action-button>
     </div>
     <div class="editor-container">
-        <AceEditor ref="ace" v-model="code" :config="config" />
+        <codemirror v-model="code" :options="options" ref="cm"></codemirror>
     </div>
 </div>
