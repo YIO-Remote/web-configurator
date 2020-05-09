@@ -9,4 +9,8 @@ export default class SwitchToggle extends Vue {
 		type: Boolean
 	})
 	public readonly checked!: boolean;
+
+	public onChange($event: Event) {
+		this.$emit('onToggle', ($event.target as HTMLInputElement).checked);
+	}
 }

@@ -1,4 +1,6 @@
-$hover: rgba(0, 0, 0, 0.4);
+$no_fill: rgba(0, 0, 0, 0);
+$fill_disabled: rgba(231, 13, 65, 0.25);
+$fill_enabled: rgba(146, 189, 83, 0.25);
 
 .delete-button {
 	transform: translateY(-50%);
@@ -107,16 +109,9 @@ $hover: rgba(0, 0, 0, 0.4);
 					width: 100%;
 
 					.fill {
-						display: none;
 						width: 100%;
 						height: 100%;;
-						background-color: $hover;
-					}
-
-					&:hover {
-						.fill {
-							display: block;
-						}
+						background-color: $fill_disabled;
 					}
 				}
 
@@ -130,7 +125,7 @@ $hover: rgba(0, 0, 0, 0.4);
 						transform: translate(-50%, -50%);
 						left: 50%;
 						font-size: 10px;
-						opacity: 0.3;
+						color: #5b5b5b;
 					}
 				}
 
@@ -144,7 +139,7 @@ $hover: rgba(0, 0, 0, 0.4);
 						transform: translate(-50%, -50%);
 						left: 50%;
 						font-size: 10px;
-						opacity: 0.3;
+						color: #5b5b5b;
 					}
 				}
 			}
@@ -170,6 +165,7 @@ $hover: rgba(0, 0, 0, 0.4);
 					top: 50%;
 					left: 50%;
 					position: absolute;
+					background-color: $fill_disabled;
 
 					&:after {
 						content: 'OK';
@@ -178,17 +174,13 @@ $hover: rgba(0, 0, 0, 0.4);
 						transform: translate(-50%, -50%);
 						left: 50%;
 						font-size: 10px;
-						opacity: 0.3;
-					}
-
-					&:hover {
-						background-color: $hover;
+						color: #5b5b5b;
 					}
 				}
 
 				.centre-diamond {
 					width: calc(100% - 4px);
-					padding-bottom: 100%;
+					padding-bottom: 97%;
 					background-image: url('../../../assets/images/centre-diamond.svg');
 					background-size: contain;
 					background-repeat: no-repeat;
@@ -214,6 +206,7 @@ $hover: rgba(0, 0, 0, 0.4);
 						position: absolute;
 						font-size: 30px;
 						color: #5b5b5b;
+						z-index: 9;
 					}
 
 					&.left {
@@ -231,13 +224,10 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 30px 30px 30px 5px;
-							transform: translateY(-53%);
+							transform: translateY(-50%);
 							top: 50%;
 							left: 0;
-						}
-
-						&:hover .fill {
-							border-color: transparent $hover transparent transparent;
+							border-color: transparent $fill_disabled transparent transparent;
 						}
 					}
 
@@ -256,13 +246,10 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 30px 5px 30px 30px;
-							transform: translateY(-53%);
+							transform: translateY(-50%);
 							top: 50%;
 							right: 0;
-						}
-
-						&:hover .fill {
-							border-color: transparent transparent transparent $hover;
+							border-color: transparent transparent transparent $fill_disabled;
 						}
 					}
 
@@ -284,10 +271,7 @@ $hover: rgba(0, 0, 0, 0.4);
 							transform: translateX(-50%);
 							bottom: 0;
 							left: 50%;
-						}
-
-						&:hover .fill {
-							border-color: $hover transparent transparent transparent;
+							border-color: $fill_disabled transparent transparent transparent;
 						}
 					}
 
@@ -309,10 +293,7 @@ $hover: rgba(0, 0, 0, 0.4);
 							transform: translateX(-50%);
 							top: 0;
 							left: 50%;
-						}
-
-						&:hover .fill {
-							border-color: transparent transparent $hover transparent;
+							border-color: transparent transparent $fill_disabled transparent;
 						}
 					}
 				}
@@ -329,6 +310,7 @@ $hover: rgba(0, 0, 0, 0.4);
 						position: absolute;
 						font-size: 30px;
 						color: #5b5b5b;
+						z-index: 9;
 					}
 
 					.fill {
@@ -337,11 +319,6 @@ $hover: rgba(0, 0, 0, 0.4);
 						height: 0;
 						position: absolute;
 						border-style: solid;
-						display: none;
-					}
-
-					&:hover .fill {
-						display: block;
 					}
 
 					&.top-left {
@@ -356,7 +333,7 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 52px 52px 0 0;
-							border-color: $hover transparent transparent transparent;
+							border-color: $fill_disabled transparent transparent transparent;
 							top: 2px;
 							left: 2px;
 						}
@@ -374,7 +351,7 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 0 52px 52px 0;
-							border-color: transparent $hover transparent transparent;
+							border-color: transparent $fill_disabled transparent transparent;
 							top: 2px;
 							right: 2px;
 						}
@@ -392,7 +369,7 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 0 0 52px 52px;
-							border-color: transparent transparent $hover transparent;
+							border-color: transparent transparent $fill_disabled transparent;
 							bottom: 2px;
 							right: 2px;
 						}
@@ -410,7 +387,7 @@ $hover: rgba(0, 0, 0, 0.4);
 
 						.fill {
 							border-width: 52px 0 0 52px;
-							border-color: transparent transparent transparent $hover;
+							border-color: transparent transparent transparent $fill_disabled;
 							bottom: 2px;
 							left: 2px;
 						}

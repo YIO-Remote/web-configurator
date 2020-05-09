@@ -46,6 +46,23 @@ export type Reducers<S> = {
 export type UpdateFromServer = boolean | undefined;
 
 // State Types
+export interface IButtonConfig {
+	enabled: boolean;
+	feature: string;
+	button: string;
+	text: string;
+	icon: string;
+	size: 'small' | 'large';
+	colour: string;
+	command: string;
+}
+
+export interface IRemoteFeature {
+	id: string;
+	name: string;
+	buttonGroups: IButtonConfig[][];
+}
+
 export enum ButtonMap {
 	// power control
 	C_POWER_OFF,

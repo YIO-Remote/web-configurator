@@ -2,5 +2,5 @@
     <div class="label">
         <slot></slot>
     </div>
-    <input class="toggle" type="checkbox" :checked="checked" />
+    <input class="toggle" type="checkbox" :checked="checked" @change="onChange($event)" />
 </div>

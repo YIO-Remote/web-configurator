@@ -6,7 +6,7 @@ import { Component, Emit, Prop } from 'vue-property-decorator';
 })
 export default class ActionButton extends Vue {
 	@Prop({
-		required: true
+		required: false
 	})
 	public text: string;
 

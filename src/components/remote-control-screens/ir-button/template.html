@@ -1,0 +1,7 @@
+
+<transition name="fade">
+    <div :class="classes" v-if="config.enabled" @click="onClick">
+        <span v-if="hasText">{{config.text}}</span>
+        <i v-if="hasIcon" :class="iconClasses"></i>
+    </div>
+</transition>

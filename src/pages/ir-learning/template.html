@@ -23,7 +23,7 @@
                 </div>
                 <div class="features">
                     <card-list :dragOptions="featuresDragOptions" :dragList="features" :disableSelect="true">
-                        <small-card v-for="(feature, index) in features" :key="index" :title="feature" :data-id="feature"></small-card>
+                        <small-card v-for="(feature, index) in features" :key="index" :title="feature.name" :data-id="feature.id"></small-card>
                     </card-list>
                 </div>
             </div>
@@ -42,85 +42,13 @@
                     </div>
                     <div class="content">
                         <swiper :options="swiperOptions">
-                            <swiper-slide v-if="powerFeatureSelected || sourceFeatureSelected">
-                                <div class="feature-button-pad" v-if="powerFeatureSelected">
-                                    <div class="feature-header">
-                                        <div class="title">
-                                            Power Control
-                                        </div>
-                                        <action-icon-button type="delete"></action-icon-button>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button icon green">
-                                            <i class="icon icon-power-on"></i>
-                                        </div>
-                                        <div class="button icon red">
-                                            <i class="icon icon-power-on"></i>
-                                        </div>
-                                        <div class="button icon">
-                                            <i class="icon icon-power-on"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="feature-button-pad" v-if="sourceFeatureSelected">
-                                    <div class="feature-header">
-                                        <div class="title">
-                                            Source Selection
-                                        </div>
-                                        <action-icon-button type="delete"></action-icon-button>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button icon green">
-                                            <i class="icon icon-power-on"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </swiper-slide>
-                            <swiper-slide v-if="mediaControlFeatureSelected">
-                                <div class="feature-button-pad">
-                                    <div class="feature-header">
-                                        <div class="title">
-                                            Media Controls
-                                        </div>
-                                        <action-icon-button type="delete"></action-icon-button>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button number">1</div>
-                                        <div class="button number">2</div>
-                                        <div class="button number">3</div>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button colour red"></div>
-                                    </div>
-                                </div>
+                            <swiper-slide v-if="powerFeatureSelected || tunerFeatureSelected || volumeFeatureSelected">
+                                <button-pad :config="powerFeature" alignment="space-between" @onButtonSelected="onButtonSelected" @onRemoved="onFeatureRemoved" v-if="powerFeatureSelected"></button-pad>
+                                <button-pad :config="volumeFeature" alignment="space-between" @onButtonSelected="onButtonSelected" @onRemoved="onFeatureRemoved" v-if="volumeFeatureSelected"></button-pad>
+                                <button-pad :config="tunerFeature" alignment="space-between" @onButtonSelected="onButtonSelected" @onRemoved="onFeatureRemoved" v-if="tunerFeatureSelected"></button-pad>
                             </swiper-slide>
                             <swiper-slide v-if="numberPadFeatureSelected">
-                                <div class="feature-button-pad">
-                                    <div class="feature-header">
-                                        <div class="title">
-                                            Number Pad
-                                        </div>
-                                        <action-icon-button type="delete"></action-icon-button>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button number">1</div>
-                                        <div class="button number">2</div>
-                                        <div class="button number">3</div>
-                                        <div class="button number">4</div>
-                                        <div class="button number">5</div>
-                                        <div class="button number">6</div>
-                                        <div class="button number">7</div>
-                                        <div class="button number">8</div>
-                                        <div class="button number">9</div>
-                                        <div class="button number">0</div>
-                                    </div>
-                                    <div class="buttons">
-                                        <div class="button colour red"></div>
-                                        <div class="button colour green"></div>
-                                        <div class="button colour yellow"></div>
-                                        <div class="button colour blue"></div>
-                                    </div>
-                                </div>
+                                <button-pad :config="numberPadFeature" @onButtonSelected="onButtonSelected" @onRemoved="onFeatureRemoved"></button-pad>
                             </swiper-slide>
                             <div class="swiper-pagination" slot="pagination"></div>
                         </swiper>

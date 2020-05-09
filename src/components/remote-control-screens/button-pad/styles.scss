@@ -1,0 +1,32 @@
+.button-pad {
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    margin-bottom: 5px;
+    border: 1px dashed #666666;
+    border-radius: 8px;
+
+    .feature-header {
+        display: flex;
+        flex-direction: row;
+        color: #666666;
+        margin: 3px 5px 0 6px;
+        font-size: 12px;
+
+        .name {
+            flex: 1;
+            line-height: 1.5;
+        }
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    } 
+
+    .button-group {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+}

@@ -1,12 +1,33 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
+import { IButtonConfig } from '../../../types';
+import TextInput from '../../text-input/index.vue';
 import ActionButton from '../../action-button/index.vue';
+import SwitchToggle from '../../switch-toggle/index.vue';
+import Icon from '../../icon/index.vue';
 
 @Component({
-	name: 'IntegrationSettings',
+	name: 'IrButtonMapping',
 	components: {
-		ActionButton
+		SwitchToggle,
+		ActionButton,
+		TextInput,
+		Icon
 	}
 })
-export default class IRButtonMapping extends Vue {
+export default class IrButtonMapping extends Vue {
+	@Prop({
+		type: Object,
+		required: true
+	})
+	public button: IButtonConfig;
+
+	public onToggled(button: IButtonConfig, value: boolean) {
+		console.log(value);
+		button.enabled = value;
+	}
+
+	public onRecord(button: IButtonConfig) {
+		alert('LEARN COMMAND FOR ' + button.feature);
+	}
 }

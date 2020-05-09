@@ -1,0 +1,11 @@
+<div class="button-pad">
+    <div class="feature-header">
+        <div class="name">
+            {{config.name}}
+        </div>
+        <action-icon-button type="delete" @onClick="onRemove()"></action-icon-button>
+    </div>
+    <div class="button-group" :style="{ 'justify-content': alignment }" v-for="(buttonGroup, groupIndex) in config.buttonGroups" :key="groupIndex">
+        <ir-button :config="button" v-for="(button, buttonIndex) in buttonGroup" :key="buttonIndex" @onClick="onButtonSelected"></ir-button>
+    </div>
+</div>

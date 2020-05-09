@@ -1,3 +1,17 @@
 <div class="ir-button-mapping">
-   <h1 class="title">IR Button Mapping</h1>
+   <h2 class="title">{{button.feature}}</h2>
+      <div class="details">
+         <div class="switch">
+            <label>Enabled: </label>
+            <switch-toggle v-model="button.enabled"></switch-toggle>
+         </div>
+         <div class="text-container">
+            <div class="text sub">
+               {{button.command || 'No IR Command'}}
+            </div>
+         </div>
+      </div>
+      <action-button @onClick="onRecord(button)">
+         <icon type="play"></icon>
+      </action-button>
 </div>

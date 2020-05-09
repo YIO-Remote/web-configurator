@@ -1,7 +1,83 @@
 .ir-button-mapping {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background-color: #313246;
     padding: 30px;
     font-family: OpenSans-Light;
+
+    .title {
+        font-size: 14px;
+        padding: 10px 0;
+        border-bottom: 1px solid #0b0b0b;
+        color: #FFFFFF;
+        text-align: left;
+    }
+
+    .list {
+        padding: 20px 0 0;
+        border-bottom: 1px solid #0b0b0b;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 12px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        background: #222332;
+        padding: 10px;
+        border-radius: 6px;
+
+        .details {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 90%;
+        }
+
+        .text-container {
+            margin: 0 10px;
+        }
+
+        .text {
+            padding: 5px 0;
+            color: #FFFFFF;
+            text-align: left;
+
+            &.sub {
+                opacity: 0.5;
+            }
+        }
+
+        .action {
+            width: 10%;
+            float: right;
+        }
+
+        /deep/ .action-button {
+            width: 30px;
+            min-width: auto;
+            height: 30px;
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        /deep/ .icon-container {
+            width: 100%;
+            height: 100%;
+
+            .icon {
+                position: absolute;
+                top: 50%;
+                transform: translate(-50%,-50%);
+                left: 60%;
+                font-size: 25px;
+            }
+        }
+    }
 }
