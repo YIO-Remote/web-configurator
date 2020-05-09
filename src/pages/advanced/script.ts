@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { IVueCodeMirror } from 'vue-codemirror';
 import { Component } from 'vue-property-decorator';
 import { Inject } from '../../utilities/dependency-injection';
 import { YioStore } from '../../store';
 import { ServerConnection } from '../../server';
 import ActionButton from '../../components/action-button/index.vue';
-import { IAceEditor, IVueAce } from '../../types';
 
 @Component({
 	name: 'AdvancedPage',
@@ -14,7 +14,7 @@ import { IAceEditor, IVueAce } from '../../types';
 	},
 	beforeRouteLeave(this: AdvancedEditPage, _, __, next) {
 		const storeConfigValue = JSON.stringify(this.store.value.config, null, 4);
-		const editorConfigValue = this.$ace.getSession().getValue();
+		const editorConfigValue = this.editor.getValue();
 
 		if (storeConfigValue === editorConfigValue) {
 			return next();
@@ -34,14 +34,27 @@ export default class AdvancedEditPage extends Vue {
 	@Inject(() => ServerConnection)
 	public server: ServerConnection;
 
-	public $ace: IAceEditor;
+	public $cm: HTMLElement;
 	public code: string = JSON.stringify(this.store.value.config, null, 4);
-	public config = {
-		lang: 'json',
+	public options = {
+		autofocus: true,
+		lineNumbers: true,
+		lineWrap: false,
+		foldGutter: true,
+		gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+		theme: 'ayu-dark',
+		mode: {
+			name: 'javascript',
+			json: true
+		}
 	};
 
+	public get editor() {
+		return (this.$refs.cm as IVueCodeMirror).codemirror;
+	}
+
 	public async save() {
-		const config = this.$ace.getSession().getValue();
+		const config = this.editor.getValue();
 
 		this.$dialog.warning({
 			title: this.$t('dialogs.areYouSure.title').toString(),
@@ -49,20 +62,16 @@ export default class AdvancedEditPage extends Vue {
 			showButtons: true
 		})
 		.then(() => this.server.setConfig(JSON.parse(config)))
-		.then(() => this.$ace.getSession().foldAll(1))
-		.catch(() => this.$ace.setValue(config));
+		.then(() => this.editor.execCommand('foldAll'))
+		.catch(() => this.editor.setValue(config));
 	}
 
 	public mounted() {
-		this.$ace = ((this.$refs.ace as IVueAce).$ace as IAceEditor);
-
 		this.$subscribeTo(
 			this.store.select('config').pipe(distinctUntilChanged((x, y) => JSON.stringify(x) === JSON.stringify(y))),
 			(value) => {
 				this.code = JSON.stringify(value, null, 4);
-				this.$ace.setValue(this.code);
-				this.$ace.resize();
-				this.$nextTick().then(() => this.$ace.getSession().foldAll(1));
+				this.editor.setValue(this.code);
 			});
 	}
 }

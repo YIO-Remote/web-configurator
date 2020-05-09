@@ -366,21 +366,6 @@ export interface IDropDownItem {
 	value: string;
 }
 
-export interface IVueAce extends Element {
-	$ace: IAceEditor;
-}
-
-export interface IAceEditor {
-	getSession(): IAceEditorSession;
-	setValue(value: string): void;
-	resize(): void;
-}
-
-export interface IAceEditorSession {
-	getValue(): string;
-	foldAll(index: number): void;
-}
-
 export interface ISpotifyTokenData {
 	access_token: string;
 	refresh_token: string;

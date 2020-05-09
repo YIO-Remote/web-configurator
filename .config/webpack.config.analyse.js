@@ -4,7 +4,7 @@ const common = require('./webpack.config.common');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = merge(common, {
     mode: 'production',
@@ -32,7 +32,9 @@ module.exports = merge(common, {
         ]
     },
     plugins: [
-        new CompressionPlugin(),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'server'
+        }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new MiniCssExtractPlugin({
             filename: 'style.css'
