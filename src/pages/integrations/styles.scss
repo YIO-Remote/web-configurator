@@ -4,6 +4,12 @@
     height: 100%;
 }
 
+.configured, .discovered {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+}
+
 .title {
     font-family: OpenSans;
 }

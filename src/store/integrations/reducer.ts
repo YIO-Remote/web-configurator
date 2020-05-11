@@ -12,6 +12,13 @@ export default function reducer(state: IIntegrationsState = initialState, action
 					configured: action.payload.integrations
 				}
 			};
+		case getType(actions.addDiscoveredIntegration):
+			const alreadyAdded = !!state.discovered.find((existing) => JSON.stringify(existing) === JSON.stringify(action.payload));
+
+			return {
+				...state,
+				discovered: [...state.discovered, ...(alreadyAdded ? [] : [action.payload])]
+			};
 		case getType(actions.setSupportedIntegrations):
 			return {
 				...state,

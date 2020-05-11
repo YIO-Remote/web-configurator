@@ -1,30 +1,54 @@
 <div class="integrations">
-    <h1 class="title">
-        {{$t('pages.integrations.configuredIntegrations')}}
-    </h1>
-    <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
-        <template v-slot:header>
-            <th>
-                {{$t('common.name')}}
-            </th>
-            <th>
-                {{$t('common.type')}}
-            </th>
-            <th :style="{ width: '80px' }"></th>
-        </template>
-        <template v-slot:item="{ item }">
-            <td>
-                {{item.friendly_name}}
-            </td>
-            <td>
-                {{item.type}}
-            </td>
-            <td :style="{ width: '80px' }">
-                <action-icon-button @onClick="onItemDeleted(item)" type="delete"></action-icon-button>
-            </td>
-        </template>
-    </yio-table>
-    <h1 class="title">
-        {{$t('pages.integrations.discoveredIntegrations')}}
-    </h1>
+    <div class="configured">
+        <h1 class="title">
+            {{$t('pages.integrations.configuredIntegrations')}}
+        </h1>
+        <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
+            <template v-slot:header>
+                <th>
+                    {{$t('common.name')}}
+                </th>
+                <th>
+                    {{$t('common.type')}}
+                </th>
+                <th :style="{ width: '80px' }"></th>
+            </template>
+            <template v-slot:item="{ item }">
+                <td>
+                    {{item.friendly_name}}
+                </td>
+                <td>
+                    {{item.type}}
+                </td>
+                <td :style="{ width: '80px' }">
+                    <action-icon-button @onClick="onItemDeleted(item)" type="delete"></action-icon-button>
+                </td>
+            </template>
+        </yio-table>
+    </div>
+    <div class="discovered">
+        <h1 class="title">
+            {{$t('pages.integrations.discoveredIntegrations')}}
+        </h1>
+        <yio-table ref="table" :items="discoveredIntegrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
+            <template v-slot:header>
+                <th>
+                    {{$t('common.name')}}
+                </th>
+                <th>
+                    {{$t('common.type')}}
+                </th>
+                <th :style="{ width: '80px' }"></th>
+            </template>
+            <template v-slot:item="{ item }">
+                <td>
+                    {{item.friendly_name}}
+                </td>
+                <td>
+                    {{item.type}}
+                </td>
+                <td :style="{ width: '80px' }"></td>
+            </template>
+        </yio-table>
+    </div>
 </div>

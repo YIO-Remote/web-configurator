@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Guid } from 'guid-typescript';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting, IDiscoveredIntegration } from './types';
 import Vue from 'vue';
 import { Localisation } from './i18n';
 
@@ -22,14 +22,20 @@ export class ServerConnection {
 	private wsp: WebSocketAsPromised;
 	private configPollingRequestId: number;
 	private entitiesPollingRequestId: number;
+	private discoveryPollingRequestId: number;
 	private requestId: number;
+	private isDiscoveringIntegrations: boolean;
+	private hasInitialData: boolean;
 
 	constructor() {
 		this.host = window.location.hostname;
 		this.port = 946;
 		this.requestId = 0;
+		this.isDiscoveringIntegrations = false;
+		this.hasInitialData = false;
 		this.configPollingRequestId = 1316134911;
 		this.entitiesPollingRequestId = 1316134910;
+		this.discoveryPollingRequestId = 1316134909;
 		this.isConnected$ = new BehaviorSubject<boolean>(false);
 		this.wsp = new WebSocketAsPromised(`ws://${this.host}:${this.port}`, {
 			packMessage: (data) => JSON.stringify(data),
@@ -38,8 +44,9 @@ export class ServerConnection {
 			extractRequestId: (data) => data && data.id
 		});
 		this.wsp.onClose.addListener(() => {
+			this.hasInitialData = false;
 			this.isConnected$.next(false);
-			this.connect();
+			window.setTimeout(() => this.connect(), 3000);
 		});
 		this.wsp.onError.addListener(() => this.isConnected$.next(false));
 		this.wsp.onResponse.addListener((response) => {
@@ -47,7 +54,7 @@ export class ServerConnection {
 
 			if (response.success && response.id === this.configPollingRequestId) {
 				this.store.dispatch(this.store.actions.updateConfig(response.config));
-				this.pollForData();
+				this.pollForConfig();
 			}
 		});
 	}
@@ -66,7 +73,10 @@ export class ServerConnection {
 			.then(() => this.getProfiles())
 			.then(() => this.getConfig(true))
 			.then(() => this.getAvailableEntities())
-			.then(() => this.pollForData());
+			.then(() => this.hasInitialData = true)
+			.then(() => this.pollForConfig())
+			.then(() => this.pollForEntities())
+			.then(() => this.pollForIntegrations());
 	}
 
 	public authenticate(token: string) {
@@ -116,10 +126,44 @@ export class ServerConnection {
 		return this.sendMessage<IEntity[]>({type: 'get_available_entities'})
 			.then((response) => response.available_entities)
 			.then((entities) => this.store.dispatch(this.store.actions.setAvailableEntities(entities)))
+			.then(() => this.pollForEntities())
 			.catch(() => ({}));
 	}
 
-	public getSupportedIntegrations(): Promise < void > {
+	public discoverIntegrations() {
+		if (this.isDiscoveringIntegrations) {
+			this.pollForIntegrations();
+			return Promise.resolve();
+		}
+
+		this.isDiscoveringIntegrations = true;
+
+		return new Promise<IDiscoveredIntegration[]>((resolve, reject) => {
+			const listener = (response: string) => {
+				const parsedResponse = JSON.parse(response) as IServerResponseWithData<IDiscoveredIntegration>;
+
+				if (parsedResponse.id === this.discoveryPollingRequestId) {
+					if (parsedResponse.message === 'discovery_done') {
+						this.wsp.onMessage.removeListener(listener);
+						resolve();
+						return;
+					}
+
+					if (parsedResponse.discovered_integration) {
+						this.store.dispatch(this.store.actions.addDiscoveredIntegration(parsedResponse.discovered_integration));
+					}
+				}
+			};
+
+			this.wsp.onMessage.addListener(listener);
+			this.wsp.sendRequest({type: 'discover_integrations'}, { requestId: this.discoveryPollingRequestId })
+				.catch((error) => reject(error));
+		})
+		.then(() => this.isDiscoveringIntegrations = false)
+		.then(() => this.pollForIntegrations());
+	}
+
+	public getSupportedIntegrations(): Promise<void> {
 		return this.sendMessage<string[]>({type: 'get_supported_integrations'})
 			.then((response) => response.supported_integrations)
 			.then((integrations: string[]) => {
@@ -135,7 +179,7 @@ export class ServerConnection {
 			.then((integrations) => this.store.dispatch(this.store.actions.setSupportedIntegrations(integrations)));
 	}
 
-	public getIntegrationSchema(integration: string): Promise < IIntegrationSchema > {
+	public getIntegrationSchema(integration: string): Promise<IIntegrationSchema> {
 		return this.sendMessage<IIntegrationSchema>({type: 'get_integration_setup_data', integration})
 			.then((response) => response.data);
 	}
@@ -507,6 +551,13 @@ export class ServerConnection {
 			.catch((response) => this.showToast(response));
 	}
 
+	// public checkForUpdate() {
+	// 	return this.sendMessage({ type: 'check_for_update' })
+	// 		.then((response) => this.showToast(response))
+	// 		.then(() => this.store.dispatch(this.store.actions.setLanguage(language)))
+	// 		.catch((response) => this.showToast(response));
+	// }
+
 	public reboot() {
 		return this.sendMessage({ type: 'reboot' })
 			.catch((response) => this.showToast(response));
@@ -517,21 +568,28 @@ export class ServerConnection {
 		this.requestId++;
 
 		return this.wsp.sendRequest(message, {requestId: this.requestId})
-		.then((response: IServerResponseWithData<T>) => {
-			if (!response.success) {
-				return Promise.reject(response);
-			}
+			.then((response: IServerResponseWithData<T>) => {
+				if (!response.success) {
+					return Promise.reject(response);
+				}
 
-			if (message.type !== 'get_config') {
-				this.getConfig(true);
-			}
-			return response;
-		});
+				if (message.type !== 'get_config' && this.hasInitialData) {
+					this.getConfig(true);
+				}
+				return response;
+			});
 	}
 
-	private pollForData() {
+	private pollForConfig() {
 		window.setTimeout(() => this.getConfig(), 3000);
-		window.setTimeout(() => this.getAvailableEntities(), 3000);
+	}
+
+	private pollForEntities() {
+		window.setTimeout(() => this.getAvailableEntities(), 5000);
+	}
+
+	private pollForIntegrations() {
+		window.setTimeout(() => this.discoverIntegrations(), 10000);
 	}
 
 	private showToast(response: IServerResponse) {

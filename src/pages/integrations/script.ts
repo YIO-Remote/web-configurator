@@ -18,7 +18,8 @@ import AddIntegration from '../../components/sub-menus/add-integration/index.vue
 	subscriptions(this: IntegrationsPage) {
 		return {
 			integrations: this.store.integrations.configured$,
-			supportedIntegrations: this.store.integrations.supported$
+			supportedIntegrations: this.store.integrations.supported$,
+			discoveredIntegrations: this.store.integrations.discovered$
 		};
 	}
 })

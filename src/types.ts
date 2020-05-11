@@ -132,8 +132,50 @@ export interface IUiConfig {
 	groups: IKeyValuePair<IGroup>;
 }
 
+export interface IUpdateInfo {
+	available: boolean;
+	release_name: string;
+	version: string;
+	// [
+	// 	{
+	// 		name: 'app',
+	// 		available: true,
+	// 		release_name: 'v0.3.0 foobar feature',
+	// 		version: '0.3.0',
+	// 	},
+	// 	{
+	// 		name: 'plugin',
+	// 		homeassistant:
+	// 		{
+	// 			available: true,
+	// 			release_name: 'v0.3.0 foobar feature',
+	// 			version: '0.3.0',
+	// 		},
+	// 		homey:
+	// 		{
+	// 			available: true,
+	// 			release_name: 'v0.3.0 foobar feature',
+	// 			version: '0.3.0',
+	// 		}
+	// 	},
+	// 	{
+	// 		name: 'os',
+	// 		available: true,
+	// 		release_name: 'v0.3.0 foobar feature',
+	// 		version: '0.3.0',
+	// 	},
+	// 	{
+	// 		name: 'dock',
+	// 		available: true,
+	// 		release_name: 'v0.3.0 foobar feature',
+	// 		version: '0.3.0',
+	// 	}
+	// ];
+}
+
 export interface ISettingsState {
 	languages: ILanguageSetting[];
+	// updates: any;
 }
 
 export interface IConfigState {
@@ -157,6 +199,7 @@ export interface IIntegrationSchema {
 export interface IIntegrationsState {
 	configured: IKeyValuePair<IIntegration>;
 	supported: IKeyValuePair<IIntegrationSchema>;
+	discovered: IDiscoveredIntegration[];
 }
 
 export interface IEntitiesState {
@@ -277,6 +320,12 @@ export interface ILocale extends LocaleMessageObject {
 }
 
 // Server
+export interface IDiscoveredIntegration {
+	friendly_name: string;
+	ip: string;
+	type: string;
+}
+
 export interface IServerResponse {
 	type: string;
 	success: boolean;
@@ -285,6 +334,7 @@ export interface IServerResponse {
 }
 
 export interface IServerResponseWithData<T> extends IServerResponse {
+	discovered_integration: T;
 	config: T;
 	languages: T;
 	groups: T;
