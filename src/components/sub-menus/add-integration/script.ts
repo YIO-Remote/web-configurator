@@ -6,11 +6,12 @@ import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../server';
 import { IKeyValuePair, IDropDownItem, IIntegrationSchema } from '../../../types';
+import { SpotifyAuthentication } from '../../../utilities/spotify-authentication';
 import ActionButton from '../../action-button/index.vue';
 import ActionIconButton from '../../action-icon-button/index.vue';
 import DropDown from '../../drop-down/index.vue';
 import Spotify from '../../spotify/index.vue';
-import { SpotifyAuthentication } from '../../../utilities/spotify-authentication';
+import SwitchToggle from '../../switch-toggle/index.vue';
 
 @Component({
 	name: 'AddIntegration',
@@ -24,6 +25,7 @@ import { SpotifyAuthentication } from '../../../utilities/spotify-authentication
 		};
 	},
 	components: {
+		SwitchToggle,
 		ActionButton,
 		ActionIconButton,
 		DropDown,
@@ -48,7 +50,7 @@ export default class AddIntegration extends Vue {
 	public name: string = '';
 	public type: string = '';
 	public properties: IKeyValuePair<IIntegrationSchema> = {};
-	public propertyValues: IKeyValuePair<string> = {};
+	public propertyValues: IKeyValuePair<string | boolean | number> = {};
 	public newDataKey: string = '';
 	public newDataValue: string = '';
 	public selectedValue: string = this.isIntegrationTypeSelectedSpotify ? 'spotify' : '';
@@ -71,11 +73,13 @@ export default class AddIntegration extends Vue {
 		this.properties = { ...filteredProps };
 		this.propertyValues = { ...Object.keys(filteredProps)
 			.reduce((values, propName) => {
+				const type = filteredProps[propName].type;
+
 				return {
 					...values,
-					[`${propName}`]: ''
+					[`${propName}`]: type === 'string' ? '' : false
 				};
-			}, {} as IKeyValuePair<string>) };
+			}, {} as IKeyValuePair<string | boolean | number>) };
 	}
 
 	public onAddNewIntegration() {
