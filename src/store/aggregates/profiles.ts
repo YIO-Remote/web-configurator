@@ -39,4 +39,16 @@ export class ProfilesAggregate {
 	public profile$(id: string) {
 		return this.profiles$.pipe(map((profiles) => profiles.find((profile) => profile.id === id)));
 	}
+
+	public getProfileNamesByPage(page: IPageAggregate) {
+		const profiles = this.store.value.profiles.all;
+
+		return Object.keys(profiles)
+			.filter((key) => {
+				const profile = profiles[key];
+
+				return profile.pages.includes(page.id);
+			})
+			.map((key) => profiles[key].name);
+	}
 }

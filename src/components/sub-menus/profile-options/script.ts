@@ -115,9 +115,11 @@ export default class ProfileOptions extends Vue {
 	}
 
 	public onDeletePage(page: IPageAggregate) {
+		const profiles = this.store.profiles.getProfileNamesByPage(page);
+
 		this.$dialog.warning({
 			title: this.$t('dialogs.deletePage.title').toString(),
-			message: this.$t('dialogs.deletePage.message', { name: page.name }).toString(),
+			message: this.$t('dialogs.deletePage.message', { name: page.name, profiles: profiles.join(', ') }).toString(),
 			showButtons: true
 		}).then(() => this.server.deletePage(page));
 	}

@@ -10,7 +10,7 @@
 		},
 		"deletePage": {
 			"title": "Delete Page",
-			"message": "Are you sure you want to delete the page \"{name}\"? The settings will be lost."
+			"message": "Are you sure you want to delete the page \"{name}\"? This page is included in the following profiles: {profiles}. The settings will be lost. "
 		},
 		"deleteGroup": {
 			"title": "Delete Group",
