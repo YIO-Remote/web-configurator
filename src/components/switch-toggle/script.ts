@@ -1,12 +1,17 @@
 import Vue from 'vue';
-import {Component, Model} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 
 @Component({
 	name: 'SwitchToggle'
 })
 export default class SwitchToggle extends Vue {
-	@Model('onToggle', {
-		type: Boolean
+	@Prop({
+		type: Boolean,
+		required: true
 	})
-	public readonly checked!: boolean;
+	public readonly value: boolean;
+
+	public get hasSlotContent() {
+		return !!(this.$slots.default || this.$scopedSlots.default);
+	}
 }

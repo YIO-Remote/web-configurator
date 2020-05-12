@@ -1,6 +1,6 @@
 <div class="container">
-    <div class="label">
+    <div class="label" v-if="hasSlotContent">
         <slot></slot>
     </div>
-    <input class="toggle" type="checkbox" :checked="checked" />
+    <input class="toggle" type="checkbox" :checked="value" @change="$emit('input', $event.target.checked)" />
 </div>

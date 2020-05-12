@@ -50,8 +50,4 @@ export default class SettingsPage extends Vue {
 	public updateAutoBrightness(value: boolean) {
 		this.server.setAutoBrightness(value);
 	}
-
-	public updateAutoSoftwareUpdate(value: boolean) {
-		alert('TODO: API ENDPOINT NEEDED');
-	}
 }
