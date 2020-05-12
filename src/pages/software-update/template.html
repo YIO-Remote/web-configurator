@@ -6,7 +6,7 @@
         <div class="row">
             <card :title="$t('pages.softwareUpdate.autoUpdate')" class="item" @onClick="updateAutoSoftwareUpdate(!autoSoftwareUpdate)">
                 <template v-slot:rightIcon>
-                    <switch-toggle v-model="autoSoftwareUpdate" @onToggle="updateAutoSoftwareUpdate"></switch-toggle>
+                    <switch-toggle v-model="autoSoftwareUpdate"></switch-toggle>
                 </template>
             </card>
             <div class="description">

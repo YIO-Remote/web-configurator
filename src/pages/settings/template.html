@@ -6,14 +6,14 @@
         <div class="row">
             <card :title="$t('pages.settings.darkMode.title')" class="settings-item" @onClick="updateDarkMode(!darkMode)">
                 <template v-slot:rightIcon>
-                    <switch-toggle v-model="darkMode" @onToggle="updateDarkMode"></switch-toggle>
+                    <switch-toggle v-model="darkMode"></switch-toggle>
                 </template>
             </card>
         </div>
         <div class="row">
             <card :title="$t('pages.settings.autoBrightness.title')" class="settings-item" @onClick="updateAutoBrightness(!autoBrightness)">
                 <template v-slot:rightIcon>
-                    <switch-toggle v-model="autoBrightness" @onToggle="updateAutoBrightness"></switch-toggle>
+                    <switch-toggle v-model="autoBrightness"></switch-toggle>
                 </template>
             </card>
             <div class="settings-description">

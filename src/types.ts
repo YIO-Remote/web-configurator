@@ -116,7 +116,7 @@ export interface IIntegrationInstance {
 	type: string;
 	friendly_name: string;
 	friendly_name_search_term: string;
-	data: IKeyValuePair<string>;
+	data: IKeyValuePair<string | boolean | number>;
 }
 
 export interface IIntegration {

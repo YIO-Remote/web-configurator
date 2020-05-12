@@ -6,7 +6,8 @@
          {{key}}
       </div>
       <div class="setting-value">
-         <input class="setting-input" :placeholder="`example: ${property.examples[0]}`" type="text" v-model="propertyValues[key]" />
+         <input v-if="property.type === 'string'" class="setting-input" :placeholder="`example: ${property.examples[0]}`" type="text" v-model="propertyValues[key]" />
+         <switch-toggle v-if="property.type === 'boolean'" v-model="propertyValues[key]"></switch-toggle>
       </div>
    </div>
    <action-button text="Save" :primary="true" @onClick="onSave"></action-button>

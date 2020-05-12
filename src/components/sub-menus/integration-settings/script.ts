@@ -5,11 +5,13 @@ import { Inject } from '../../../utilities/dependency-injection';
 import { ServerConnection } from '../../../server';
 import { IIntegrationInstance, IKeyValuePair, IIntegrationSchema } from '../../../types';
 import ActionButton from '../../action-button/index.vue';
+import SwitchToggle from '../../switch-toggle/index.vue';
 
 @Component({
 	name: 'IntegrationSettings',
 	components: {
-		ActionButton
+		ActionButton,
+		SwitchToggle
 	},
 	subscriptions(this: IntegrationSettings) {
 		return {
@@ -44,7 +46,7 @@ export default class IntegrationSettings extends Vue {
 
 	public supportedIntegrations: IKeyValuePair<IIntegrationSchema>;
 	public properties: IKeyValuePair<IIntegrationSchema> = {};
-	public propertyValues: IKeyValuePair<string> = {};
+	public propertyValues: IKeyValuePair<string | number | boolean> = {};
 
 	public get name() {
 		return this.integration.friendly_name;
@@ -70,7 +72,7 @@ export default class IntegrationSettings extends Vue {
 				...values,
 				[`${propName}`]: this.integration.data[propName]
 			};
-		}, {} as IKeyValuePair<string>) };
+		}, {} as IKeyValuePair<string | number | boolean>) };
 	}
 
 	public onSave() {

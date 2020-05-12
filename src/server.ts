@@ -28,7 +28,7 @@ export class ServerConnection {
 	private hasInitialData: boolean;
 
 	constructor() {
-		this.host = window.location.hostname;
+		this.host = '192.168.12.131'; // window.location.hostname;
 		this.port = 946;
 		this.requestId = 0;
 		this.isDiscoveringIntegrations = false;
