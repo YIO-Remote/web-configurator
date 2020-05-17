@@ -23,7 +23,7 @@
          </div>
          <div v-for="(property, key) in properties" class="setting">
             <div class="setting-name">
-               {{key}}
+               {{property.title}}
             </div>
             <div class="setting-value">
                <input v-if="property.type === 'string'" class="setting-input" :placeholder="`example: ${property.examples[0]}`" type="text" v-model="propertyValues[key]" />
