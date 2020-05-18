@@ -1,108 +1,108 @@
 {
 	"overlays": {
 		"disconnection": {
-			"title": "Oh No!",
-			"message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
-			"reconnecting": "Reconnecting"
+			"title": "O nee!",
+			"message": "Het lijkt erop dat we geen verbinding meer hebben met jouw afstandsbediening. Zorg ervoor dat deze beschikbaar is op het netwerk.",
+			"reconnecting": "Bezig met opnieuw verbinden"
 		}
 	},
 	"common": {
 		"id": "ID",
-		"save": "Save",
+		"save": "Opslaan",
 		"cancel": "Annuleer",
-		"create": "Create",
-		"name": "Name",
-		"pleaseSelect": "Please Select",
-		"settings": "Settings",
-		"type": "Type",
-		"version": "Version",
-		"release": "Release"
+		"create": "Maken",
+		"name": "Naam",
+		"pleaseSelect": "Maak een keuze",
+		"settings": "Instellingen",
+		"type": "Soort",
+		"version": "Versie",
+		"release": "Uitgave"
 	},
 	"header": {
 		"title": "Web Configurator"
 	},
 	"menu": {
-		"advanced": "Advanced",
-		"entities": "Entities",
-		"integrations": "Integrations",
-		"irLearning": "IR Learning",
-		"settings": "Settings",
-		"profiles": "Profiles",
-		"softwareUpdate": "Software Update"
+		"advanced": "Geavanceerd",
+		"entities": "Entiteiten",
+		"integrations": "Integraties",
+		"irLearning": "IR Leren",
+		"settings": "Instellingen",
+		"profiles": "Profielen",
+		"softwareUpdate": "Software Bijwerken"
 	},
 	"components": {
 		"editEntities": {
-			"dropZone": "Drag an entity here"
+			"dropZone": "Sleep een entiteit hierheen"
 		},
 		"editPage": {
-			"dropZone": "Drag a group here"
+			"dropZone": "Sleep een groep hierheen"
 		},
 		"profileOptions": {
 			"pagesTab": {
-				"title": "Pages",
-				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
-				"availablePages": "Available Pages"
+				"title": "Pagina's",
+				"message": "U kunt groepen aan een pagina toevoegen nadat u het onder een profiel sleept en selecteert.",
+				"availablePages": "Beschikbare pagina's"
 			},
 			"groupsTab": {
-				"title": "Groups",
-				"message": "You can add entities to a group after dragging it under a page in the remote view to the left.",
-				"availableGroups": "Available Groups"
+				"title": "Groepen",
+				"message": "U kunt entiteiten aan een groep toevoegen nadat u ze onder een pagina heeft gesleept in de weergave van de afstandsbediening aan de linker kant.",
+				"availableGroups": "Beschikbare groepen"
 			},
 			"entitiesTab": {
-				"title": "Entities",
-				"message": "Drag entities to the remote view to add them to favorites or a group."
+				"title": "Entiteiten",
+				"message": "Sleep entiteiten naar de weergave van de afstandsbediening om ze toe te voegen aan favorieten of een groep."
 			}
 		}
 	},
 	"pages": {
 		"integrations": {
-			"configuredIntegrations": "Configured Integrations",
-			"discoveredIntegrations": "Discovered Integrations",
-			"addIntegration": "Add Integrations",
-			"newIntegration": "New Integrations"
+			"configuredIntegrations": "Geconfigureerde integraties",
+			"discoveredIntegrations": "Ontdekte integraties",
+			"addIntegration": "Integraties Toevoegen",
+			"newIntegration": "Nieuwe Integraties"
 		},
 		"entities": {
-			"title": "Entities Controlled By YIO Remote",
-			"integration": "Integration",
-			"availableEntities": "Available Entities"
+			"title": "Entiteiten beheerd door de YIO Afstandsbediening",
+			"integration": "Integratie",
+			"availableEntities": "Beschikbare Entiteiten"
 		},
 		"profiles": {
-			"title": "Profiles",
+			"title": "Profielen",
 			"profileList": {
-				"title": "Pages",
-				"dropZone": "Drag a page here"
+				"title": "Pagina's",
+				"dropZone": "Sleep een pagina hierheen"
 			},
 			"newProfile": {
-				"title": "New Profile"
+				"title": "Nieuw Profiel"
 			},
 			"remote": {
-				"defaultMessage": "Select a page in a profile to start editing",
-				"editSettingsMessage": "Settings content cannot be edited"
+				"defaultMessage": "Selecteer een pagina in een profiel om te beginnen met bewerken",
+				"editSettingsMessage": "Instellingen kunnen niet worden bewerkt"
 			}
 		},
 		"irLearning": {},
 		"softwareUpdate": {
-			"title": "Software Update",
-			"description": "Automatically look for updates and update when a new software version is available. Updates are installed at 04.00 am.",
-			"autoUpdate": "Auto Update",
-			"update": "Update",
-			"checkForUpdate": "Check For Updates",
-			"upToDate": "Your software is up to date",
-			"newAvailable": "New software is available",
-			"installedVersion": "Installed Version"
+			"title": "Software Bijwerken",
+			"description": "Automatisch zoeken naar nieuwe softwareversies en bijwerken indien beschikbaar. Nieuwe softwareversies worden geïnstalleerd om 04.00 uur.",
+			"autoUpdate": "Automatisch Bijwerken",
+			"update": "Bijwerken",
+			"checkForUpdate": "Controleren op nieuwe versies",
+			"upToDate": "Uw software is bijgewerkt",
+			"newAvailable": "Nieuwe softwareversie beschikbaar",
+			"installedVersion": "Geïnstalleerde Versie"
 		},
 		"advanced": {
-			"title": "Advanced Configuration",
-			"message": "Manually set the remote config by hand:"
+			"title": "Geavanceerde Configuratie",
+			"message": "Stel de configuratie van de afstandsbediening handmatig in:"
 		},
 		"settings": {
-			"title": "Settings",
+			"title": "Instellingen",
 			"darkMode": {
-				"title": "Dark Mode"
+				"title": "Donkere Modus"
 			},
 			"autoBrightness": {
-				"title": "Auto Brightness",
-				"description": "Automatically adjust the brightness based on ambient light."
+				"title": "Automatische Helderheid",
+				"description": "Helderheid automatisch aanpassen op basis van omgevingslicht."
 			}
 		}
 	}
