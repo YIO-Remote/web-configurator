@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { map } from 'rxjs/operators';
 import { Guid } from 'guid-typescript';
 import { Inject } from '../../../utilities/dependency-injection';
 import { YioStore } from '../../../store';
 import { ServerConnection } from '../../../server';
-import { IKeyValuePair, IDropDownItem, IIntegrationSchema } from '../../../types';
+import { IKeyValuePair, IDropDownItem, IIntegrationSchema, IDiscoveredIntegration } from '../../../types';
 import { SpotifyAuthentication } from '../../../utilities/spotify-authentication';
 import ActionButton from '../../action-button/index.vue';
 import ActionIconButton from '../../action-icon-button/index.vue';
@@ -42,6 +42,12 @@ export default class AddIntegration extends Vue {
 	@Inject(() => SpotifyAuthentication)
 	public spotifyAuthentication: SpotifyAuthentication;
 
+	@Prop({
+		type: Object,
+		required: false
+	})
+	public discoveredIntegration: IDiscoveredIntegration;
+
 	public isAddingNewIntegration: boolean = this.spotifyAuthentication.isInAuthenticationCycle;
 	public supportedIntegrations: IKeyValuePair<IIntegrationSchema>;
 	public integrationTypeSelected: boolean = false;
@@ -54,6 +60,25 @@ export default class AddIntegration extends Vue {
 	public newDataKey: string = '';
 	public newDataValue: string = '';
 	public selectedValue: string = this.isIntegrationTypeSelectedSpotify ? 'spotify' : '';
+
+	public mounted() {
+		if (this.discoveredIntegration) {
+			this.isAddingNewIntegration = true;
+			const matchingItem = this.typeOptions.find((type) => type.value === this.discoveredIntegration.type);
+
+			if (matchingItem) {
+				this.selectedValue = matchingItem.value;
+				this.onIntegrationTypeChanged(matchingItem);
+				this.propertyValues.friendly_name = this.discoveredIntegration.friendly_name;
+
+				this.$nextTick().then(() => {
+					if (Object.keys(this.propertyValues).includes('ip')) {
+						this.propertyValues.ip = this.discoveredIntegration.ip;
+					}
+				});
+			}
+		}
+	}
 
 	public onIntegrationTypeChanged(item: IDropDownItem) {
 		const selectedIntegration = this.supportedIntegrations[item.value];

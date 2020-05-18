@@ -35,10 +35,14 @@ export default class SoftwareUpdatePage extends Vue {
 			this.$t('pages.softwareUpdate.upToDate');
 	}
 
-	public checkForUpdate() {
-		this.isNewVersionAvailable = !this.isNewVersionAvailable;
-		console.log('TODO: API ENDPOINT NEEDED');
+	public updateAutoSoftwareUpdate(value: boolean) {
+		this.server.setAutoUpdate(value);
 	}
+
+	public checkForUpdate() {
+		this.server.checkForUpdate();
+	}
+
 	public update() {
 		console.log('TODO: API ENDPOINT NEEDED');
 	}
