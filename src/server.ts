@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Guid } from 'guid-typescript';
 import { Singleton, Inject } from './utilities/dependency-injection';
 import { YioStore } from './store';
-import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting } from './types';
+import { IConfigState, IKeyValuePair, IIntegrationInstance, IEntity, IServerResponse, IServerResponseWithData, IProfile, IPage, IGroup, IIntegrationSchema, IProfileAggregate, IPageAggregate, IEntityAggregate, IGroupAggregate, ILanguageSetting, IDiscoveredIntegration } from './types';
 import { Localisation } from './i18n';
 
 @Singleton
@@ -23,19 +23,17 @@ export class ServerConnection {
 	private configPollingRequestId: number;
 	private entitiesPollingRequestId: number;
 	private requestId: number;
-	// private discoveryPollingRequestId: number;
-	// private isDiscoveringIntegrations: boolean;
+	private discoveryPollingRequestId: number;
 	private hasInitialData: boolean;
 
 	constructor() {
 		this.host = window.location.hostname;
 		this.port = 946;
 		this.requestId = 0;
-		// this.isDiscoveringIntegrations = false;
 		this.hasInitialData = false;
 		this.configPollingRequestId = 1316134911;
 		this.entitiesPollingRequestId = 1316134910;
-		// this.discoveryPollingRequestId = 1316134909;
+		this.discoveryPollingRequestId = 1316134909;
 		this.isConnected$ = new BehaviorSubject<boolean>(false);
 		this.wsp = new WebSocketAsPromised(`ws://${this.host}:${this.port}`, {
 			packMessage: (data) => JSON.stringify(data),
@@ -75,8 +73,7 @@ export class ServerConnection {
 			.then(() => this.getAvailableEntities())
 			.then(() => this.hasInitialData = true)
 			.then(() => this.pollForConfig())
-			.then(() => this.pollForEntities())
-			.then(() => this.pollForIntegrations());
+			.then(() => this.pollForEntities());
 	}
 
 	public authenticate(token: string) {
@@ -131,38 +128,34 @@ export class ServerConnection {
 	}
 
 	public discoverIntegrations() {
-		return Promise.resolve();
-		// TODO: This is ready, it just needs to be fixed on the remote. Some kind of threading issue?
-		// if (this.isDiscoveringIntegrations) {
-		// 	this.pollForIntegrations();
-		// 	return Promise.resolve();
-		// }
+		if (this.store.value.integrations.isSearchingForIntegrations) {
+			return Promise.resolve();
+		}
 
-		// this.isDiscoveringIntegrations = true;
+		this.store.dispatch(this.store.actions.setSearchingForIntegrations(true));
 
-		// return new Promise<IDiscoveredIntegration[]>((resolve, reject) => {
-		// 	const listener = (response: string) => {
-		// 		const parsedResponse = JSON.parse(response) as IServerResponseWithData<IDiscoveredIntegration>;
+		return new Promise<IDiscoveredIntegration[]>((resolve, reject) => {
+			const listener = (response: string) => {
+				const parsedResponse = JSON.parse(response) as IServerResponseWithData<IDiscoveredIntegration>;
 
-		// 		if (parsedResponse.id === this.discoveryPollingRequestId) {
-		// 			if (parsedResponse.message === 'discovery_done') {
-		// 				this.wsp.onMessage.removeListener(listener);
-		// 				resolve();
-		// 				return;
-		// 			}
+				if (parsedResponse.id === this.discoveryPollingRequestId) {
+					if (parsedResponse.message === 'discovery_done') {
+						this.wsp.onMessage.removeListener(listener);
+						resolve();
+						return;
+					}
 
-		// 			if (parsedResponse.discovered_integration) {
-		// 				this.store.dispatch(this.store.actions.addDiscoveredIntegration(parsedResponse.discovered_integration));
-		// 			}
-		// 		}
-		// 	};
+					if (parsedResponse.discovered_integration) {
+						this.store.dispatch(this.store.actions.addDiscoveredIntegration(parsedResponse.discovered_integration));
+					}
+				}
+			};
 
-		// 	this.wsp.onMessage.addListener(listener);
-		// 	this.wsp.sendRequest({type: 'discover_integrations'}, { requestId: this.discoveryPollingRequestId })
-		// 		.catch((error) => reject(error));
-		// })
-		// .then(() => this.isDiscoveringIntegrations = false)
-		// .then(() => this.pollForIntegrations());
+			this.wsp.onMessage.addListener(listener);
+			this.wsp.sendRequest({type: 'discover_integrations'}, { requestId: this.discoveryPollingRequestId })
+				.catch((error) => reject(error));
+		})
+		.then(() => this.store.dispatch(this.store.actions.setSearchingForIntegrations(false)));
 	}
 
 	public getSupportedIntegrations(): Promise<void> {
@@ -595,10 +588,6 @@ export class ServerConnection {
 
 	private pollForEntities() {
 		window.setTimeout(() => this.getAvailableEntities(), 5000);
-	}
-
-	private pollForIntegrations() {
-		window.setTimeout(() => this.discoverIntegrations(), 10000);
 	}
 
 	private showToast(response: IServerResponse) {

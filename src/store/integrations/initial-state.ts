@@ -3,7 +3,8 @@ import { IIntegrationsState } from '../../types';
 const initialState: IIntegrationsState = {
 	configured: {},
 	supported: {},
-	discovered: []
+	discovered: [],
+	isSearchingForIntegrations: false
 };
 
 export default initialState;

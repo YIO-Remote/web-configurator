@@ -3,7 +3,7 @@
         <h1 class="title">
             {{$t('pages.integrations.configuredIntegrations')}}
         </h1>
-        <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
+        <yio-table ref="table" :items="integrations" max-height="525px" @onItemSelected="(index) => onItemSelected(index, false)" @onItemsDeselected="onItemDeselected">
             <template v-slot:header>
                 <th>
                     {{$t('common.name')}}
@@ -27,10 +27,19 @@
         </yio-table>
     </div>
     <div class="discovered">
-        <h1 class="title">
-            {{$t('pages.integrations.discoveredIntegrations')}}
-        </h1>
-        <yio-table ref="table" :items="discoveredIntegrations" max-height="525px" @onItemSelected="onItemSelected" @onItemsDeselected="onItemDeselected">
+        <div class="discovered-container">
+            <div class="title-container">
+                <div class="title">
+                    {{$t('pages.integrations.discoveredIntegrations')}}
+                </div>
+            </div>
+                <div v-if="isSearching" class="spinner"></div>
+                <div v-else class="search-container">
+                    <i class="icon icon-search" @click="onSearchForIntegrations"></i>
+                    <div class="search-message">{{$t('pages.integrations.searchForIntegrations')}}</div>
+                </div>
+        </div>
+        <yio-table ref="table" :items="discoveredIntegrations" max-height="525px" @onItemSelected="(index) => onItemSelected(index, true)" @onItemsDeselected="onItemDeselected">
             <template v-slot:header>
                 <th>
                     {{$t('common.name')}}

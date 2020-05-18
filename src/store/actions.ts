@@ -14,6 +14,7 @@ const actions = {
 	setConfiguredIntegrations: createStandardAction('store/integrations/set-configured')<IKeyValuePair<IIntegration>>(),
 	setSupportedIntegrations: createStandardAction('store/integrations/set-supported')<IKeyValuePair<IIntegrationSchema>>(),
 	addDiscoveredIntegration: createStandardAction('store/integrations/add-discovered')<IDiscoveredIntegration>(),
+	setSearchingForIntegrations: createStandardAction('store/integrations/set-searching')<boolean>(),
 
 	// Profiles
 	setProfiles: createStandardAction('store/profiles/set-all')<IKeyValuePair<IProfile>>(),

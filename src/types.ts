@@ -200,6 +200,7 @@ export interface IIntegrationsState {
 	configured: IKeyValuePair<IIntegration>;
 	supported: IKeyValuePair<IIntegrationSchema>;
 	discovered: IDiscoveredIntegration[];
+	isSearchingForIntegrations: boolean;
 }
 
 export interface IEntitiesState {

@@ -10,8 +10,42 @@
     height: 50%;
 }
 
-.title {
+.discovered-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.title-container {
     font-family: OpenSans;
+    position: relative;
+}
+
+.title {
+    line-height: 40px;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.icon-search {
+    cursor: pointer;
+}
+
+.search-message {
+    font-size: 10px;
+    opacity: 0.5;
+    line-height: 40px;
+}
+
+.spinner {
+    margin: 12px 10px;
+    width: 15px;
+    height: 15px;
+    background: url('../../../assets/images/loader.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 td {

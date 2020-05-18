@@ -107,7 +107,8 @@
 			"configuredIntegrations": "Configured Integrations",
 			"discoveredIntegrations": "Discovered Integrations",
 			"addIntegration": "Add Integration",
-			"newIntegration": "New Integration"
+			"newIntegration": "New Integration",
+			"searchForIntegrations": "Search For Integrations On Your Network"
 		},
 		"entities": {
 			"title": "Entities Controlled By YIO Remote",

@@ -19,6 +19,11 @@ export default function reducer(state: IIntegrationsState = initialState, action
 				...state,
 				discovered: [...state.discovered, ...(alreadyAdded ? [] : [action.payload])]
 			};
+		case getType(actions.setSearchingForIntegrations):
+			return {
+				...state,
+				isSearchingForIntegrations: action.payload
+			};
 		case getType(actions.setSupportedIntegrations):
 			return {
 				...state,
