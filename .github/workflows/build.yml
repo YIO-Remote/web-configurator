@@ -8,6 +8,9 @@
     push:
     pull_request:
 
+  env:
+    HASH_FILENAME: yio-web-configurator.hash
+
   jobs:
     build:
       runs-on: ubuntu-latest
@@ -65,6 +68,8 @@
           run: |
             cd dist
             zip -r ../YIO-web-configurator-${{ env.APP_VERSION }}.zip .
+            cd ..
+            for filename in *.zip; do echo "sha256  `sha256sum $filename`" >> ${{ env.HASH_FILENAME }}; done;
             
         - name: Create Pre-Release ${{ env.VERSION }}
           uses: "marvinpinto/action-automatic-releases@latest"
@@ -76,6 +81,7 @@
             title: "Development Build ${{ env.APP_VERSION }}"
             files: |
                 *.zip
+                ${{ env.HASH_FILENAME }}
                 
         - name: Create Release ${{ env.VERSION }}
           uses: "marvinpinto/action-automatic-releases@latest"
@@ -84,4 +90,5 @@
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             prerelease: false
             files: |
-              *.zip
+                *.zip
+                ${{ env.HASH_FILENAME }}
