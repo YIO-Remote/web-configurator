@@ -1,108 +1,108 @@
 {
 	"overlays": {
 		"disconnection": {
-			"title": "Oh No!",
-			"message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
-			"reconnecting": "Reconnecting"
+			"title": "Упс!",
+			"message": "Похоже, потеряно соединение с пультом. Пожалуйста, убедитесь, что он доступен в сети.",
+			"reconnecting": "Переподключение"
 		}
 	},
 	"common": {
 		"id": "ID",
-		"save": "Save",
-		"cancel": "Cancel",
-		"create": "Create",
-		"name": "Name",
-		"pleaseSelect": "Please Select",
-		"settings": "Settings",
-		"type": "Type",
-		"version": "Version",
-		"release": "Release"
+		"save": "Сохранить",
+		"cancel": "Отмена",
+		"create": "Создать",
+		"name": "Название",
+		"pleaseSelect": "Выберите",
+		"settings": "Настройки",
+		"type": "Тип",
+		"version": "Версия",
+		"release": "Релиз"
 	},
 	"header": {
-		"title": "Web Configurator"
+		"title": "Веб-конфигуратор"
 	},
 	"menu": {
-		"advanced": "Advanced",
-		"entities": "Entities",
-		"integrations": "Integrations",
-		"irLearning": "IR Learning",
-		"settings": "Settings",
-		"profiles": "Profiles",
-		"softwareUpdate": "Software Update"
+		"advanced": "Дополнительно",
+		"entities": "Объекты",
+		"integrations": "Интеграция",
+		"irLearning": "IR настройка",
+		"settings": "Настройки",
+		"profiles": "Профили",
+		"softwareUpdate": "Обновить приложение"
 	},
 	"components": {
 		"editEntities": {
-			"dropZone": "Drag an entity here"
+			"dropZone": "Перетащите объект сюда"
 		},
 		"editPage": {
-			"dropZone": "Drag a group here"
+			"dropZone": "Перетащите группу сюда"
 		},
 		"profileOptions": {
 			"pagesTab": {
-				"title": "Pages",
-				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
-				"availablePages": "Available Pages"
+				"title": "Страницы",
+				"message": "Вы можете добавить группы на страницу после их перетаскивания под профиль и выбора.",
+				"availablePages": "Доступные страницы"
 			},
 			"groupsTab": {
-				"title": "Groups",
-				"message": "You can add entities to a group after dragging it under a page in the remote view to the left.",
-				"availableGroups": "Available Groups"
+				"title": "Группы",
+				"message": "Вы можете добавить сущности в группу после их перетаскивания вниз страницы в описании пульта слева.",
+				"availableGroups": "Доступные группы"
 			},
 			"entitiesTab": {
-				"title": "Entities",
-				"message": "Drag entities to the remote view to add them to favorites or a group."
+				"title": "Объекты",
+				"message": "Перетащите объекты, чтобы добавить их в избранное или группу."
 			}
 		}
 	},
 	"pages": {
 		"integrations": {
-			"configuredIntegrations": "Configured Integrations",
-			"discoveredIntegrations": "Discovered Integrations",
-			"addIntegration": "Add Integrations",
-			"newIntegration": "New Integrations"
+			"configuredIntegrations": "Настроенные интеграции",
+			"discoveredIntegrations": "Найденные интеграции",
+			"addIntegration": "Добавить интеграции",
+			"newIntegration": "Новые интеграции"
 		},
 		"entities": {
-			"title": "Entities Controlled By YIO Remote",
-			"integration": "Integration",
-			"availableEntities": "Available Entities"
+			"title": "Управляемые YIO Remote объекты",
+			"integration": "Интеграция",
+			"availableEntities": "Доступные объекты"
 		},
 		"profiles": {
-			"title": "Profiles",
+			"title": "Профили",
 			"profileList": {
-				"title": "Pages",
-				"dropZone": "Drag a page here"
+				"title": "Страницы",
+				"dropZone": "Перетащите страницу сюда"
 			},
 			"newProfile": {
-				"title": "New Profile"
+				"title": "Новый профиль"
 			},
 			"remote": {
-				"defaultMessage": "Select a page in a profile to start editing",
-				"editSettingsMessage": "Settings content cannot be edited"
+				"defaultMessage": "Выберите страницу в профиле, чтобы начать редактирование",
+				"editSettingsMessage": "Настройки не могут быть отредактированы"
 			}
 		},
 		"irLearning": {},
 		"softwareUpdate": {
-			"title": "Software Update",
-			"description": "Automatically look for updates and update when a new software version is available. Updates are installed at 04.00 am.",
-			"autoUpdate": "Auto Update",
-			"update": "Update",
-			"checkForUpdate": "Check For Updates",
-			"upToDate": "Your software is up to date",
-			"newAvailable": "New software is available",
-			"installedVersion": "Installed Version"
+			"title": "Обновление приложения",
+			"description": "Автоматически искать обновления и устанавливать их при наличии. \nУстановка происходит в 04:00.",
+			"autoUpdate": "Автообновление",
+			"update": "Обновить",
+			"checkForUpdate": "Проверить наличие обновлений",
+			"upToDate": "Установлена последняя версия",
+			"newAvailable": "Доступно обновление",
+			"installedVersion": "Текущая версия"
 		},
 		"advanced": {
-			"title": "Advanced Configuration",
-			"message": "Manually set the remote config by hand:"
+			"title": "Расширенная конфигурация",
+			"message": "Установите настройки вручную:"
 		},
 		"settings": {
-			"title": "Settings",
+			"title": "Настройки",
 			"darkMode": {
-				"title": "Dark Mode"
+				"title": "Тёмная тема"
 			},
 			"autoBrightness": {
-				"title": "Auto Brightness",
-				"description": "Automatically adjust the brightness based on ambient light."
+				"title": "Адаптивная яркость",
+				"description": "Автоматически регулировать яркость на основе окружающего света."
 			}
 		}
 	}
