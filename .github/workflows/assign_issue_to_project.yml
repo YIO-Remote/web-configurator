@@ -14,5 +14,5 @@ jobs:
       uses: srggrs/assign-one-project-github-action@1.2.0
       if: github.event.action == 'opened'
       with:
-        project: 'https://github.com/orgs/YIO-Remote/projects/11'
+        project: 'https://github.com/orgs/YIO-Remote/projects/14'
         column_name: 'Backlog'
