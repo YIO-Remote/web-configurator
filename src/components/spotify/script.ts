@@ -25,6 +25,7 @@ export default class Spotify extends Vue {
 	public clientId: string = '';
 	public clientSecret: string = '';
 	public accessToken: string = '';
+	public refreshToken: string = '';
 	public redirectUrl: string = `${window.location.origin}`;
 
 	public get isInAuthenticationCycle() {
@@ -46,7 +47,7 @@ export default class Spotify extends Vue {
 			this.clientSecret = options.clientSecret;
 
 			this.spotifyAuthentication.requestTokens(this.clientId, this.clientSecret, this.redirectUrl)
-				.then(() => this.accessToken = this.spotifyAuthentication.accessToken);
+				.then(() => { this.accessToken = this.spotifyAuthentication.accessToken; this.refreshToken = this.spotifyAuthentication.refreshToken; });
 		}
 	}
 
@@ -79,6 +80,7 @@ export default class Spotify extends Vue {
 		this.clientId = '';
 		this.clientSecret = '';
 		this.accessToken = '';
+		this.refreshToken = '';
 		window.sessionStorage.removeItem('yio.spotify');
 		this.spotifyAuthentication.reset();
 	}
@@ -93,7 +95,8 @@ export default class Spotify extends Vue {
 				entity_id: `spotify_${`${Guid.create()}`.substr(0, 4)}`,
 				client_id: this.clientId,
 				client_secret: this.clientSecret,
-				access_token: this.accessToken
+				access_token: this.accessToken,
+				refresh_token: this.refreshToken
 			}
 		})
 		.then(() => this.onCancel())
