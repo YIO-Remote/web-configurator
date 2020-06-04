@@ -60,11 +60,11 @@ export class Router extends VueRouter {
 			path: '/settings',
 			component: SettingsPage
 		},
-		{
-			name: 'menu.softwareUpdate',
-			path: '/update',
-			component: SoftwareUpdatePage
-		},
+		// {
+		// 	name: 'menu.softwareUpdate',
+		// 	path: '/update',
+		// 	component: SoftwareUpdatePage
+		// },
 		{
 			name: 'menu.advanced',
 			path: '/advanced',
