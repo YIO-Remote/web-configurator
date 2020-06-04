@@ -4,7 +4,7 @@ import EntitiesPage from './pages/entities/index.vue';
 import ProfilesPage from './pages/profiles/index.vue';
 import SettingsPage from './pages/settings/index.vue';
 // import IRLearningPage from './pages/ir-learning/index.vue';
-import SoftwareUpdatePage from './pages/software-update/index.vue';
+// import SoftwareUpdatePage from './pages/software-update/index.vue';
 import AdvancedPage from './pages/advanced/index.vue';
 import { Inject, Singleton } from './utilities/dependency-injection';
 import { ServerConnection } from './server';
