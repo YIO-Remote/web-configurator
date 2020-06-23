@@ -1,108 +1,108 @@
 {
 	"overlays": {
 		"disconnection": {
-			"title": "Oh No!",
-			"message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
-			"reconnecting": "Reconnecting"
+			"title": "Voi prkl!",
+			"message": "Vaikuttaa siltä, että yhteys kaukosäätimeen on katkennut. Ole hyvä ja tarkista, että kaukosäädin on yhdistetty verkkoon.",
+			"reconnecting": "Yhdistetään uudelleen"
 		}
 	},
 	"common": {
 		"id": "ID",
-		"save": "Save",
-		"cancel": "Cancel",
-		"create": "Create",
-		"name": "Name",
-		"pleaseSelect": "Please Select",
-		"settings": "Settings",
-		"type": "Type",
-		"version": "Version",
-		"release": "Release"
+		"save": "Tallenna",
+		"cancel": "Peruuta",
+		"create": "Luo uusi",
+		"name": "Nimi",
+		"pleaseSelect": "Ole hyvä ja valitse",
+		"settings": "Asetukset",
+		"type": "Tyyppi",
+		"version": "Versio",
+		"release": "Julkaisu"
 	},
 	"header": {
-		"title": "Web Configurator"
+		"title": "Web-hallinta työkalu"
 	},
 	"menu": {
-		"advanced": "Advanced",
-		"entities": "Entities",
-		"integrations": "Integrations",
-		"irLearning": "IR Learning",
-		"settings": "Settings",
-		"profiles": "Profiles",
-		"softwareUpdate": "Software Update"
+		"advanced": "Lisäasetukset",
+		"entities": "Kohteet",
+		"integrations": "Integraatiot",
+		"irLearning": "IR kaappaus",
+		"settings": "Asetukset",
+		"profiles": "Profiilit",
+		"softwareUpdate": "Ohjelmistopäivitys"
 	},
 	"components": {
 		"editEntities": {
-			"dropZone": "Drag an entity here"
+			"dropZone": "Raahaa kohde tähän"
 		},
 		"editPage": {
-			"dropZone": "Drag a group here"
+			"dropZone": "Raahaa ryhmä tähän"
 		},
 		"profileOptions": {
 			"pagesTab": {
-				"title": "Pages",
-				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
-				"availablePages": "Available Pages"
+				"title": "Sivut",
+				"message": "Voit lisätä sivulle ryhmiä kun olet raahannut Sivun profiilleihin ja valinnut sen.",
+				"availablePages": "Saatavilla olevat Sivut"
 			},
 			"groupsTab": {
-				"title": "Groups",
-				"message": "You can add entities to a group after dragging it under a page in the remote view to the left.",
-				"availableGroups": "Available Groups"
+				"title": "Ryhmät",
+				"message": "Voit lisätä kohteita ryhmiin kun olet raahannut Ryhmän Sivulle sivun vasemmmalle laidalle.",
+				"availableGroups": "Saatavilla olevat Ryhmät"
 			},
 			"entitiesTab": {
-				"title": "Entities",
-				"message": "Drag entities to the remote view to add them to favorites or a group."
+				"title": "Kohteet",
+				"message": "Lisätäksesi Kohteen Suosikkeihin raahaa se kaukosäätien näytölle."
 			}
 		}
 	},
 	"pages": {
 		"integrations": {
-			"configuredIntegrations": "Configured Integrations",
-			"discoveredIntegrations": "Discovered Integrations",
-			"addIntegration": "Add Integrations",
-			"newIntegration": "New Integrations"
+			"configuredIntegrations": "Asennetut integraatiot",
+			"discoveredIntegrations": "Löydetyt integraatiot",
+			"addIntegration": "Lisää integraatio",
+			"newIntegration": "Uusi integraatio"
 		},
 		"entities": {
-			"title": "Entities Controlled By YIO Remote",
-			"integration": "Integration",
-			"availableEntities": "Available Entities"
+			"title": "YIO Kaukosäätimen hallinnoimat Kohteet",
+			"integration": "Integraatio",
+			"availableEntities": "Saatavilla olevat Kohteet"
 		},
 		"profiles": {
-			"title": "Profiles",
+			"title": "Profiilit",
 			"profileList": {
-				"title": "Pages",
-				"dropZone": "Drag a page here"
+				"title": "Sivut",
+				"dropZone": "Raahaa Sivu tähän"
 			},
 			"newProfile": {
-				"title": "New Profile"
+				"title": "Uusi Profiili"
 			},
 			"remote": {
-				"defaultMessage": "Select a page in a profile to start editing",
-				"editSettingsMessage": "Settings content cannot be edited"
+				"defaultMessage": "Muokataksesi valitse Sivu Profiileista",
+				"editSettingsMessage": "Asetusten sisältöä ei voida muokata"
 			}
 		},
 		"irLearning": {},
 		"softwareUpdate": {
-			"title": "Software Update",
-			"description": "Automatically look for updates and update when a new software version is available. Updates are installed at 04.00 am.",
-			"autoUpdate": "Auto Update",
-			"update": "Update",
-			"checkForUpdate": "Check For Updates",
-			"upToDate": "Your software is up to date",
-			"newAvailable": "New software is available",
-			"installedVersion": "Installed Version"
+			"title": "Ohjelmistopäivitys",
+			"description": "Etsi päivityksiä automaattisesti ja suorita päivitys kun uusi ohjelmistoversio on saatavilla.\nPäivitykset asennetaan yöllä klo 04: 00.",
+			"autoUpdate": "Automaattinen päivitys",
+			"update": "Päivitä",
+			"checkForUpdate": "Tarkista päivitykset",
+			"upToDate": "Ohjelmistosi on ajan tasalla",
+			"newAvailable": "Ohjelmistopäivitys on saatavilla",
+			"installedVersion": "Asennettu versio"
 		},
 		"advanced": {
-			"title": "Advanced Configuration",
-			"message": "Manually set the remote config by hand:"
+			"title": "Lisäasetukset",
+			"message": "Muokkaa kaukosäätimen asetuksia manuaalisesti:"
 		},
 		"settings": {
-			"title": "Settings",
+			"title": "Asetukset",
 			"darkMode": {
-				"title": "Dark Mode"
+				"title": "Tumma tila"
 			},
 			"autoBrightness": {
-				"title": "Auto Brightness",
-				"description": "Automatically adjust the brightness based on ambient light."
+				"title": "Automaattinen kirkkaus",
+				"description": "Säädä näytön kirkkautta automaattisesti ympäristön valoisuuden mukaan."
 			}
 		}
 	}
