@@ -109,6 +109,7 @@ export interface IEntity {
 	area: string;
 	friendly_name: string;
 	supported_features: string[];
+	custom_features: string[];
 }
 
 export interface IIntegrationInstance {
@@ -239,6 +240,7 @@ export interface IEntityAggregate {
 	friendly_name: string;
 	friendly_name_search_term: string;
 	supported_features: string[];
+	custom_features: string[];
 }
 
 export interface IGroupAggregate {
