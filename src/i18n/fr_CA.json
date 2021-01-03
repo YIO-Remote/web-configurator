@@ -1,50 +1,50 @@
 {
 	"overlays": {
 		"disconnection": {
-			"title": "Ah, não!",
-			"message": "Parece que perdemos a conexão com o seu controle remoto. Certifique-se de que esteja acessível na rede.",
-			"reconnecting": "Reconectando"
+			"title": "Oh No!",
+			"message": "It looks like we lost connection with your remote. Please make sure it is accessible on the network.",
+			"reconnecting": "Reconnecting"
 		}
 	},
 	"common": {
 		"id": "ID",
-		"save": "Salvar",
-		"cancel": "Cancelar",
-		"create": "Criar",
-		"name": "Nome",
-		"pleaseSelect": "Selecione por favor",
-		"settings": "Configurações",
-		"type": "Tipo",
-		"version": "Versão",
-		"release": "Versão"
+		"save": "Save",
+		"cancel": "Cancel",
+		"create": "Create",
+		"name": "Name",
+		"pleaseSelect": "Please Select",
+		"settings": "Settings",
+		"type": "Type",
+		"version": "Version",
+		"release": "Release"
 	},
 	"header": {
-		"title": "Configurador Web"
+		"title": "Web Configurator"
 	},
 	"menu": {
-		"advanced": "Avançado",
-		"entities": "Entidades",
-		"integrations": "Integrações",
-		"irLearning": "Aprendizagem IR",
-		"settings": "Configurações",
-		"profiles": "Perfis",
-		"softwareUpdate": "Atualização do Software"
+		"advanced": "Advanced",
+		"entities": "Entities",
+		"integrations": "Integrations",
+		"irLearning": "IR Learning",
+		"settings": "Settings",
+		"profiles": "Profiles",
+		"softwareUpdate": "Software Update"
 	},
 	"components": {
 		"editEntities": {
-			"dropZone": "Arraste uma entidade aqui"
+			"dropZone": "Drag an entity here"
 		},
 		"editPage": {
-			"dropZone": "Arraste um grupo aqui"
+			"dropZone": "Drag a group here"
 		},
 		"profileOptions": {
 			"pagesTab": {
-				"title": "Páginas",
-				"message": "Você pode adicionar grupos a uma página depois de arrastá-lo para um perfil e selecioná-lo.",
-				"availablePages": "Páginas disponíveis"
+				"title": "Pages",
+				"message": "You can add groups to a page after dragging it under a profile and selecting it.",
+				"availablePages": "Available Pages"
 			},
 			"groupsTab": {
-				"title": "Grupos",
+				"title": "Groups",
 				"message": "You can add entities to a group after dragging it under a page in the remote view to the left.",
 				"availableGroups": "Available Groups"
 			},
