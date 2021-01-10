@@ -24,10 +24,11 @@
         - name: Fetch all tags to determine version
           run: |
             git fetch origin +refs/tags/*:refs/tags/*
-            echo "::set-env name=VERSION::$(git describe --match "v[0-9]*" --tags HEAD --always)"
+            echo "VERSION=$(git describe --match "v[0-9]*" --tags HEAD --always)" >> $GITHUB_ENV
 
         - name: Set build timestamp
-          run: echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"      
+          run: |
+            echo "TIMESTAMP=$(date +"%Y%m%d_%H%M%S")" >> $GITHUB_ENV
 
         - name: npm install, build
           run: |
@@ -61,8 +62,9 @@
        
         - name: Get artifact version
           run: |
-            echo "::set-env name=APP_VERSION::$(cat dist/version.txt)"
-            echo "::set-env name=TIMESTAMP::$(date +"%Y%m%d_%H%M%S")"
+            read -r APP_VERSION < dist/version.txt
+            echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+            echo "TIMESTAMP=$(date +"%Y%m%d_%H%M%S")" >> $GITHUB_ENV
             
         - name: Create GitHub release archive
           run: |
