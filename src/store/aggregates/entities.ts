@@ -25,6 +25,7 @@ export class EntitiesAggregate {
 						friendly_name: entity.friendly_name,
 						friendly_name_search_term: entity.friendly_name,
 						supported_features: entity.supported_features,
+						custom_features: entity.custom_features,
 						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
 					}))
 					], [] as IEntityAggregate[]
@@ -55,6 +56,7 @@ export class EntitiesAggregate {
 						friendly_name: entity.friendly_name,
 						friendly_name_search_term: entity.friendly_name,
 						supported_features: entity.supported_features,
+						custom_features: entity.custom_features,
 						type: entity.type,
 						integration: integrations.find((integration) => integration.id === entity.integration) as IIntegrationInstance
 					}));

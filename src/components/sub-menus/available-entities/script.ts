@@ -53,6 +53,7 @@ export default class AvailableEntities extends Vue {
 			friendly_name: entity.friendly_name,
 			integration: entity.integration.id,
 			supported_features: entity.supported_features,
+			custom_features: entity.custom_features,
 			type: entity.type
 		});
 	}
